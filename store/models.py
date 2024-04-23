@@ -10,3 +10,6 @@ class Store(AbstractUser):
     email = models.EmailField(max_length=30) #emailfield
     telnum = models.CharField(max_length=20) # 000-0000-0000 폰번호 양식 유효성검사 있으면 좋을듯
     regdate = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
