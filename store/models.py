@@ -2,14 +2,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class Store(AbstractUser):
-    name = models.CharField(max_length=20)
-    img = models.ImageField(upload_to='img') #imagefield
-    num = models.CharField(max_length=20) # 사업자번호 유효성검사 있으면 좋을듯
-    address = models.CharField(max_length=30) # 주소검색 api를 통해서 입력받으면 좋을텐데 어려우면 패스
-    zipcode = models.IntegerField()
-    email = models.EmailField(max_length=30) #emailfield
-    telnum = models.CharField(max_length=20) # 000-0000-0000 폰번호 양식 유효성검사 있으면 좋을듯
-    regdate = models.DateField(auto_now_add=True)
+    name = models.CharField(max_length=20) # 상호명
+    img = models.ImageField(upload_to='img') # 스토어이미지경로
+    num = models.CharField(max_length=20) # 사업자번호 [유효성 검사 있으면 좋을듯]
+    address = models.CharField(max_length=30) # 회사 주소 [주소검색 api를 통해서 입력받으면 좋을텐데 어려우면 패스]
+    zipcode = models.IntegerField() # 회사 우편번호
+    email = models.EmailField(max_length=30) # 이메일
+    telnum = models.CharField(max_length=20) # 연락처 폰번호 양식 유효성검사 있으면 좋을듯
+    regdate = models.DateField(auto_now_add=True) # 가입일
+    # 비밀번호는 기본으로 제공됨
 
     def __str__(self):
         return self.name
