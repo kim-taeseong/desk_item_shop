@@ -1,5 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- 페이지의 제목을 정의함 -->
+    {% with page_title="상품 목록" %}
+    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">{{ page_title }}</span></h1>
+    {% endwith %}
+</div>
+
 <div>
-    <h1><span>상품 목록</span></h1>
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background-color: #f2f2f2;">
@@ -27,3 +36,5 @@
         </tbody>
     </table>
 </div>
+
+{% endblock %}

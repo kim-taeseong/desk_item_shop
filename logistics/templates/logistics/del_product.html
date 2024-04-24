@@ -1,5 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- 페이지의 제목을 정의함 -->
+    {% with page_title="상품 삭제하기" %}
+    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">{{ page_title }}</span></h1>
+    {% endwith %}
+</div>
+
 <div>
-    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">상품 삭제 확인</span></h1>
     <h3>다음 상품을 삭제하시겠습니까?</h3>
     <p><strong>상품명:</strong> {{ object.product_name }}</p>
     <p><strong>가격:</strong> {{ object.product_price }}</p>
@@ -24,3 +33,5 @@
         >뒤로 가기</button>
 
 </div>
+
+{% endblock %}

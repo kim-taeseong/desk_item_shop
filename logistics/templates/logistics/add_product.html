@@ -1,5 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <div class="container">
-    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">상품 추가</span></h1>
+    <!-- 페이지의 제목을 정의함 -->
+    {% with page_title="상품 추가하기" %}
+    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">{{ page_title }}</span></h1>
+    {% endwith %}
+</div>
+
+<div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
@@ -12,3 +21,5 @@
     </form>
 </div>
 
+
+{% endblock %}
