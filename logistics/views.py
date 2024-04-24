@@ -13,6 +13,10 @@ class AddProductView(CreateView):
     fields = ['category_id', 'product_name', 'product_description', 'product_price', 'product_inventory', 'product_img', 'product_sale']
     # 상품 추가 후 리다이렉트할 URL 지정
     success_url = reverse_lazy('product_list')
+
+class UpdateProductView(UpdateView):
+    model = Product
+    template_name = 'logistics/update_product.html'
     
 class ProductListView(ListView):
     model = Product
