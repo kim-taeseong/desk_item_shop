@@ -3,9 +3,17 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Category
 from django.views.generic import *
 from django.urls import reverse_lazy
-# Create your views here.
+
+#-- 상품 리스트
+class ProductLV(ListView):
+    model = Product
+    template_name = 'logistics/list.html'
+
+class ProductDV(DetailView):
+    model = Product
 
 
+#-- 상품 추가
 class AddProductView(CreateView):
     model = Product
     template_name = 'logistics/add_product.html' # templates url 지정 필요

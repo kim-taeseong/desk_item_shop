@@ -1,0 +1,28 @@
+<!-- logistics/product_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Product List</h2>
+        <!-- Product List -->
+        <ul>
+            {% for product in object_list %}
+                <li>{{ product.product_name }} - {{ product.product_price }}</li>
+            {% endfor %}
+        </ul>
+        <!-- Add Product Form -->
+        <h2>Add Product</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ add_product_form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Product</button>
+        </form>
+    </div>
+</body>
+</html>
+
