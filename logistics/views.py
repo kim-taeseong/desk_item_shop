@@ -17,6 +17,7 @@ class AddProductView(CreateView):
 class UpdateProductView(UpdateView):
     model = Product
     template_name = 'logistics/update_product.html'
+    success_url = reverse_lazy('product_list')
     
 class ProductListView(ListView):
     model = Product
