@@ -1,1 +1,24 @@
 <h1>this is product_list.html</h1>
+
+<!-- logistics/templates/logistics/product_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <ul>
+        {% for product in product %}
+            <li>
+                <h2><a href="{%url 'product_detail'  product.pk %}">{{product.product_name }}</a></h2>
+                <p>{{ product.product_description }}</p>
+                <p>{{ product.product_price }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
