@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product
+from .models import Product, Category
 from django.views.generic import *
 from django.urls import reverse_lazy
 # Create your views here.
@@ -17,3 +17,19 @@ class AddProductView(CreateView):
 class ProductListView(ListView):
     model = Product
     template_name = 'logistics/product_list.html'
+
+#--- ListView
+class CategoryLV(ListView):
+    model = Category
+    template_name = ''
+
+class ProductLV(ListView):
+    model = Product
+    template_name = ''
+
+#--- DetailView
+class CategoryDV(DetailView):
+    model = Category
+
+class ProductDV(DetailView):
+    model = Product
