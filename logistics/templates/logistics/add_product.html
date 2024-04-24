@@ -1,9 +1,14 @@
 <div class="container">
-    <h2>상품 추가</h2>
+    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">상품 추가</span></h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">상품 추가하기</button>
+        <button style="background-color: 
+                    #ff4d4d; color: #fff; 
+                    border: none; padding: 
+                    8px 16px; text-align: center; 
+                    display: inline-block; border-radius: 
+                    4px; cursor: pointer;">상품 추가하기</button>
     </form>
 </div>
 

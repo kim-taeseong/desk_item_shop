@@ -1,0 +1,29 @@
+<div>
+    <h1><span>상품 목록</span></h1>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid #ddd;">상품명</th>
+                <th style="border: 1px solid #ddd;">가격</th>
+                <th style="border: 1px solid #ddd;">재고</th>
+                <th style="border: 1px solid #ddd;">등록일</th>
+                <th style="border: 1px solid #ddd;">상세 설명</th>
+                <th style="border: 1px solid #ddd;">삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in object_list %}
+            <tr>
+                <td style="border: 1px solid #ddd;">{{ product.product_name }}</td>
+                <td style="border: 1px solid #ddd;">{{ product.product_price }}</td>
+                <td style="border: 1px solid #ddd;">{{ product.product_inventory }}</td>
+                <td style="border: 1px solid #ddd;">{{ product.product_date }}</td>
+                <td style="border: 1px solid #ddd;">{{ product.product_description }}</td>
+                <td style="border: 1px solid #ddd;">
+                    <a href="{% url 'logistics:del_product' pk=product.pk %}">
+                    <button>상품 삭제</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

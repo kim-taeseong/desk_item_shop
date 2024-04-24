@@ -1,7 +1,18 @@
-<h1>카테고리 추가</h1>
+<h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">카테고리 추가</span></h1>
+
 <form method="post" action="{% url 'logistics:category_create' %}">
     {% csrf_token %}
     <label for="category_name">카테고리명:</label>
     <input type="text" id="category_name" name="category_name">
     <button type="submit">추가</button>
 </form>
+
+<button onclick="window.location.href='{% url 'logistics:category_list' %}'" 
+style="background-color: #ff4d4d; 
+        color: #fff; 
+        border: none; 
+        padding: 8px 16px; 
+        ext-align: center; 
+        display: inline-block; 
+        border-radius: 4px; 
+        cursor: pointer;">뒤로 가기</button>
