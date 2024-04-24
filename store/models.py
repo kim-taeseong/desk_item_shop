@@ -3,8 +3,27 @@ from django.db import models
 
 class Store(AbstractUser): 
     # AbstractUser에서 기본적으로 제공하는 필드가 있음 따라서 실제 화면에서는 fields = [] 를 이용해 어떤 필드만 표시할건지 결정 가능
-    name = models.CharField(max_length=20) # 상호명
-    img = models.ImageField(upload_to='img/') # 스토어이미지
+    store_name = models.CharField(max_length=20) # 상호명
+    store_img = models.ImageField(upload_to='img') # 스토어 이미지
+    # 기타 필드 정의
+
+    # related_name을 추가하여 역참조 충돌 문제를 해결
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        related_name="store_user_set",
+        related_query_name="store_user",
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name="store_user_set",
+        related_query_name="store_user",
+    )
     num = models.CharField(max_length=20) # 사업자번호 [유효성 검사 있으면 좋을듯]
     address = models.CharField(max_length=30) # 회사 주소 [주소검색 api를 통해서 입력받으면 좋을텐데 어려우면 패스]
     zipcode = models.IntegerField() # 회사 우편번호
@@ -16,3 +35,4 @@ class Store(AbstractUser):
 
     def __str__(self):
         return self.name
+    
