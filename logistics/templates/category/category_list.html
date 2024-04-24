@@ -1,0 +1,20 @@
+<!-- logistics/category_list.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카테고리 목록</title>
+</head>
+<body>
+    <h1>카테고리 목록</h1>
+    <ul>
+        {% for category in object_list %}
+            <li>{{ category.category_name }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'logistics:category_create' %}">카테고리 추가</a>
+</body>
+</html>

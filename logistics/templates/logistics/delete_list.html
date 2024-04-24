@@ -1,0 +1,27 @@
+<div>
+    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">상품 목록</span></h1>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 8px; border: 1px solid #ddd;">상품명</th>
+                <th style="padding: 8px; border: 1px solid #ddd;">가격</th>
+                <th style="padding: 8px; border: 1px solid #ddd;">재고</th>
+                <th style="padding: 8px; border: 1px solid #ddd;">등록일</th>
+                <th style="padding: 8px; border: 1px solid #ddd;">상세 설명</th>
+                <th style="padding: 8px; border: 1px solid #ddd;">삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in object_list %}
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ product.product_name }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ product.product_price }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ product.product_inventory }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ product.product_date }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{{ product.product_description }}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;"><a href="{% url 'logistics:delete_product' pk=product.pk %}"><button style="background-color: #ff4d4d; color: #fff; border: none; padding: 8px 16px; text-align: center; display: inline-block; border-radius: 4px; cursor: pointer;">상품 삭제</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
