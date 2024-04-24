@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class Store(AbstractUser):
+class Store(AbstractUser): 
+    # AbstractUser에서 기본적으로 제공하는 필드가 있음 따라서 실제 화면에서는 fields = [] 를 이용해 어떤 필드만 표시할건지 결정 가능
     name = models.CharField(max_length=20) # 상호명
     img = models.ImageField(upload_to='img') # 스토어이미지경로
     num = models.CharField(max_length=20) # 사업자번호 [유효성 검사 있으면 좋을듯]
@@ -11,6 +12,7 @@ class Store(AbstractUser):
     telnum = models.CharField(max_length=20) # 연락처 폰번호 양식 유효성검사 있으면 좋을듯
     regdate = models.DateField(auto_now_add=True) # 가입일
     # 비밀번호는 기본으로 제공됨
+    # username도 기본으로 제공된다는데 확인 필요
 
     def __str__(self):
         return self.name
