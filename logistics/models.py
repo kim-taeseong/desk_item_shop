@@ -13,9 +13,9 @@ class Category(models.Model):
         return reverse('logistics:product_detail', args=(self.pk, ))
 
 class Product(models.Model):
-
+    
     # 카테고리와의 외부 키 관계
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     
     #store_id = models.IntegerField() # 스토어 ID
     

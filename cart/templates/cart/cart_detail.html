@@ -1,0 +1,14 @@
+<h1>장바구니</h1>
+<p>현재 장바구니에 {{ total_quantity }}개의 상품이 있습니다.</p>
+
+<ul>
+    {% for item in cart_items %}
+        <li>{{ item.product.product_name }} - 수량: {{ item.amount }}</li>
+    {% endfor %}
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="action" value="increase">증가</button>
+    <button type="submit" name="action" value="decrease">감소</button>
+</form>
