@@ -4,5 +4,4 @@
 <p>Price: {{ product.product_price }}</p>
 
 
-<a href="{% url 'update_product' product.pk %}" class="btn btn-primary">편집</a>
-
+<a href="{% url 'logistics:update_product' product.pk %}" class="btn btn-primary">편집</a>

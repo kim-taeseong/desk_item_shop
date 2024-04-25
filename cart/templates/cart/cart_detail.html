@@ -1,14 +1,13 @@
 <h1>장바구니</h1>
-<p>현재 장바구니에 {{ total_quantity }}개의 상품이 있습니다.</p>
 
-<ul>
-    {% for item in cart_items %}
-        <li>{{ item.product.product_name }} - 수량: {{ item.amount }}</li>
-    {% endfor %}
-</ul>
+{% for cart_item in cart_items %}
+    <p>선택한 상품: {{ cart_item.product.product_name }} - 수량: {{ cart_item.amount }}</p>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" name="action" value="increase">증가</button>
-    <button type="submit" name="action" value="decrease">감소</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="action" value="increase">증가</button>
+        <button type="submit" name="action" value="decrease">감소</button>
+        <!-- 여기에 cart_item.id를 숨겨진 필드로 추가하여 각 폼이 특정 cart_item에 대응되도록 합니다. -->
+        <input type="hidden" name="cart_item_id" value="{{ cart_item.id }}">
+    </form>
+{% endfor %}
