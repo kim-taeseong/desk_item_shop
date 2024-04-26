@@ -50,14 +50,14 @@ class AddProductView(CreateView):
     # 상품 추가 후 리다이렉트할 URL 지정
     success_url = reverse_lazy('logistics:product_list')
 
-# Page not found (404) - 쿼리 결과에 product가 없습니다. (수정필요)
+# Page not found (404) - 쿼리 결과에 product가 없습니다. (수정필요) > 수정완료했습니다 product_detail.html
 class UpdateProductView(UpdateView):
     model = Product
     template_name = 'logistics/update.html'
     fields = ['category', 'product_name', 'product_description', 'product_price', 'product_inventory', 'product_img', 'product_sale']
     success_url = reverse_lazy('logistics:product_list')
 
-# Page not found (404) - 쿼리 결과에 product가 없습니다.(수정필요)
+# Page not found (404) - 쿼리 결과에 product가 없습니다.(수정필요) > 수정완료했습니다 product_detail.html
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'logistics/product_detail.html'
