@@ -8,13 +8,16 @@
 </head>
 <body>
     <h1>로그인</h1>
-    <form action="{% url 'login' %}" method="POST">
+    <form action="{% url 'users:login' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Login">
     </form>
-    <p>가입하지 않았다면?</p>
-    <a href="{% url 'customer-signup' %}">고객 회원가입</a><br>
-    <a href="{% url 'store-signup' %}">스토어 회원가입</a>
+    <br>
+    <br>
+    <a href="{% url 'users:customer_signup' %}">고객 회원가입</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'users:store_signup' %}">스토어 회원가입</a>
+    <br>
+    <br>
+    <a href="{%url 'users:find_username' %}">아이디 찾기</a>&nbsp;&nbsp;&nbsp;<a href="">비밀번호 찾기</a>
 </body>
 </html>

@@ -8,11 +8,11 @@
 </head>
 <body>
     <h1>판매자 회원가입</h1>
-    <form action="{% url 'store-signup' %}" method="POST">
+    <form action="{% url 'users:store_signup' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="회원가입">
     </form>
-    <p>축하합니다! 회원가입이 완료되었습니다 - <a href="{% url 'login' %}">로그인</a><br></p>
+    <a href="{% url 'users:login' %}">로그인</a>
 </body>
 </html>
