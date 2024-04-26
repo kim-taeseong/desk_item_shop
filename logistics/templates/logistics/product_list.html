@@ -1,4 +1,3 @@
-<!-- logistics/product_list.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,17 +6,35 @@
     <title>Product List</title>
 </head>
 <body>
-    <div class="container">
-        <h2>Product List</h2>
-        <!-- Product List -->
-        <ul>
-            {% for product in object_list %}
-                <li>{{ product.product_name }} - {{ product.product_price }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+    <h1>Product List</h1>
+    <!-- 검색 폼 -->
+    <form method="GET">
+        <!-- 폼 필드 렌더링 -->
+        {{ search_form.as_p }}
+        <!-- 검색 버튼 -->
+        <button type="submit">검색</button>
+    </form>
+    <ul>
+        <!-- 상품 목록 순회 -->
+        {% for product in products %}
+            <li>
+                <!-- 상품 링크 -->
+                <h2><a href="{{ product.get_absolute_url }}">{{ product.product_name }}</a></h2>
+                <!-- 카테고리 표시 -->
+                <p>Category: {{ product.category }}</p>
+                <!-- 가격 표시 -->
+                <p>Price: ${{ product.product_price }}</p>
+                <!-- 할인율 표시 -->
+                <p>Sale: {{ product.product_sale }}%</p>
+                <!-- 상품 이미지 -->
+                <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+                <!-- 상품 설명 -->
+                <p>{{ product.product_description }}</p>
+                <!-- 판매자 페이지 링크 -->
+                <a href="{{ product.seller_link }}">Seller Page</a>
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
-
-
 
