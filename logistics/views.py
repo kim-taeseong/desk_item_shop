@@ -34,6 +34,5 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'logistics/product_detail.html'
     context_object_name = 'product'
-
     def get_queryset(self):
         return self.model.objects.all()
