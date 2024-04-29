@@ -1,1 +1,6 @@
 <h1>판매자 홈 </h1>
+
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">로그아웃</button>
+</form>
