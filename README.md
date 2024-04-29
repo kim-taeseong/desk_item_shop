@@ -1,4 +1,4 @@
-# desk_item_shop
+# desk_item_shop 준호
 
 # 24-04-26
 ### 구매자,판매자 로그인 및 회원가입 기능
