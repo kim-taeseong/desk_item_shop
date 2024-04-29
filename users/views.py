@@ -1,17 +1,17 @@
 from django.shortcuts import redirect, render
-from django.views.generic import *
-from .models import User, Customer, Store
+from django.views.generic import CreateView, TemplateView
+from .models import User
 from logistics.models import Product
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm
-from django.contrib.auth import login
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .decorators import customer_required, store_required
 from django.core.mail import send_mail
 from django.conf import settings
-from django import forms
-from django.urls import reverse_lazy
+from django.contrib.auth import views as auth_views
+
+User = get_user_model()
 
 class CustomerSignUpView(CreateView): # 구매자 회원가입
     model = User
@@ -106,8 +106,8 @@ def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 
 #     return render(request, 'logistics/add_product.html', context) # 로그인 완료하면 logistics/add_product로 이동
 
 def find_username(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
+    if request.method == 'POST':
+        email = request.POST['email']
         users = User.objects.filter(email=email)
         if users.exists():
             user = users.first()
@@ -126,3 +126,4 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
+    
