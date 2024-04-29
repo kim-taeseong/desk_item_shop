@@ -1,0 +1,28 @@
+<h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">카테고리 목록</span></h1>
+
+<table style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">카테고리명</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in object_list %}
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ category.category_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<button onclick="window.location.href='{% url 'logistics:category_create' %}'" 
+style="background-color: #ff4d4d; 
+        color: #fff; 
+        border: none; 
+        padding: 8px 16px; 
+        ext-align: center; 
+        display: inline-block; 
+        border-radius: 4px; 
+        cursor: pointer;">카테고리 추가</button>
