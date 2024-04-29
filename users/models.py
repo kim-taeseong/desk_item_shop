@@ -36,3 +36,7 @@ class Store(models.Model):
 
     def __str__(self) -> str:
         return self.store_name
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> origin/anjiyoo

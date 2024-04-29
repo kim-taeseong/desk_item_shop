@@ -31,6 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
+<<<<<<< HEAD
+=======
+    'cart',
+>>>>>>> origin/anjiyoo
     'users',
 ]
 
@@ -148,4 +152,8 @@ EMAIL_HOST_PASSWORD = os.getenv('MY_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 # TLS 보안 방법
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+<<<<<<< HEAD
 # 사이트와 관련한 자동응답을 받을 이메일 주소
+=======
+# 사이트와 관련한 자동응답을 받을 이메일 주소
+>>>>>>> origin/anjiyoo

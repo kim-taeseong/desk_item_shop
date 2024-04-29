@@ -13,6 +13,10 @@ class Category(models.Model):
         return reverse('logistics:product_detail', args=(self.pk, ))
 
 class Product(models.Model):
+<<<<<<< HEAD
+=======
+    
+>>>>>>> origin/anjiyoo
     # 카테고리와의 외부 키 관계
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     
@@ -39,4 +43,8 @@ class Product(models.Model):
 
     # 상품의 pk를 사용하여 URL 생성
     def get_absolute_url(self):
+<<<<<<< HEAD
         return reverse('logistics:product_detail', args=(self.pk, ))
+=======
+        return reverse('logistics:product_detail', args=(self.pk, ))
+>>>>>>> origin/anjiyoo

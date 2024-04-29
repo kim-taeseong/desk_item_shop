@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>판매자-회원정보수정</title>
+</head>
+<body>
+    <h1>회원정보수정</h1>
+    <!-- 변경된 정보 저장 -->
+    <form action="{% url 'users:edit_store' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="수정완료">
+    </form>
+</body>
+</html>

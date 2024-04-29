@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # Create your views here.
+=======
+>>>>>>> origin/anjiyoo
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import QuerySet
@@ -6,6 +9,7 @@ from .models import Product, Category
 from django.views.generic import *
 from django.urls import reverse_lazy
 from typing import Any
+<<<<<<< HEAD
 from django.db.models.query import QuerySet
 
 #-- 카테고리
@@ -46,6 +50,12 @@ class ProductListView(ListView):
 
 #-- 추가
 class ProductCreateView(CreateView):
+=======
+# Create your views here.
+
+
+class AddProductView(CreateView):
+>>>>>>> origin/anjiyoo
     model = Product
     template_name = 'logistics/add_product.html' # templates url 지정 필요
     # 필드 지정
@@ -53,20 +63,37 @@ class ProductCreateView(CreateView):
     # 상품 추가 후 리다이렉트할 URL 지정
     success_url = reverse_lazy('logistics:product_list')
 
+<<<<<<< HEAD
 # Page not found (404) - 쿼리 결과에 product가 없습니다. (수정필요) > 수정완료했습니다 product_detail.html
 class ProductUpdateView(UpdateView):
+=======
+class UpdateProductView(UpdateView):
+>>>>>>> origin/anjiyoo
     model = Product
     template_name = 'logistics/update_product.html'
     fields = ['category', 'product_name', 'product_description', 'product_price', 'product_inventory', 'product_img', 'product_sale']
     success_url = reverse_lazy('logistics:product_list')
+<<<<<<< HEAD
 
 # Page not found (404) - 쿼리 결과에 product가 없습니다.(수정필요) > 수정완료했습니다 product_detail.html
+=======
+    
+class ProductListView(ListView):
+    model = Product
+    template_name = 'logistics/product_list.html'
+    context_object_name = 'product'
+    paginate_by = 10
+    def get_queryset(self) -> QuerySet[Any]:
+        return self.model.objects.all()
+
+>>>>>>> origin/anjiyoo
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'logistics/product_detail.html'
     context_object_name = 'product'
     def get_queryset(self):
         return self.model.objects.all()
+<<<<<<< HEAD
 
 #-- 상품 삭제
 class DeleteProductLV(ListView):
@@ -77,3 +104,5 @@ class DeleteProductDV(DeleteView):
     model = Product 
     success_url = reverse_lazy('logistics:del_list')  # 삭제 후 리다이렉트할 URL 지정
     template_name = 'logistics/delete.html'  # 삭제할 상품 목록을 보여줄 템플릿 지정
+=======
+>>>>>>> origin/anjiyoo

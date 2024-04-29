@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,3 +39,17 @@
 </body>
 </html>
 
+=======
+<h1>상품 리스트</h1>
+
+<h1>Product List</h1>
+<ul>
+    {% for product in product %}
+        <li>
+            <h2><a href="{%url 'logistics:product_detail'  product.pk %}">{{product.product_name }}</a></h2>
+            <p>{{ product.product_description }}</p>
+            <p>{{ product.product_price }}</p>
+        </li>
+    {% endfor %}
+</ul>
+>>>>>>> origin/anjiyoo
