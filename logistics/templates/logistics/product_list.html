@@ -1,12 +1,40 @@
-<h1>상품 리스트</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <!-- 검색 폼 -->
+    <form method="GET">
+        <!-- 폼 필드 렌더링 -->
+        {{ search_form.as_p }}
+        <!-- 검색 버튼 -->
+        <button type="submit">검색</button>
+    </form>
+    <ul>
+        <!-- 상품 목록 순회 -->
+        {% for product in products %}
+            <li>
+                <!-- 상품 링크 -->
+                <h2><a href="{{ product.get_absolute_url }}">{{ product.product_name }}</a></h2>
+                <!-- 카테고리 표시 -->
+                <p>Category: {{ product.category }}</p>
+                <!-- 가격 표시 -->
+                <p>Price: ${{ product.product_price }}</p>
+                <!-- 할인율 표시 -->
+                <p>Sale: {{ product.product_sale }}%</p>
+                <!-- 상품 이미지 -->
+                <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+                <!-- 상품 설명 -->
+                <p>{{ product.product_description }}</p>
+                <!-- 판매자 페이지 링크 -->
+                <a href="{{ product.seller_link }}">Seller Page</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
 
-<h1>Product List</h1>
-<ul>
-    {% for product in product %}
-        <li>
-            <h2><a href="{%url 'logistics:product_detail'  product.pk %}">{{product.product_name }}</a></h2>
-            <p>{{ product.product_description }}</p>
-            <p>{{ product.product_price }}</p>
-        </li>
-    {% endfor %}
-</ul>

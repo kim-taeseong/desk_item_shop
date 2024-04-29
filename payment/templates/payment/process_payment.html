@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Payment</title>
+</head>
+<body>
+    <h1>Process Payment</h1>
+    <form action="{% url 'process_payment' %}" method="post">
+        {% csrf_token %}
+        <label for="order">Order Number:</label><br>
+        <input type="text" id="order" name="order"><br>
+        <label for="payment_method">Payment Method:</label><br>
+        <input type="text" id="payment_method" name="payment_method"><br>
+        <label for="amount">Amount:</label><br>
+        <input type="text" id="amount" name="amount"><br><br>
+        <button type="submit">Process Payment</button>
+    </form>
+</body>
+</html>

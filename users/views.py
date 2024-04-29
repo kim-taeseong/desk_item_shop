@@ -126,4 +126,3 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
-    
