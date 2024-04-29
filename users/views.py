@@ -67,11 +67,13 @@ def customer_home(request): # 메인페이지가 개발되면 그 페이지로 �
     }
     return render(request, 'users/customer_home.html', context)
 
+# 지안님 확인을 위한 ProductForm
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
 
+# 지안님 확인을 위한 store_home
 @login_required
 @store_required
 def store_home(request):
@@ -79,7 +81,7 @@ def store_home(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('logistics:product_list')  # 상품 추가 성공 시 product_list로 이동
+            return redirect('logistics:product_list')  # 상품 추가 성공 시 logistics:product_list로 이동
     else:
         form = ProductForm()
     
@@ -88,7 +90,17 @@ def store_home(request):
         'form': form,
         'products': product
     }
-    return render(request, 'logistics/add_product.html', context)
+    return render(request, 'logistics/add_product.html', context) # 로그인 완료하면 logistics/add_product로 이동
+
+# store_home 원본
+# @login_required
+# @store_required
+# def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 연결시켜야 함
+#     product = Product.objects.all()
+#     context = {
+#         'products': product
+#     }
+#     return render(request, 'logistics/add_product.html', context)
 
 def find_username(request):
     if request.method == "POST":
