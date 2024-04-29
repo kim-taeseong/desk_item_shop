@@ -12,5 +12,4 @@ urlpatterns = [
     path("signup/store/", views.StoreSignUpView.as_view(), name="store_signup"), # 스토어 회원가입 페이지
     path('find_username/', views.find_username, name='find_username'), # 아이디 찾기
     path('signup/done/', views.SignUpDoneView.as_view(), name='signup_done'), # 회원가입 완료 페이지
-    path('logout/', LogoutView.as_view(), name='logout'), # 로그아웃
 ]
