@@ -1,17 +1,21 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
-from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm
-from django.contrib.auth import login
+from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .decorators import customer_required, store_required
 from django.core.mail import send_mail
 from django.conf import settings
 from django import forms
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+
 
 class CustomerSignUpView(CreateView): # 구매자 회원가입
     model = User
@@ -126,3 +130,70 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
+
+
+# 고객 회원정보 수정
+@login_required
+def edit_customer(request):
+    # 현재 로그인한 고객과 연결된 Customer 객체
+    customer = get_object_or_404(Customer, user=request.user)
+
+    if request.method == 'POST':
+        # 고객으로부터 입력받은 데이터와 파일 사용해 초기화
+        form = CustomerEditForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():  # 폼이 유효할 경우
+            updated_customer = form.save()  # 변경사항을 DB에 저장
+            return redirect('users:edit_customer_done')  # 고객 회원정보수정 완료 페이지로 리다이렉션
+    else:
+        # POST 요청이 아니라면 CustomerEditForm이 customer 인스턴스로 초기화되어 현재 정보를 customer 정보 폼에 채움
+        form = CustomerEditForm(instance=customer)
+    return render(request, 'users/edit_customer.html', {'form': form})
+
+
+class EditCustomerDoneView(TemplateView):
+    template_name = 'users/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
+
+    def post(self, request):
+        return HttpResponseRedirect(reverse('users:edit_customer_done'))
+
+
+# 스토어 회원정보 수정
+@login_required
+def edit_store(request):
+    # 현재 로그인한 사용자와 연결된 Store 객체
+    store = get_object_or_404(Store, user=request.user) 
+
+    if request.method == 'POST':
+        # 사용자로부터 입력받은 데이터와 파일 사용해 초기화
+        form = StoreEditForm(request.POST, request.FILES, instance=store) 
+        if form.is_valid():  # 폼이 유효할 경우
+            updated_store = form.save()  # 변경 사항을 DB에 저장
+            return redirect('users:edit_store_done')  # 스토어 회원정보수정 완료 페이지로 리다이렉션
+    else:
+        # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
+        form = StoreEditForm(instance=store)
+    
+    return render(request, 'users/edit_store.html', {'form': form})
+
+class EditStoreDoneView(TemplateView):
+    template_name = 'users/edit_store_done.html' # 스토어 회원정보수정완료 페이지
+
+    def post(self, request):
+        return HttpResponseRedirect(reverse('users:edit_store_done'))
+
+
+# 비밀번호 수정
+@login_required
+def edit_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # 비밀번호 변경 후 세션 유지
+            messages.success(request, '비밀번호가 성공적으로 변경되었습니다!')
+            return redirect(reverse('users:edit_password_done'))
+        else:
+            messages.error(request, '오류를 수정해주세요.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'users/edit_password.html', {'form': form})
