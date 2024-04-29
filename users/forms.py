@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 import re
 from django.core.exceptions import ValidationError
+from django.forms.widgets import DateInput
 
 
 User = get_user_model() # models.py에서 User 모델을 가져옴
@@ -29,6 +30,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '대소문자, 숫자 포함 8-12자'}),label='비밀번호')
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),label='비밀번호 확인')
 
+    # Customer 모델에 맞춰 필드 추가
     cus_nickname = forms.CharField(widget=forms.TextInput(),label='닉네임')
     cus_name = forms.CharField(widget=forms.TextInput(),label='이름')
     cus_img = forms.ImageField(label='프로필 이미지')
@@ -37,13 +39,16 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     cus_job = forms.CharField(widget=forms.TextInput(),label='직업')
     cus_address = forms.CharField(widget=forms.TextInput(),label='주소')
     cus_zipcode = forms.CharField(widget=forms.TextInput(),label='우편번호')
-    cus_birth = forms.DateField(widget=forms.DateInput(),label='생년월일')
+    cus_birth = forms.DateField(
+        widget=DateInput(attrs={'type': 'date'}),  # DateInput 위젯 사용
+        label='생년월일'
+    )
     cus_telnum = forms.CharField(widget=forms.TextInput(),label='전화번호')
 
     def __init__(self, *args, **kwargs): # 비밀번호 입력 필드 옆 안내메시지
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
-    
+        self.fields['username'].label = '아이디'
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name','cus_img','cus_height','cus_weight','cus_job',
@@ -101,11 +106,12 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
     store_num = forms.CharField(max_length=20, widget=forms.TextInput(),label='사업자 번호')
     store_address = forms.CharField(max_length=200, widget=forms.TextInput(),label='판매자 주소')
     store_zipcode = forms.CharField(max_length=10, widget=forms.TextInput(),label='판매자 우편번호')
-    store_telnum = forms.CharField(max_length=20, widget=forms.TextInput(),label='가입일')
+    store_telnum = forms.CharField(max_length=20, widget=forms.TextInput(),label='연락처')
 
     def __init__(self, *args, **kwargs): # 비밀번호 입력 필드 옆 안내메시지
         super(StoreSignUpForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
+        self.fields['username'].label = '아이디'
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -133,6 +139,6 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
         return user # 최종적으로 생성된 사용자 객체를 반환
     
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(),label='사용자 이름')
+    username = forms.CharField(widget=forms.TextInput(),label='아이디')
     password = forms.CharField(widget=forms.PasswordInput(),label='비밀번호')
 
