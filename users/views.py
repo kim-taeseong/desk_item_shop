@@ -10,6 +10,8 @@ from django.urls import reverse
 from .decorators import customer_required, store_required
 from django.core.mail import send_mail
 from django.conf import settings
+from django import forms
+from django.urls import reverse_lazy
 
 class CustomerSignUpView(CreateView):
     model = User
@@ -65,14 +67,28 @@ def customer_home(request): # 메인페이지가 개발되면 그 페이지로 �
     }
     return render(request, 'users/customer_home.html', context)
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
 @login_required
 @store_required
-def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 연결시켜야 함
+def store_home(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('logistics:product_list')  # 상품 추가 성공 시 product_list로 이동
+    else:
+        form = ProductForm()
+    
     product = Product.objects.all()
     context = {
+        'form': form,
         'products': product
     }
-    return render(request, 'users/store_home.html', context)
+    return render(request, 'logistics/add_product.html', context)
 
 def find_username(request):
     if request.method == "POST":
@@ -95,6 +111,3 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
-    
-def reset_password(request):
-    pass
