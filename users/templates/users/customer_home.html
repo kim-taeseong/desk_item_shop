@@ -1,5 +1,15 @@
 <h1> 구매자 홈</h1>
 
+<h1> 나의 쇼핑 </h1>
+
+<!-- 회원정보수정 -->
+<a href="{% url 'users:edit_customer' %}" class="btn btn-primary">회원정보 수정</a>
+
+<br><br>
+
+<!-- 비밀번호수정 -->
+<a href="{% url 'users:edit_password' %}" class="btn btn-primary">비밀번호 수정</a>
+
 <!-- 로그아웃 버튼 -->
 <button id="logout-button">로그아웃</button>
 
@@ -14,3 +24,4 @@ document.getElementById('logout-button').addEventListener('click', function() {
   }
 });
 </script>
+

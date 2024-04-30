@@ -1,5 +1,15 @@
 <h1>판매자 홈 </h1>
 
+<h1> 나의 스토어 </h1>
+
+<!-- 회원정보수정 -->
+<a href="{% url 'users:edit_store' %}" class="btn btn-primary">회원정보 수정</a>
+
+<br><br>
+
+<!-- 비밀번호수정 -->
+<a href="{% url 'users:edit_password' %}" class="btn btn-primary">비밀번호 수정</a>
+
 <!-- 로그아웃 버튼 -->
 <button id="logout-button">로그아웃</button>
 
