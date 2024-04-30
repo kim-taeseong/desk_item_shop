@@ -142,8 +142,6 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(),label='아이디')
     password = forms.CharField(widget=forms.PasswordInput(),label='비밀번호')
 
-<<<<<<< HEAD
-=======
 
 
 class CustomerEditForm(forms.ModelForm):  # 구매자 계정 회원정보수정 폼
@@ -156,4 +154,3 @@ class StoreEditForm(forms.ModelForm):  # 판매자 계정 회원정보수정 폼
     class Meta:
         model = Store
         fields = ['store_name', 'store_img', 'store_num', 'store_address', 'store_zipcode', 'store_telnum']
->>>>>>> origin/anjiyoo

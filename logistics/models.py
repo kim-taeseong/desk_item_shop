@@ -1,6 +1,7 @@
 from django.db import models
 from logistics.fields import ThumbnailImageField
 from django.urls import reverse
+from users.models import *  # 유저 모델 참조
 
 class Category(models.Model):
     category_name = models.CharField('카테고리명', max_length=50)
@@ -12,15 +13,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('logistics:product_detail', args=(self.pk, ))
 
-class Product(models.Model):
-<<<<<<< HEAD
-=======
-    
->>>>>>> origin/anjiyoo
+
+class Product(models.Model):    
     # 카테고리와의 외부 키 관계
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    
-    #store_id = models.IntegerField() # 스토어 ID
+    # 스토어와의 외부 키 관계 (추가)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
     
     product_name = models.CharField(verbose_name='상품명', max_length=30) # 상품명
     product_description = models.TextField('상품 설명') # 설명
@@ -43,8 +41,4 @@ class Product(models.Model):
 
     # 상품의 pk를 사용하여 URL 생성
     def get_absolute_url(self):
-<<<<<<< HEAD
         return reverse('logistics:product_detail', args=(self.pk, ))
-=======
-        return reverse('logistics:product_detail', args=(self.pk, ))
->>>>>>> origin/anjiyoo
