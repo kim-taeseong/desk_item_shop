@@ -13,8 +13,7 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('logistics:product_detail', args=(self.pk, ))
 
-
-class Product(models.Model):    
+class Product(models.Model):
     # 카테고리와의 외부 키 관계
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     # 스토어와의 외부 키 관계 (추가)

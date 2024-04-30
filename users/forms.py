@@ -77,7 +77,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
             cus_birth=self.cleaned_data.get('cus_birth'),
             cus_telnum=self.cleaned_data.get('cus_telnum'),
         )
-        return user # 최종적으로 생성된 사용자 객체를 반환
+        return user # 최종적으로 생성된 구매자 객체를 반환
     
 
 class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
@@ -136,7 +136,8 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
             store_address=self.cleaned_data.get('store_address'), 
             store_zipcode=self.cleaned_data.get('store_zipcode'), 
             store_telnum=self.cleaned_data.get('store_telnum'))
-        return user # 최종적으로 생성된 사용자 객체를 반환
+        
+        return user # 최종적으로 생성된 판매자 객체를 반환
     
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(),label='아이디')

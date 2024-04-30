@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth import login, get_user_model, logout
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
@@ -8,16 +9,21 @@ from django.contrib.auth import views as auth_views
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse, reverse_lazy
-from .decorators import customer_required, store_required
-from django.core.mail import send_mail
+from django.contrib.auth import views as auth_views
+from django.contrib import messages
+from django.urls import reverse
 from django.conf import settings
+from django.core.mail import send_mail
+from .decorators import customer_required, store_required
 from django import forms
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
+User = get_user_model()
 
-class CustomerSignUpView(CreateView): # 구매자 회원가입
+# 구매자 회원가입
+class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
     template_name = 'users/customer_signup.html' # 구매자 회원가입 페이지로 이동
@@ -29,9 +35,10 @@ class CustomerSignUpView(CreateView): # 구매자 회원가입
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('users:signup_done') # 회원가입 완료 페이지 필요
+        return redirect('users:signup_done')
     
-class StoreSignUpView(CreateView): # 판매자 회원가입
+# 판매자 회원가입
+class StoreSignUpView(CreateView):
     model = User
     form_class = StoreSignUpForm
     template_name = 'users/store_signup.html' # 판매자 회원가입 페이지로 이동
@@ -43,12 +50,14 @@ class StoreSignUpView(CreateView): # 판매자 회원가입
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('users:signup_done') # 회원가입 완료 페이지 필요
+        return redirect('users:signup_done')
     
+# 회원가입 완료
 class SignUpDoneView(TemplateView):
     template_name = 'users/signup_done.html'
-    
-class LoginView(auth_views.LoginView): # 로그인
+
+# 로그인
+class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'users/login.html'
 
@@ -65,6 +74,7 @@ class LoginView(auth_views.LoginView): # 로그인
         else:
             return reverse('login') # 잘못 입력하면 다시
         
+# customer_home
 @login_required
 @customer_required
 def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페이지로 연결시켜야 함
@@ -74,7 +84,7 @@ def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페
     }
     return render(request, 'users/customer_home.html', context)
 
-# store_home 원본
+# store_home
 @login_required
 @store_required
 def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 연결시켜야 함
@@ -84,34 +94,10 @@ def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 
     }
     return render(request, 'users/store_home.html', context)
 
-# # 지안님 확인을 위한 ProductForm
-# class ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Product
-#         fields = '__all__'
-
-# # 지안님 확인을 위한 store_home
-# @login_required
-# @store_required
-# def store_home(request):
-#     if request.method == 'POST':
-#         form = ProductForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('logistics:product_list')  # 상품 추가 성공 시 logistics:product_list로 이동
-#     else:
-#         form = ProductForm()
-    
-#     product = Product.objects.all()
-#     context = {
-#         'form': form,
-#         'products': product
-#     }
-#     return render(request, 'logistics/add_product.html', context) # 로그인 완료하면 logistics/add_product로 이동
-
+# 아이디 찾기
 def find_username(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
+    if request.method == 'POST':
+        email = request.POST['email']
         users = User.objects.filter(email=email)
         if users.exists():
             user = users.first()
@@ -130,6 +116,11 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
+    
+# 로그아웃
+def logout_view(request):
+    logout(request)
+    return redirect('users:login')  # 로그인 화면으로 리다이렉트
 
 
 # 고객 회원정보 수정

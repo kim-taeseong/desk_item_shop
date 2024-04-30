@@ -2,6 +2,7 @@ from django.urls import path
 from .views import AddProductView,ProductListView, UpdateProductView, ProductDetailView
 from .views import DeleteProductDV, DeleteProductLV
 from .views import CategoryListView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView
+from . import views
 
 app_name  = 'logistics'
 urlpatterns = [
@@ -23,5 +24,15 @@ urlpatterns = [
     # 삭제
     path('product/delete/', DeleteProductLV.as_view(), name='del_list'),
     path('product/delete/<int:pk>/', DeleteProductDV.as_view(), name='del_product'),
+    path('products/', views.ProductListView.as_view(), name='product_list'),
+    path('products/create/', views.AddProductView.as_view(), name='add_product'),
+
+    # Page not found (404) - 쿼리 결과에 product가 없습니다. > 수정했습니다
+    path('products/<int:pk>/update/', views.UpdateProductView.as_view(), name='update_product'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
+    path('products/<int:pk>/detail/', views.ProductDetailView.as_view(), name='product_detail'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
+
+    # 삭제
+    path('products/delete/', views.DeleteProductLV.as_view(), name='del_list'),
+    path('products/<int:pk>/delete/', views.DeleteProductDV.as_view(), name='del_product'),
     
 ]

@@ -8,6 +8,21 @@
 <!-- 비밀번호수정 -->
 <a href="{% url 'users:edit_password' %}" class="btn btn-primary">비밀번호 수정</a>
 
+<!-- 로그아웃 버튼 -->
+<button id="logout-button">로그아웃</button>
+
+<script>
+document.getElementById('logout-button').addEventListener('click', function() {
+  // 사용자에게 로그아웃을 묻는 알림
+  const isLogout = confirm('로그아웃 하시겠습니까?');
+  
+  if (isLogout) {
+    // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
+    window.location.href = '/logout/';
+  }
+});
+</script>
+
 <br><br>
 
 <!-- 상품등록 -->
