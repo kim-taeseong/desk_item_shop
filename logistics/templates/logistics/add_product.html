@@ -1,8 +1,0 @@
-<div class="container">
-    <h2>상품 추가</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">상품 추가하기</button>
-    </form>
-</div>
