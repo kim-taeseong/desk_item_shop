@@ -11,15 +11,15 @@ urlpatterns = [
     path('categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category_delete'),
 
 
-    path('product/add/', views.ProductCreateView.as_view(), name='add_product'),
-    path('product/list/', views.ProductListView.as_view(), name='product_list'),
+    path('products/', views.ProductListView.as_view(), name='product_list'),
+    path('products/create/', views.ProductCreateView.as_view(), name='add_product'),
 
     # Page not found (404) - 쿼리 결과에 product가 없습니다. > 수정했습니다
-    path('product/update/<int:pk>', views.ProductUpdateView.as_view(), name='update_product'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
-    path('product/detail/<int:pk>', views.ProductDetailView.as_view(), name='product_detail'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
+    path('products/<int:pk>/update/', views.ProductUpdateView.as_view(), name='update_product'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
+    path('products/<int:pk>/detail/', views.ProductDetailView.as_view(), name='product_detail'), # (수정완료 product_detail.html 부분에 url 부분을 수정)
 
     # 삭제
-    path('product/delete/', views.DeleteProductLV.as_view(), name='del_list'),
-    path('product/delete/<int:pk>/', views.DeleteProductDV.as_view(), name='del_product'),
+    path('products/delete/', views.DeleteProductLV.as_view(), name='del_list'),
+    path('products/<int:pk>/delete/', views.DeleteProductDV.as_view(), name='del_product'),
     
 ]
