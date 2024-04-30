@@ -1,10 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-<<<<<<< HEAD
-=======
 from django.contrib.auth.views import PasswordChangeDoneView  # Django 제공 view
->>>>>>> origin/anjiyoo
 
 app_name = 'users'
 
@@ -20,8 +17,6 @@ urlpatterns = [
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-<<<<<<< HEAD
-=======
     path('edit/customer/', views.edit_customer, name='edit_customer'), # 고객 회원정보 수정 페이지
     path('edit/customer/done/', views.EditCustomerDoneView.as_view(), name='edit_customer_done'), # 고객 회원정보 수정 완료 페이지
     path('edit/store/', views.edit_store, name='edit_store'),  # 스토어 회원정보 수정 페이지
@@ -29,5 +24,4 @@ urlpatterns = [
     path('edit/password/', views.edit_password, name='edit_password'),  # 비밀번호 변경 페이지
     path('edit/password/done/', PasswordChangeDoneView.as_view(template_name='users/edit_password_done.html'), name='edit_password_done'),  # 비밀번호 변경 완료 페이지
 
->>>>>>> origin/anjiyoo
 ]

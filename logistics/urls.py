@@ -1,5 +1,4 @@
 from django.urls import path
-<<<<<<< HEAD
 from . import views
 
 app_name  = 'logistics'
@@ -23,14 +22,4 @@ urlpatterns = [
     path('product/delete/', views.DeleteProductLV.as_view(), name='del_list'),
     path('product/delete/<int:pk>/', views.DeleteProductDV.as_view(), name='del_product'),
     
-=======
-from .views import AddProductView,ProductListView,UpdateProductView, ProductDetailView
-
-app_name = 'logistics'
-urlpatterns = [
-    path('add_product/', AddProductView.as_view(), name='add_product'),
-    path('product_list/', ProductListView.as_view(), name='product_list'),
-    path('update_product/<int:pk>', UpdateProductView.as_view(), name='update_product'),
-    path('product_detail/<int:pk>', ProductDetailView.as_view(), name='product_detail'),
->>>>>>> origin/anjiyoo
 ]

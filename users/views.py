@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-from django.shortcuts import redirect, render
-from django.views.generic import *
-from .models import User, Customer, Store
-from logistics.models import Product
-from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm
-from django.contrib.auth import login
-from django.contrib.auth import views as auth_views
-=======
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
@@ -15,21 +6,16 @@ from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditF
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
->>>>>>> origin/anjiyoo
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .decorators import customer_required, store_required
 from django.core.mail import send_mail
 from django.conf import settings
 from django import forms
-<<<<<<< HEAD
-from django.urls import reverse_lazy
-=======
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
->>>>>>> origin/anjiyoo
 
 class CustomerSignUpView(CreateView): # 구매자 회원가입
     model = User
@@ -144,8 +130,6 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'users/find_username.html')
-<<<<<<< HEAD
-=======
 
 
 # 고객 회원정보 수정
@@ -213,4 +197,3 @@ def edit_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'users/edit_password.html', {'form': form})
->>>>>>> origin/anjiyoo
