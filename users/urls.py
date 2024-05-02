@@ -24,5 +24,4 @@ urlpatterns = [
     path('edit/store/done/', views.EditStoreDoneView.as_view(), name='edit_store_done'),  # 스토어 회원정보 수정 완료 페이지
     path('edit/password/', views.edit_password, name='edit_password'),  # 비밀번호 변경 페이지
     path('edit/password/done/', PasswordChangeDoneView.as_view(template_name='users/edit_password_done.html'), name='edit_password_done'),  # 비밀번호 변경 완료 페이지
-
 ]
