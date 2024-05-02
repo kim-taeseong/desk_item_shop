@@ -12,9 +12,9 @@ class Customer(models.Model):
     cus_nickname = models.CharField(max_length=20) # 닉네임
     cus_name = models.CharField(max_length=20) # 이름
     cus_img = models.ImageField(upload_to='customer/img') # 프로필 이미지
-    cus_height = models.IntegerField() # 키
-    cus_weight = models.IntegerField() # 몸무게
-    cus_job = models.CharField(max_length=20) # 직업
+    cus_height = models.IntegerField(null=True) # 키
+    cus_weight = models.IntegerField(null=True) # 몸무게
+    cus_job = models.CharField(max_length=20, null=True) # 직업
     cus_address = models.CharField(max_length=200) # 주소
     cus_zipcode = models.CharField(max_length=10) # 우편번호 - 수학적인 연산이 필요하지 않기에 CharField가 더 적절하다고 함
     cus_birth = models.DateField() # 생년월일

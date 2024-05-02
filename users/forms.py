@@ -34,9 +34,9 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     cus_nickname = forms.CharField(widget=forms.TextInput(),label='닉네임')
     cus_name = forms.CharField(widget=forms.TextInput(),label='이름')
     cus_img = forms.ImageField(label='프로필 이미지')
-    cus_height = forms.IntegerField(widget=forms.NumberInput(),label='키')
-    cus_weight = forms.IntegerField(widget=forms.NumberInput(),label='몸무게')
-    cus_job = forms.CharField(widget=forms.TextInput(),label='직업')
+    cus_height = forms.IntegerField(widget=forms.NumberInput(), label='키', required=False) # 키 ,무게, 직업은 필수 아님
+    cus_weight = forms.IntegerField(widget=forms.NumberInput(), label='몸무게', required=False)
+    cus_job = forms.CharField(widget=forms.TextInput(), label='직업', required=False)
     cus_address = forms.CharField(widget=forms.TextInput(),label='주소')
     cus_zipcode = forms.CharField(widget=forms.TextInput(),label='우편번호')
     cus_birth = forms.DateField(
