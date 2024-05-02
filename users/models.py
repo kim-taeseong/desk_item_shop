@@ -11,7 +11,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='customer')
     cus_nickname = models.CharField(max_length=20) # 닉네임
     cus_name = models.CharField(max_length=20) # 이름
-    cus_img = models.ImageField(upload_to='customer/img') # 프로필 이미지
+    cus_img = models.ImageField(upload_to='customer/img', null=True) # 프로필 이미지
     cus_height = models.IntegerField(null=True) # 키
     cus_weight = models.IntegerField(null=True) # 몸무게
     cus_job = models.CharField(max_length=20, null=True) # 직업
@@ -27,7 +27,7 @@ class Customer(models.Model):
 class Store(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='store')
     store_name = models.CharField(max_length=20) # 상호명
-    store_img = models.ImageField(upload_to='store/img') # 스토어 이미지
+    store_img = models.ImageField(upload_to='store/img', null=True) # 스토어 이미지
     store_num = models.CharField(max_length=20) # 사업자번호
     store_address = models.CharField(max_length=200) # 판매점 주소
     store_zipcode = models.CharField(max_length=10) # 판매점 우편번호 - 수학적인 연산이 필요하지 않기에 CharField가 더 적절하다고 함

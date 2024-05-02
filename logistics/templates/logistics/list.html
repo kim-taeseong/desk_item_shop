@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <!-- 페이지의 제목을 정의함 -->
+    {{ store.store_name }} <!-- 스토어 이름 표시 -->
     {% with page_title="상품 목록" %}
     <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">{{ page_title }}</span></h1>
     {% endwith %}
@@ -12,29 +12,46 @@
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #ddd;">상품명</th>
-                <th style="border: 1px solid #ddd;">가격</th>
-                <th style="border: 1px solid #ddd;">재고</th>
-                <th style="border: 1px solid #ddd;">등록일</th>
-                <th style="border: 1px solid #ddd;">상세 설명</th>
-                <th style="border: 1px solid #ddd;">삭제</th>
+                <th style="border: 1px solid #ddd; text-align: center;">카테고리</th> <!-- 카테고리 열 추가 -->
+                <th style="border: 1px solid #ddd; text-align: center;">상품명</th>
+                <th style="border: 1px solid #ddd; text-align: center;">가격</th>
+                <th style="border: 1px solid #ddd; text-align: center;">힐인율</th>
+                <th style="border: 1px solid #ddd; text-align: center;">재고</th>
+                <th style="border: 1px solid #ddd; text-align: center;">등록일</th>
+                <th style="border: 1px solid #ddd; text-align: center;">상세 설명</th>
+                <th style="border: 1px solid #ddd; text-align: center;">수정</th>
+                <th style="border: 1px solid #ddd; text-align: center;">삭제</th>
             </tr>
         </thead>
         <tbody>
             {% for product in object_list %}
             <tr>
-                <td style="border: 1px solid #ddd;">{{ product.product_name }}</td>
-                <td style="border: 1px solid #ddd;">{{ product.product_price }}</td>
-                <td style="border: 1px solid #ddd;">{{ product.product_inventory }}</td>
-                <td style="border: 1px solid #ddd;">{{ product.product_date }}</td>
-                <td style="border: 1px solid #ddd;">{{ product.product_description }}</td>
-                <td style="border: 1px solid #ddd;">
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.category.category_name }}</td> <!-- 카테고리 이름 출력 -->
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_name }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_price }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_sale }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_inventory }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_date }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_description }}</td>
+                <td style="border: 1px solid #ddd; text-align: center;">
+                    <a href="{% url 'logistics:update_product' pk=product.pk %}">
+                    <button>상품수정</button></a></td>
+                <td style="border: 1px solid #ddd; text-align: center;">
                     <a href="{% url 'logistics:del_product' pk=product.pk %}">
-                    <button>상품 삭제</button></a></td>
+                    <button>상품삭제</button></a></td>
             </tr>
-            {% endfor %}
+            {% endfor %} 
+
         </tbody>
+
     </table>
+</div>
+
+<!-- 상품 등록 버튼 -->
+<div style="margin-top: 20px; text-align: right;">
+    <a href="{% url 'logistics:add_product' %}">
+        <button style="padding: 5px 10px; font-size: 15px; cursor: pointer; background-color: #ff4d4d; color: white; border: none; border-radius: 5px;">상품 등록</button>
+    </a>
 </div>
 
 {% endblock %}
