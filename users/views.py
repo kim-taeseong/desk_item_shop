@@ -67,8 +67,8 @@ class LoginView(auth_views.LoginView):
     def get_success_url(self):
         user = self.request.user # 아이디가 고객인지 스토어인지
         if user.is_authenticated:
-            if user.is_customer: # 아이디가 고객이면 고객 메인 페이지로
-                return reverse('users:customer_home')
+            if user.is_customer: # 아이디가 고객이면 메인 페이지로
+                return reverse('logistics:main')
             elif user.is_store: # 아이디가 스토어면 스토어 메인 페이지로
                 return reverse('users:store_home')
         else:

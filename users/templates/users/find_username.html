@@ -1,11 +1,15 @@
-<h1>아이디 찾기</h1>
-<form action="{% url 'users:find_username' %}" method="POST">
-    {% csrf_token %}
-    <label for="email">이메일:</label>
-    <input type="email" name="email" required>
-    <input type="submit" value="아이디 찾기">
-</form>
+{% extends "noncategory_base.html" %}
 
-{% if error %}
-<p>{{ error }}</p>
-{% endif %}
+{% block content %}
+    <h1>아이디 찾기</h1>
+    <form action="{% url 'users:find_username' %}" method="POST">
+        {% csrf_token %}
+        <label for="email">이메일:</label>
+        <input type="email" name="email" required>
+        <input type="submit" value="아이디 찾기">
+    </form>
+
+    {% if error %}
+    <p>{{ error }}</p>
+    {% endif %}
+{% endblock %}

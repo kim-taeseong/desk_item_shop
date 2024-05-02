@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인</title>
-</head>
-<body>
+{% extends "noncategory_base.html" %}
+
+{% block content %}
     <h1>로그인</h1>
     <form action="{% url 'users:login' %}" method="POST">
         {% csrf_token %}
@@ -18,6 +12,5 @@
     <a href="{% url 'users:customer_signup' %}">고객 회원가입</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'users:store_signup' %}">스토어 회원가입</a>
     <br>
     <br>
-    <a href="{%url 'users:find_username' %}">아이디 찾기</a>&nbsp;&nbsp;&nbsp;<a href="{%url 'password_reset' %}">비밀번호 찾기</a>
-</body>
-</html>
+    <a href="{% url 'users:find_username' %}">아이디 찾기</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'password_reset' %}">비밀번호 찾기</a>
+{% endblock %}

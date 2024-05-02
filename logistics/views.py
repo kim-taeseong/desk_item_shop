@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # 카테고리 목록
 class CategoryListView(ListView):
     model = Category
-    template_name = 'category/list.html'  # 목록을 표시할 템플릿 파일
+    template_name = 'category/list.html'  # 연결되는 templates url
 
 # 추가 
 class CategoryCreateView(CreateView):
@@ -123,3 +123,37 @@ class DeleteProductDV(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         product = self.get_object()
         return self.request.user == product.store.user
+    
+
+###############################################################################
+#### 메인페이지
+#-- 메인페이지 http://127.0.0.1:8000/
+class MainListView(ListView):
+    model = Product
+    template_name = 'main.html'  # 연결되는 templates url
+    context_object_name = 'products'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return self.model.objects.all()
+
+
+#-- 카테고리별 상품리스트 조회
+class MainProductListView(ListView):
+    model = Product
+    template_name = 'category/cat_products.html'  # 연결되는 templates url
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        # URL에서 pk를 받아옴
+        pk = self.kwargs.get('pk')
+        self.category = Category.objects.get(pk=pk)
+
+        # 해당 카테고리에 속하는 상품들만 필터링
+        return Product.objects.filter(category=self.category).order_by('-product_date')
+
+    def get_context_data(self, **kwargs):
+        # 기본 구현을 호출하여 context를 가져옴
+        context = super().get_context_data(**kwargs)
+        # context에 카테고리를 추가
+        context['category'] = self.category
+        return context
