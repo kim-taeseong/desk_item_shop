@@ -73,7 +73,7 @@ class LoginView(auth_views.LoginView):
             elif user.is_store: # 아이디가 스토어면 스토어 메인 페이지로
                 return reverse('users:store_home')
         else: # 잘못 입력하면 다시
-            return reverse('login')
+            return reverse('login') 
 
 # 로그아웃
 def logout_view(request):
