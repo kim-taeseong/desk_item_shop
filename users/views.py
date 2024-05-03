@@ -76,10 +76,12 @@ class LoginView(auth_views.LoginView):
             return reverse('login') 
 
 # 로그아웃
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('users:login')  # 로그인 화면으로 리다이렉트
-        
+
+@login_required
 # 회원탈퇴 - 실제 삭제가 아닌 비활성화
 def account_delete(request):
     if request.method == 'POST':
@@ -257,4 +259,3 @@ def edit_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'users/edit_password.html', {'form': form})
-
