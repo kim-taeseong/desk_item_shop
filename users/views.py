@@ -132,11 +132,10 @@ def account_delete_now(request):
             user = User.objects.get(username=username)
             
             if user.check_password(password):
-                # 사용자가 'Store' 타입인지 확인
+                # 계정이 판매자 계정인지 확인
                 if hasattr(user, 'store'):
-                    # Store와 관련된 Product들을 삭제
-                    Product.objects.filter(store=user.store).delete()
-                    # Store 인스턴스 삭제 (선택적)
+                    # 해당 판매자가 올렸던 상품들 삭제
+                    Product.objects.filter(store=user.store).delete() 
                     user.store.delete()
                 # 비밀번호가 일치하는 경우에만 계정을 삭제
                 user.delete()
