@@ -22,7 +22,7 @@ User = get_user_model()
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
-    template_name = 'users/customer_signup.html' # 구매자 회원가입 페이지로 이동
+    template_name = 'customer/customer_signup.html' # 구매자 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'customer'
@@ -37,7 +37,7 @@ class CustomerSignUpView(CreateView):
 class StoreSignUpView(CreateView):
     model = User
     form_class = StoreSignUpForm
-    template_name = 'users/store_signup.html' # 판매자 회원가입 페이지로 이동
+    template_name = 'store/store_signup.html' # 판매자 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'store'
@@ -94,12 +94,12 @@ def account_delete(request):
             return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
-            return render(request, 'users/account_delete.html')
-    return render(request, 'users/account_delete.html')
+            return render(request, 'account_delete/account_delete.html')
+    return render(request, 'account_delete/account_delete.html')
 
 # 회원탈퇴 알림 페이지
 def account_delete_alert(request):
-    return render(request, 'users/account_delete_alert.html')
+    return render(request, 'account_delete/account_delete_alert.html')
 
 # 탈퇴 취소 페이지
 def account_delete_cancel(request):
@@ -122,7 +122,7 @@ def account_delete_cancel(request):
         except User.DoesNotExist:
             messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
-    return render(request, 'users/account_delete_cancel.html')
+    return render(request, 'account_delete/account_delete_cancel.html')
 
 # 즉시 탈퇴 페이지
 def account_delete_now(request):
@@ -149,7 +149,7 @@ def account_delete_now(request):
         except User.DoesNotExist:
             messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
-    return render(request, 'users/account_delete_now.html')
+    return render(request, 'account_delete/account_delete_now.html')
 
 # 구매자 홈
 @login_required
@@ -186,13 +186,13 @@ def find_username(request):
                 [email],
                 fail_silently=False,
             ) 
-            return render(request, 'users/find_username_done.html')  # 이메일 발송 완료시 발송 완료 페이지로 이동
+            return render(request, 'find/find_username_done.html')  # 이메일 발송 완료시 발송 완료 페이지로 이동
         else:
             # 등록된 이메일이 아닐 경우, 에러 메시지와 함께 find_username 템플릿을 다시 렌더링
-            return render(request, 'users/find_username.html', {'error': '해당 이메일로 등록된 사용자가 없습니다.'})
+            return render(request, 'find/find_username.html', {'error': '해당 이메일로 등록된 사용자가 없습니다.'})
     else:
         # GET 요청 처리
-        return render(request, 'users/find_username.html')
+        return render(request, 'find/find_username.html')
 
 # 고객 회원정보 수정
 @login_required
@@ -209,11 +209,11 @@ def edit_customer(request):
     else:
         # POST 요청이 아니라면 CustomerEditForm이 customer 인스턴스로 초기화되어 현재 정보를 customer 정보 폼에 채움
         form = CustomerEditForm(instance=customer)
-    return render(request, 'users/edit_customer.html', {'form': form})
+    return render(request, 'edit/edit_customer.html', {'form': form})
 
 
 class EditCustomerDoneView(TemplateView):
-    template_name = 'users/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
+    template_name = 'edit/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_customer_done'))
@@ -235,10 +235,10 @@ def edit_store(request):
         # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
         form = StoreEditForm(instance=store)
     
-    return render(request, 'users/edit_store.html', {'form': form})
+    return render(request, 'edit/edit_store.html', {'form': form})
 
 class EditStoreDoneView(TemplateView):
-    template_name = 'users/edit_store_done.html' # 스토어 회원정보수정완료 페이지
+    template_name = 'edit/edit_store_done.html' # 스토어 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_store_done'))
@@ -258,4 +258,4 @@ def edit_password(request):
             messages.error(request, '오류를 수정해주세요.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'users/edit_password.html', {'form': form})
+    return render(request, 'edit/edit_password.html', {'form': form})

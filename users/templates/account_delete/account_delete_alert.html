@@ -5,7 +5,7 @@
 <h1> 이 계정은 회원 탈퇴한 계정입니다.</h1>
 <p> 이 계정은 (회원탈퇴일)에 회원 탈퇴를 하셨으며 모든 정보는 (회원탈퇴 7일 후)일에 삭제됩니다 </p>
 <p>회원 탈퇴를 취소하거나 지금 즉시 탈퇴하실 수 있습니다</p>
-<form method="post" action="{% url 'users:account_delete_cancel' %}">
+<form method="post" action="{% url 'account_delete:account_delete_cancel' %}">
     {% csrf_token %}
     <button type="submit">탈퇴 취소하기</button>
 </form>
