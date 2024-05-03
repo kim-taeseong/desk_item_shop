@@ -27,7 +27,7 @@ urlpatterns = [
     path('edit/password/done/', PasswordChangeDoneView.as_view(template_name='users/edit_password_done.html'), name='edit_password_done'),  # 비밀번호 변경 완료 페이지
     path('account/delete/', views.account_delete, name='account_delete'), # 회원탈퇴
     path('account_delete_alert/', views.account_delete_alert, name='account_delete_alert'), # 회원탈퇴 안내 페이지
-    # path('account/delete/cancel', views.account_delete_cancel, name='account_delete_cancel'), # 탈퇴 취소
-    # path('account/delete/confirm', views.delete_account_confirm, name='account_delete_confirm'), # 즉시 탈퇴
+    path('account/delete/cancel', views.account_delete_cancel, name='account_delete_cancel'), # 탈퇴 취소
+    path('account/delete/now', views.account_delete_now, name='account_delete_now'), # 즉시 탈퇴
 
 ]

@@ -1,5 +1,5 @@
-<h1>탈퇴 취소하기</h1>
-<p>탈퇴를 취소하시려면 아이디와 비밀번호를 입력해주세요</p>
+<h1>즉시 탈퇴하기</h1>
+<p>즉시 탈퇴하시려면 아이디와 비밀번호를 입력해주세요</p>
 
 <form method="post" action="{% url 'users:login' %}">
     {% csrf_token %}
@@ -7,7 +7,7 @@
     <input type="text" name="username" placeholder="아이디">
     <!-- 비밀번호 입력란 -->
     <input type="password" name="password" placeholder="비밀번호">
-    <button type="submit">탈퇴 취소</button>
+    <button type="submit">즉시 탈퇴</button>
 </form>
 
 <a href="{% url 'users:login' %}">로그인 화면으로</a>

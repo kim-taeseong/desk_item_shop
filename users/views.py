@@ -1,5 +1,3 @@
-import json, os
-from django import forms
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
@@ -9,17 +7,13 @@ from django.contrib.auth import login, get_user_model, logout, authenticate, upd
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib import messages
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-from django.utils import timezone
 from django.utils.translation import gettext as _
-from django.core.serializers import serialize
-from datetime import timedelta, datetime
 
 User = get_user_model()
 
@@ -62,21 +56,23 @@ class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'users/login.html'
 
-    def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
+    def form_invalid(self, form):
+        # 비활성화된 계정으로 로그인 시도 시, 계정 삭제 안내 페이지로
+        username = form.cleaned_data.get('username')
+        user = User.objects.filter(username=username).first()
+        if user and not user.is_active:
+            return HttpResponseRedirect(reverse('users:account_delete_alert'))
+        return super().form_invalid(form)
 
     def get_success_url(self):
-        user = self.request.user # 아이디가 고객인지 스토어인지
+        user = self.request.user
         if user.is_authenticated:
-            if user.is_customer: # 아이디가 고객이면 고객 메인 페이지로
+            if user.is_customer: # 구매자면 구매자 홈으로
                 return reverse('users:customer_home')
-            elif user.is_store: # 아이디가 스토어면 스토어 메인 페이지로
+            elif user.is_store: # 판매자면 판매자 홈으로
                 return reverse('users:store_home')
-            elif user.is_active == False: # 탈퇴(비활성화)했던 계정이면 탈퇴 안내 페이지로
-                return reverse('users:account_delete_alert')
-        else:
-            return reverse('login') # 잘못 입력하면 다시
-
+        else: # 잘못 입력하면 다시
+            return reverse('login')
 
 # 로그아웃
 def logout_view(request):
@@ -92,14 +88,43 @@ def account_delete(request):
             user.is_active = False  # 탈퇴 처리(실제 삭제 대신 비활성화)
             user.save()
             logout(request)
-            return redirect('users:login')  # 로그인 페이지로 리다이렉트
+            return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
-            messages.error(request, '비밀번호가 틀렸습니다.')  # 비밀번호가 틀렸을 때 안내메시지
+            messages.error(request, '비밀번호가 틀렸습니다.')
+            return render(request, 'users/account_delete.html')
     return render(request, 'users/account_delete.html')
 
-# 회원탈퇴 알림 페이지 뷰
+# 회원탈퇴 알림 페이지
 def account_delete_alert(request):
     return render(request, 'users/account_delete_alert.html')
+
+# 탈퇴 취소 페이지
+def account_delete_cancel(request):
+    message = None
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=username, is_active=False)
+            
+            if user.check_password(password):
+                user.is_active = True
+                user.save()
+                
+                messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
+                return redirect('users:account_delete_cancel')
+            else:
+                messages.error(request, '비밀번호가 일치하지 않습니다.')
+        except User.DoesNotExist:
+            messages.error(request, '비활성화된 계정을 찾을 수 없습니다.')
+
+    return render(request, 'users/account_delete_cancel.html', {'message': message})
+
+# 즉시 탈퇴 페이지
+def account_delete_now(request):
+    return render(request, 'users/account_delete_now.html')
 
 # 구매자 홈
 @login_required
