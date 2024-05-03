@@ -101,8 +101,6 @@ def account_delete_alert(request):
 
 # 탈퇴 취소 페이지
 def account_delete_cancel(request):
-    message = None
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -111,20 +109,45 @@ def account_delete_cancel(request):
             user = User.objects.get(username=username, is_active=False)
             
             if user.check_password(password):
+                # 비밀번호가 일치하는 경우에만 계정을 활성화 상태로 변경
                 user.is_active = True
                 user.save()
                 
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
-                return redirect('users:account_delete_cancel')
+                return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
-                messages.error(request, '비밀번호가 일치하지 않습니다.')
+                messages.error(request, '비밀번호가 일치하지 않습니다.') # 비밀번호가 일치하지 않으면
         except User.DoesNotExist:
-            messages.error(request, '비활성화된 계정을 찾을 수 없습니다.')
+            messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
-    return render(request, 'users/account_delete_cancel.html', {'message': message})
+    return render(request, 'users/account_delete_cancel.html')
 
 # 즉시 탈퇴 페이지
 def account_delete_now(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=username)
+            
+            if user.check_password(password):
+                # 사용자가 'Store' 타입인지 확인
+                if hasattr(user, 'store'):
+                    # Store와 관련된 Product들을 삭제
+                    Product.objects.filter(store=user.store).delete()
+                    # Store 인스턴스 삭제 (선택적)
+                    user.store.delete()
+                # 비밀번호가 일치하는 경우에만 계정을 삭제
+                user.delete()
+                
+                messages.success(request, '계정이 성공적으로 삭제되었습니다.')
+                return redirect('users:login')  # 로그인 페이지로 리다이렉트
+            else:
+                messages.error(request, '비밀번호가 일치하지 않습니다.') # 비밀번호가 일치하지 않으면
+        except User.DoesNotExist:
+            messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
+
     return render(request, 'users/account_delete_now.html')
 
 # 구매자 홈

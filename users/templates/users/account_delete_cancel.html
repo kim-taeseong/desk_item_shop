@@ -1,7 +1,11 @@
+{% extends "noncategory_base.html" %}
+
+{% block content %}
+
 <h1>탈퇴 취소하기</h1>
 <p>탈퇴를 취소하시려면 아이디와 비밀번호를 입력해주세요</p>
 
-<form method="post" action="{% url 'users:login' %}">
+<form method="post" action="{% url 'users:account_delete_cancel' %}" onsubmit="confirmDeleteCancel(event)">
     {% csrf_token %}
     <!-- 아이디 입력란 -->
     <input type="text" name="username" placeholder="아이디">
@@ -10,4 +14,27 @@
     <button type="submit">탈퇴 취소</button>
 </form>
 
+<script>
+    function confirmDeleteCancel(event) {
+        // '회원 탈퇴를 취소하시겠습니까?' 안내 메시지
+        const isConfirmed = confirm('회원 탈퇴를 취소하시겠습니까?');
+        if (isConfirmed) {
+            
+        } else {
+            // [아니오]를 선택했을 경우, 폼 제출을 중단
+            event.preventDefault();
+        }
+    }
+</script>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <a href="{% url 'users:login' %}">로그인 화면으로</a> 
+
+{% endblock %}
