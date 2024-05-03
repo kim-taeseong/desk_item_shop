@@ -92,7 +92,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'users.validators.CustomPasswordValidator',
+        'NAME': 'users.forms.CustomPasswordValidator',
     },
 ]
 
