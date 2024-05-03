@@ -1,3 +1,6 @@
-<h1>이메일이 발송되었습니다!</h1>
+{% extends "noncategory_base.html" %}
 
-<a href="{%url 'users:login'%}">로그인 화면으로</a>
+{% block content %}
+    <h1>이메일이 발송되었습니다!</h1>
+    <a href="{% url 'users:login' %}">로그인 화면으로</a>
+{% endblock %}

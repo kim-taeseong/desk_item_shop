@@ -1,12 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'store_base.html' %}
 
 {% block content %}
-<div class="container">
+<div>
     {{ store.store_name }} <!-- 스토어 이름 표시 -->
     {% with page_title="상품 목록" %}
-    <h1><span style="border-bottom: 12px solid #dcf1fb; padding: 0 0 0 0.2em;">{{ page_title }}</span></h1>
+    <h3>{{ page_title }}</span></h3>
     {% endwith %}
 </div>
+
+
+<style>
+    .store-name {
+        margin-bottom: 20px; /* 스토어 이름 아래에 20px의 마진 추가 */
+    }
+
+    .page-title {
+        margin-top: 20px; /* 페이지 타이틀 위에 20px의 마진 추가 */
+    }
+</style>
+
 
 <div>
     <table style="width: 100%; border-collapse: collapse;">

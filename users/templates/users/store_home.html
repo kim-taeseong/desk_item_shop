@@ -1,28 +1,30 @@
-<h1>판매자 홈 </h1>
+{% extends "store_base.html" %}
 
-<h1> 나의 스토어 </h1>
-
-<!-- 회원정보수정 -->
-<a href="{% url 'users:edit_store' %}" class="btn btn-primary">회원정보 수정</a>
-
-<br><br>
-
-<!-- 비밀번호수정 -->
-<a href="{% url 'users:edit_password' %}" class="btn btn-primary">비밀번호 수정</a>
+{% block content %}
 
 <!-- 로그아웃 버튼 -->
-<button id="logout-button">로그아웃</button>
+<button id="logout-button">로그아웃</button>  
 
 <script>
-document.getElementById('logout-button').addEventListener('click', function() {
-  // 사용자에게 로그아웃을 묻는 알림
-  const isLogout = confirm('로그아웃 하시겠습니까?');
-  
-  if (isLogout) {
-    // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
-    window.location.href = '/logout/';
-  }
-});
+    document.getElementById('logout-button').addEventListener('click', function() {
+    // 사용자에게 로그아웃을 묻는 알림
+    const isLogout = confirm('로그아웃 하시겠습니까?');
+    
+    if (isLogout) {
+        // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
+        window.location.href = '/logout/';
+    }
+    });
 </script>
 
-<a href="{% url 'users:account_delete' %}">회원탈퇴</a>
+    <br><br>
+
+    <!-- 상품등록 -->
+    <a href="{% url 'logistics:add_product' %}" class="btn btn-primary">상품등록</a>
+
+    <br><br>
+
+    <!-- 등록 상품 리스트 -->
+    <a href="{% url 'logistics:product_list' %}" class="btn btn-primary">상품조회</a>
+{% endblock %}
+

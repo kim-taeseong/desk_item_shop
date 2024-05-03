@@ -1,0 +1,32 @@
+{% extends 'customer_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h4>{{ category.category_name }}</h4>
+        {% if products %}
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-3">
+                        <div class="card mb-3 box-shadow" style="width: 250px;">
+                            <img class="card-img-top" src="{{ product.product_img.url }}" alt="{{ product.product_name }}" style="height: 225px; width: 100%; display: block;">
+                            <div class="card-body">
+                                <!--  상품 이름을 클릭하면 상세 페이지로 이동 -->
+                                <p class="card-text">
+                                    <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: inherit;">
+                                        {{ product.product_name }}
+                                    </a>
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ product.product_sale }}%</small>
+                                    <small class="text-muted">{{ product.product_price }}원</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>이 카테고리에는 현재 등록된 상품이 없습니다.</p>
+        {% endif %}
+    </div>
+{% endblock %}

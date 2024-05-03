@@ -1,0 +1,9 @@
+<h1>상품 디테일</h1>
+<p>Product Name: {{ product.product_name }}</p>
+<p>Description: {{ product.product_description }}</p>
+<p>Price: {{ product.product_price }}</p>
+
+{#<a href="{% url 'update' product.pk %}" class="btn btn-primary">편집</a>#}
+<!-- 위 부분을 아래와 같이 수정했습니다 (주석 처리되어 있음)-->
+<a href="{% url 'logistics:update_product' product.pk %}" class="btn btn-primary">편집</a>
+<a href="{% url 'logistics:update_product' product.pk %}" class="btn btn-primary">편집</a>

@@ -1,5 +1,6 @@
-<h1> 구매자 홈</h1>
+{% extends "noncategory_base.html" %}
 
+{% block content %}
 <h1> 나의 쇼핑 </h1>
 
 <!-- 회원정보수정 -->
@@ -9,6 +10,8 @@
 
 <!-- 비밀번호수정 -->
 <a href="{% url 'users:edit_password' %}" class="btn btn-primary">비밀번호 수정</a>
+
+<br><br>
 
 <!-- 로그아웃 버튼 -->
 <button id="logout-button">로그아웃</button>
@@ -25,5 +28,4 @@ document.getElementById('logout-button').addEventListener('click', function() {
 });
 </script>
 
-<a href="{% url 'users:account_delete' %}">회원탈퇴</a>
-
+{% endblock %}
