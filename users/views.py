@@ -76,7 +76,6 @@ class LoginView(auth_views.LoginView):
             return reverse('login') 
 
 # 로그아웃
-@login_required
 def logout_view(request):
     logout(request)
     return redirect('users:login')  # 로그인 화면으로 리다이렉트
@@ -169,7 +168,7 @@ def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 
     context = {
         'products': product
     }
-    return render(request, 'users/store_home.html', context)
+    return render(request, 'store/store_home.html', context)
 
 # 아이디 찾기
 def find_username(request):
@@ -196,6 +195,7 @@ def find_username(request):
 
 # 고객 회원정보 수정
 @login_required
+@customer_required
 def edit_customer(request):
     # 현재 로그인한 고객과 연결된 Customer 객체
     customer = get_object_or_404(Customer, user=request.user)
@@ -221,6 +221,7 @@ class EditCustomerDoneView(TemplateView):
 
 # 스토어 회원정보 수정
 @login_required
+@store_required
 def edit_store(request):
     # 현재 로그인한 사용자와 연결된 Store 객체
     store = get_object_or_404(Store, user=request.user) 
