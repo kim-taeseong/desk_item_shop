@@ -2,6 +2,14 @@
 
 {% block content %}
     <h1>로그인</h1>
+    <!-- 메시지 표시 부분 -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form action="{% url 'users:login' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
@@ -13,4 +21,5 @@
     <br>
     <br>
     <a href="{% url 'users:find_username' %}">아이디 찾기</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'password_reset' %}">비밀번호 찾기</a>
+
 {% endblock %}
