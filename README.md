@@ -45,3 +45,4 @@
 ### base.html > main_base, noncategory_base, store_base, customer_base, customer_store_base
 ### customer 로그인 시, mypage 생성
 ![alt text](image-8.png)
+### store, customer 로그인 시, mypage와  myprofile 구분
