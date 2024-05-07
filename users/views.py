@@ -91,7 +91,7 @@ def account_delete(request):
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
             user.is_active = False  # 탈퇴(비활성화) 처리
-            user.deactivetime = timezone.now()  # 비활성화 시간 기록
+            user.deactivetime = timezone.now()  # 비활성화한 시간 기록
             user.save()
             logout(request)
             return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
@@ -114,7 +114,7 @@ def account_delete_cancel(request):
             if user.check_password(password):
                 # 비밀번호가 일치하는 경우에만 계정을 활성화 상태로 변경
                 user.is_active = True # 활성화 처리
-                user.deactivetime = None  # 비활성화 시간을 None으로 변경 
+                user.deactivetime = None  # 비활성화한 시간을 None으로 변경 
                 user.save()
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
