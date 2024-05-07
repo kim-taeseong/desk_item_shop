@@ -53,12 +53,12 @@ class StoreSignUpView(CreateView):
     
 # 회원가입 완료
 class SignUpDoneView(TemplateView):
-    template_name = 'users/signup_done.html'
+    template_name = 'login_password/signup_done.html'
 
 # 로그인
 class LoginView(auth_views.LoginView):
     form_class = LoginForm
-    template_name = 'users/login.html'
+    template_name = 'login_password/login.html'
 
     def form_invalid(self, form):
         # 비활성화된 계정으로 로그인 시도 시, 계정 삭제 안내 페이지로
@@ -163,7 +163,7 @@ def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페
     context = {
         'products': product
     }
-    return render(request, 'users/customer_home.html', context)
+    return render(request, 'customer/customer_home.html', context)
 
 
 # 아이디 찾기
@@ -206,11 +206,11 @@ def edit_customer(request):
     else:
         # POST 요청이 아니라면 CustomerEditForm이 customer 인스턴스로 초기화되어 현재 정보를 customer 정보 폼에 채움
         form = CustomerEditForm(instance=customer)
-    return render(request, 'edit/edit_customer.html', {'form': form})
+    return render(request, 'edit_profile/edit_customer.html', {'form': form})
 
 
 class EditCustomerDoneView(TemplateView):
-    template_name = 'edit/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
+    template_name = 'edit_profile/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_customer_done'))
@@ -233,10 +233,10 @@ def edit_store(request):
         # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
         form = StoreEditForm(instance=store)
     
-    return render(request, 'edit/edit_store.html', {'form': form})
+    return render(request, 'edit_profile/edit_store.html', {'form': form})
 
 class EditStoreDoneView(TemplateView):
-    template_name = 'edit/edit_store_done.html' # 스토어 회원정보수정완료 페이지
+    template_name = 'edit_profile/edit_store_done.html' # 스토어 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_store_done'))
@@ -256,13 +256,13 @@ def edit_password(request):
             messages.error(request, '오류를 수정해주세요.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'users/edit_password.html', {'form': form})
+    return render(request, 'login_password/edit_password.html', {'form': form})
 
 
 # store_home http://127.0.0.1:8000/users/store/
 class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상품 정렬
     model = Product
-    template_name = 'users/store_home.html'  # 연결되는 templates url
+    template_name = 'store/store_home.html'  # 연결되는 templates url
     context_object_name = 'products'  # 컨텍스트 객체 이름 설정
 
     def get_queryset(self):
@@ -280,7 +280,7 @@ class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상�
 # customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  
     model = Product
-    template_name = 'users/customer_store_view.html'  # 연결되는 templates url
+    template_name = 'customer/customer_store_view.html'  # 연결되는 templates url
     context_object_name = 'products'
 
     def get_queryset(self):
