@@ -259,4 +259,4 @@ def edit_password(request):
             messages.error(request, '오류를 수정해주세요.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'edit/edit_password.html', {'form': form})
+    return render(request, 'users/edit_password.html', {'form': form})
