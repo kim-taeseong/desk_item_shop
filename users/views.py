@@ -17,6 +17,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -89,7 +90,8 @@ def account_delete(request):
         password = request.POST.get('password')
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
-            user.is_active = False  # 탈퇴 처리(실제 삭제 대신 비활성화)
+            user.is_active = False  # 탈퇴(비활성화) 처리
+            user.deactivetime = timezone.now()  # 비활성화 시간 기록
             user.save()
             logout(request)
             return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
@@ -98,11 +100,11 @@ def account_delete(request):
             return render(request, 'account_delete/account_delete.html')
     return render(request, 'account_delete/account_delete.html')
 
-# 회원탈퇴 알림 페이지
+# 회원탈퇴 알림 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시
 def account_delete_alert(request):
     return render(request, 'account_delete/account_delete_alert.html')
 
-# 탈퇴 취소 페이지
+# 탈퇴 취소 페이지 - 탈퇴 취소됨
 def account_delete_cancel(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -113,7 +115,8 @@ def account_delete_cancel(request):
             
             if user.check_password(password):
                 # 비밀번호가 일치하는 경우에만 계정을 활성화 상태로 변경
-                user.is_active = True
+                user.is_active = True # 활성화 처리
+                user.deactivetime = None  # 비활성화 시간을 None으로 변경
                 user.save()
                 
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
@@ -124,9 +127,8 @@ def account_delete_cancel(request):
         messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
     return render(request, 'account_delete/account_delete_cancel.html')
-        
-    
-# 즉시 탈퇴 페이지
+
+# 즉시 탈퇴 페이지 - 즉시 DB에서 모든 정보 삭제
 def account_delete_now(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -136,12 +138,11 @@ def account_delete_now(request):
             user = User.objects.get(username=username)
             
             if user.check_password(password):
-                # 계정이 판매자 계정인지 확인
-                if hasattr(user, 'store'):
-                    # 해당 판매자가 올렸던 상품들 삭제
-                    Product.objects.filter(store=user.store).delete() 
+                if hasattr(user, 'store'): # 만약 탈퇴하려는 계정이 판매자 계정이라면
+                    Product.objects.filter(store=user.store).delete() # 해당 판매자가 올렸던 상품들 삭제
                     user.store.delete()
-                # 비밀번호가 일치하는 경우에만 계정을 삭제
+
+                # 계정 삭제
                 user.delete()
                 
                 messages.success(request, '계정이 성공적으로 삭제되었습니다.')

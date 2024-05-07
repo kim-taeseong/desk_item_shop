@@ -3,9 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True)
-    is_customer = models.BooleanField(default=False)
-    is_store = models.BooleanField(default=False)
+    email = models.EmailField(unique=True) # 이메일
+    is_customer = models.BooleanField(default=False) # 구매자 계정인지
+    is_store = models.BooleanField(default=False) # 스토어 계정인지
+    deactivetime = models.DateTimeField(null=True, blank=True) # 비활성화한 시간
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='customer')
