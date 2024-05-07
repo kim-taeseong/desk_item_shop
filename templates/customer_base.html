@@ -37,7 +37,7 @@
     <nav id="nav">
         <ul>
             <li><a href="{% url 'users:customer_home' %}">나의 쇼핑</a></li>
-            <li><a href="#">구매내역</a></li>
+            <li><a href="{% url 'orders:display_orders' %}">구매내역</a></li>
             <li><a href="#">장바구니</a></li>
         </ul>       
     </nav>
