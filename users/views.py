@@ -21,11 +21,11 @@ from django.utils import timezone
 
 User = get_user_model()
 
-# 구매자 회원가입
+# Customer 회원가입
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
-    template_name = 'customer/customer_signup.html' # 구매자 회원가입 페이지로 이동
+    template_name = 'customer/customer_signup.html' # Customer 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'customer'
@@ -36,11 +36,11 @@ class CustomerSignUpView(CreateView):
         login(self.request, user)
         return redirect('users:signup_done')
     
-# 판매자 회원가입
+# Store 회원가입
 class StoreSignUpView(CreateView):
     model = User
     form_class = StoreSignUpForm
-    template_name = 'store/store_signup.html' # 판매자 회원가입 페이지로 이동
+    template_name = 'store/store_signup.html' # Store 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'store'
@@ -71,9 +71,9 @@ class LoginView(auth_views.LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_authenticated:
-            if user.is_customer: # 아이디가 고객이면 메인 페이지로
+            if user.is_customer: # 아이디가 Customer라면 메인 페이지로
                 return reverse('logistics:main')
-            elif user.is_store: # 아이디가 스토어면 스토어 메인 페이지로
+            elif user.is_store: # 아이디가 Store라면 Store 메인 페이지로
                 return reverse('users:store_home')
         else: # 잘못 입력하면 다시
             return reverse('login') 
@@ -100,7 +100,7 @@ def account_delete(request):
             return render(request, 'account_delete/account_delete.html')
     return render(request, 'account_delete/account_delete.html')
 
-# 회원탈퇴 알림 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시(실제 로그인 처리되지는 않음 last_login 시간에 반영 X)
+# 회원탈퇴 알림 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시 표시(실제 로그인 처리되지는 않음 last_login 시간에 반영 X)
 def account_delete_alert(request):
     return render(request, 'account_delete/account_delete_alert.html')
 
@@ -152,10 +152,10 @@ def account_delete_now(request):
     return render(request, 'account_delete/account_delete_now.html')
 
 
-# 구매자 홈
+# Customer 홈
 @login_required
 @customer_required
-def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페이지로 연결시켜야 함
+def customer_home(request):
     product = Product.objects.all()
     context = {
         'products': product
@@ -187,7 +187,7 @@ def find_username(request):
         return render(request, 'find/find_username.html')
 
 
-# 고객 회원정보 수정
+# Customer 회원정보 수정
 @login_required
 @customer_required
 def edit_customer(request):
@@ -201,7 +201,7 @@ def edit_customer(request):
             updated_customer = form.save()  # 변경사항을 DB에 저장
             return redirect('users:edit_customer_done')  # 고객 회원정보수정 완료 페이지로 리다이렉션
     else:
-        # POST 요청이 아니라면 CustomerEditForm이 customer 인스턴스로 초기화되어 현재 정보를 customer 정보 폼에 채움
+        # POST 요청이 아니라면 CustomerEditForm이 Customer 인스턴스로 초기화되어 현재 정보를 Customer 정보 폼에 채움
         form = CustomerEditForm(instance=customer)
     return render(request, 'edit_profile/edit_customer.html', {'form': form})
 
@@ -213,7 +213,7 @@ class EditCustomerDoneView(TemplateView):
         return HttpResponseRedirect(reverse('users:edit_customer_done'))
 
 
-# 스토어 회원정보 수정
+# Store 회원정보 수정
 @login_required
 @store_required
 def edit_store(request):
@@ -225,7 +225,7 @@ def edit_store(request):
         form = StoreEditForm(request.POST, request.FILES, instance=store) 
         if form.is_valid():  # 폼이 유효할 경우
             updated_store = form.save()  # 변경 사항을 DB에 저장
-            return redirect('users:edit_store_done')  # 스토어 회원정보수정 완료 페이지로 리다이렉션
+            return redirect('users:edit_store_done')  # Store 회원정보수정 완료 페이지로 리다이렉션
     else:
         # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
         form = StoreEditForm(instance=store)
@@ -233,7 +233,7 @@ def edit_store(request):
     return render(request, 'edit_profile/edit_store.html', {'form': form})
 
 class EditStoreDoneView(TemplateView):
-    template_name = 'edit_profile/edit_store_done.html' # 스토어 회원정보수정완료 페이지
+    template_name = 'edit_profile/edit_store_done.html' # Store 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_store_done'))
@@ -256,14 +256,14 @@ def edit_password(request):
     return render(request, 'login_password/edit_password.html', {'form': form})
 
 
-# store_home http://127.0.0.1:8000/users/store/
+# Store_home http://127.0.0.1:8000/users/store/
 class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상품 정렬
     model = Product
     template_name = 'store/store_home.html'  # 연결되는 templates url
     context_object_name = 'products'  # 컨텍스트 객체 이름 설정
 
     def get_queryset(self):
-        # 로그인한 사용자의 스토어에 연결된 최근에 등록된 상품 5개를 가져옴
+        # 로그인한 사용자의 Store에 연결된 최근에 등록된 상품 5개를 가져옴
         user = self.request.user
         if user.is_authenticated and hasattr(user, 'store'):
             return Product.objects.filter(store=user.store).order_by('-product_date')[:5]
@@ -274,7 +274,7 @@ class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상�
         context = super().get_context_data(**kwargs)
         return context
 
-# customer 기준의 store_home
+# Customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  
     model = Product
     template_name = 'customer/customer_store_view.html'  # 연결되는 templates url
@@ -288,11 +288,11 @@ class CustomerStoreHomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         store_id = self.kwargs['store_id']
-        store = get_object_or_404(Store, pk=store_id)  # 스토어 객체를 가져옴
-        # 제품 목록을 조회하여 해당 스토어의 모든 카테고리를 가져옴
+        store = get_object_or_404(Store, pk=store_id)  # Store 객체를 가져옴
+        # 제품 목록을 조회하여 해당 Store의 모든 카테고리를 가져옴
         products = self.get_queryset()
         # list로 값 전달, 중복 카테고리 제거: id를 기반으로
         categories = list(set(product.category for product in products if product.category))
-        context['store'] = store  # 스토어 정보를 컨텍스트에 추가
+        context['store'] = store  # Store 정보를 컨텍스트에 추가
         context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
         return context
