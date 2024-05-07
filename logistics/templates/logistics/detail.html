@@ -65,7 +65,7 @@
         {% csrf_token %}
         {% if product.product_inventory %}
             <p class="col">재고: {{ product.product_inventory }}</p>
-            <input class="form-control col" type="number" name="amount" id="amount" min="1">
+            <input class="form-control col" type="number" name="amount" id="amount" min="1" value="1">
             <button class="form-control col btn btn-primary" type="submit" name="product" value="{{ product.id }}">주문하기</button>
         {% else %}
             <button class="form-control col btn btn-primary" disabled>품절</button>
