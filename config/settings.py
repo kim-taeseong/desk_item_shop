@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
     'cart',
-    'users',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
