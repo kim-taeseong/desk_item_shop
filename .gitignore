@@ -161,3 +161,8 @@ cython_debug/
 
 .DS_Store
 media/.DS_Store
+
+media/
+logistics/migrations
+users/migrations
+order/migrations
