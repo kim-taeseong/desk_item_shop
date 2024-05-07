@@ -21,7 +21,7 @@ class CustomPasswordValidator:
         if not any(char.islower() for char in password): # 소문자가 없는 경우
             raise ValidationError(_('비밀번호는 적어도 하나의 소문자를 포함해야 합니다.'))
 
-        for i in range(len(password) - 2):
+        for i in range(len(password) - 2): 
             if password[i].isdigit() and password[i+1].isdigit() and password[i+2].isdigit():
                 if int(password[i+1]) == int(password[i]) + 1 and int(password[i+2]) == int(password[i]) + 2:
                     raise ValidationError(_('비밀번호는 연속되는 숫자를 포함할 수 없습니다.'))
