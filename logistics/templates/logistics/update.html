@@ -1,6 +1,18 @@
-<h1>상품 변경</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">수정완료</button>
-</form>
+{% extends 'store_base.html' %}
+
+{% block content %}
+<div>
+    {% with page_title="상품 수정" %}
+    <h3><strong>{{ page_title }}</span></strong></h3>
+    {% endwith %}
+</div>
+
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">수정완료</button>
+    </form>
+</div>
+
+{% endblock %}

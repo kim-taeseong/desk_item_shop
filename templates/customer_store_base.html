@@ -44,14 +44,7 @@
     <!-- container -->
     <section id="container">
 
-        <aside id="aside">
-            <ul class="category-list">
-                <h2>{{ store.name }}</h2>
-                {% for category in categories %}
-                <li><a href="{% url 'cus_store_home_cat' store.id category.id %}">{{ category.category_name }}</a></li>
-                {% endfor %}
-            </ul>
-        </aside>
+        <!-- aside 수정중 -->
         
 
         <div class="content">
