@@ -36,3 +36,12 @@
  ![alt text](image-2.png)
  ### 카테고리 위에 전체상품 보이도록 링크 추가
  ![alt text](image-3.png)
+
+*******
+
+### 2024.05.07
+### 상품detail 에서 store 클릭 시, 해당 상품을 판매하는 판매자 페이지로 이동 (판매하고 있는 상품들의 카테고리만 보임)
+![alt text](image-7.png)
+### base.html > main_base, noncategory_base, store_base, customer_base
+### customer 로그인 시, mypage 생성
+![alt text](image-8.png)

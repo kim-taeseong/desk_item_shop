@@ -164,16 +164,6 @@ def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페
     }
     return render(request, 'users/customer_home.html', context)
 
-# 판매자 홈
-@login_required
-@store_required
-def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 연결시켜야 함
-    product = Product.objects.all()
-    context = {
-        'products': product
-    }
-    return render(request, 'store/store_home.html', context)
-
 
 # 아이디 찾기
 def find_username(request):
@@ -303,7 +293,8 @@ class CustomerStoreHomeView(ListView):
         store = get_object_or_404(Store, pk=store_id)  # 스토어 객체를 가져옴
         # 제품 목록을 조회하여 해당 스토어의 모든 카테고리를 가져옴
         products = self.get_queryset()
-        categories = set(product.category for product in products if product.category)
+        # list로 값 전달, 중복 카테고리 제거: id를 기반으로
+        categories = list(set(product.category for product in products if product.category))
         context['store'] = store  # 스토어 정보를 컨텍스트에 추가
         context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
         return context
