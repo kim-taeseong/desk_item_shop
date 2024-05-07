@@ -16,7 +16,9 @@
     <!-- header -->
     <header>
         <div id="header">
-            <img src="{% static 'main_logo.png' %}" alt="Logo" id="header-logo">  <!-- 로고 이미지 -->
+            <a href="{% url 'logistics:main' %}">
+                <img src="{% static 'main_logo.png' %}" alt="Logo" id="header-logo"> <!-- 로고 이미지 -->
+            </a>
         </div>
         <div class="login-menu">
             <ul>

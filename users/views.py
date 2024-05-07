@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
-from logistics.models import Product
+from logistics.models import Product, Category
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
@@ -14,6 +14,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 
 User = get_user_model()
@@ -105,8 +107,8 @@ def account_delete_cancel(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        try:
+    
+    try:
             user = User.objects.get(username=username, is_active=False)
             
             if user.check_password(password):
@@ -118,11 +120,12 @@ def account_delete_cancel(request):
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
                 messages.error(request, '비밀번호가 일치하지 않습니다.') # 비밀번호가 일치하지 않으면
-        except User.DoesNotExist:
-            messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
+    except User.DoesNotExist:
+        messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
     return render(request, 'account_delete/account_delete_cancel.html')
-
+        
+    
 # 즉시 탈퇴 페이지
 def account_delete_now(request):
     if request.method == 'POST':
@@ -150,6 +153,7 @@ def account_delete_now(request):
 
     return render(request, 'account_delete/account_delete_now.html')
 
+
 # 구매자 홈
 @login_required
 @customer_required
@@ -169,6 +173,7 @@ def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 
         'products': product
     }
     return render(request, 'store/store_home.html', context)
+
 
 # 아이디 찾기
 def find_username(request):
@@ -192,6 +197,7 @@ def find_username(request):
     else:
         # GET 요청 처리
         return render(request, 'find/find_username.html')
+
 
 # 고객 회원정보 수정
 @login_required
@@ -260,3 +266,44 @@ def edit_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'users/edit_password.html', {'form': form})
+
+
+# store_home http://127.0.0.1:8000/users/store/
+class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상품 정렬
+    model = Product
+    template_name = 'users/store_home.html'  # 연결되는 templates url
+    context_object_name = 'products'  # 컨텍스트 객체 이름 설정
+
+    def get_queryset(self):
+        # 로그인한 사용자의 스토어에 연결된 최근에 등록된 상품 5개를 가져옴
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'store'):
+            return Product.objects.filter(store=user.store).order_by('-product_date')[:5]
+        else:
+            return Product.objects.none()  # 상품이 없는 경우 빈 쿼리셋 반환
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+# customer 기준의 store_home
+class CustomerStoreHomeView(ListView):  
+    model = Product
+    template_name = 'users/customer_store_view.html'  # 연결되는 templates url
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        store_id = self.kwargs['store_id']  # URL에서 스토어 ID를 받음
+        store = get_object_or_404(Store, pk=store_id)  # 해당 스토어가 없는 경우 404 에러
+        return Product.objects.filter(store=store).select_related('category', 'store')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        store_id = self.kwargs['store_id']
+        store = get_object_or_404(Store, pk=store_id)  # 스토어 객체를 가져옴
+        # 제품 목록을 조회하여 해당 스토어의 모든 카테고리를 가져옴
+        products = self.get_queryset()
+        categories = set(product.category for product in products if product.category)
+        context['store'] = store  # 스토어 정보를 컨텍스트에 추가
+        context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
+        return context

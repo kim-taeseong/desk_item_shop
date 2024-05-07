@@ -1,0 +1,68 @@
+{% extends "customer_store_base.html" %}
+
+{% block content %}
+<style>
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* 카드 사이의 간격을 균등하게 설정 */
+    padding: 20px;
+  }
+
+  .product-card {
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    width: 250px; /* 카드 너비 */
+    margin: 10px;
+    overflow: hidden;
+    background-color: #fff; /* 배경 색상 */
+    transition: transform 0.2s; /* 호버 효과 */
+  }
+
+  .product-card:hover {
+    transform: scale(1.05); /* 호버 시 카드 확대 */
+  }
+
+  .product-card img {
+    width: 100%; /* 이미지 너비 */
+    height: 180px; /* 이미지 높이 */
+    object-fit: cover; /* 이미지 비율 유지 */
+  }
+
+  .products a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black;
+    border: none; /* 박스 테두리 제거 */
+    }
+
+  .product-card h6 {
+    padding: 10px; /* 제목 패딩 */
+    margin: 0;
+    text-align: left; /* 제목 중앙 정렬 */
+  }
+
+  .product-card p {
+    padding: 0 10px 10px; /* 문단 패딩 */
+    margin: 0;
+    font-size: 14px; /* 폰트 사이즈 */
+    color: #666; /* 폰트 색상 */
+    text-align: left; /* 폰트 왼쪽 정렬 */
+  }
+</style>
+
+<h2><strong>{{ store.store_name|upper }}</strong></h2>  <!-- 스토어 이름 표시 --> 
+<div class="products">
+  {% for product in products %}
+    <div class="product-card">
+      <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+      <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
+      <p>{{ product.product_sale }}% {{ product.product_price }}원</p>
+    </div>
+  {% empty %}
+    <p>No products found.</p>
+  {% endfor %}
+</div>
+{% endblock %}
+
+

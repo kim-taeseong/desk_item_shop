@@ -16,7 +16,9 @@
     <!-- header -->
     <header>
         <div id="header">
-            <img src="{% static 'main_logo.png' %}" alt="Logo" id="header-logo">  <!-- 로고 이미지 -->
+            <a href="{% url 'logistics:main' %}">
+                <img src="{% static 'main_logo.png' %}" alt="Logo" id="header-logo"> <!-- 로고 이미지 -->
+            </a>
         </div>
         <div class="login-menu">
             <ul>
@@ -25,7 +27,6 @@
                 <li><a href="{% url 'users:edit_customer' %}">MYPAGE</a></li>
                 {% else %}
                 <li><a href="{% url 'users:login' %}">LOGIN</a></li>
-                <li><a href="{% url 'users:customer_signup' %}">SIGNUP</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -44,19 +45,21 @@
     <section id="container">
 
         <aside id="aside">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 1 %}">테이블·책상·의자</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 2 %}">PC주변용품</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 3 %}">타공판·보드</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 4 %}">모니터받침대·노트북거치대</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 5 %}">데스크 수납·정리</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 6 %}">데스크매트·마우스패드</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 7 %}">데스크스탠드·조명</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 8 %}">스위치·콘센트</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 9 %}">데코용품</a></li>
-                    <li class="list-group-item"><a href="{% url 'logistics:cat_products' 10 %}">디자인문구</a></li>
-                </ul>
+            <a href="{% url 'logistics:main' %}" style="font-size: 25px; font-weight: bold; display: block; margin-left: 15px; margin-bottom: 20px;">전체보기</a>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 1 %}">테이블·책상·의자</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 2 %}">PC주변용품</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 3 %}">타공판·보드</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 4 %}">모니터받침대·노트북거치대</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 5 %}">데스크 수납·정리</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 6 %}">데스크매트·마우스패드</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 7 %}">데스크스탠드·조명</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 8 %}">스위치·콘센트</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 9 %}">데코용품</a></li>
+                <li class="list-group-item"><a href="{% url 'logistics:cat_products' 10 %}">디자인문구</a></li>
+            </ul>
         </aside>
+        
 
         <div class="content">
             <article>

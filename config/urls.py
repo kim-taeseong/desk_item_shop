@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('logistics/',include('logistics.urls')),
     path('users/',include('users.urls')),
     path("", include("logistics.urls")),
     # 비밀번호 초기화
