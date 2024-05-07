@@ -14,12 +14,9 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-<<<<<<< HEAD
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-=======
 from django.utils.translation import gettext as _
->>>>>>> 7a7cc67f187a60c333b4ea8a85dc5ea692620a50
 
 User = get_user_model()
 
