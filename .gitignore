@@ -166,3 +166,4 @@ media/
 logistics/migrations
 users/migrations
 order/migrations
+.vscode/
