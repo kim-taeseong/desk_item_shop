@@ -10,7 +10,7 @@ from django.utils.translation import gettext as _
 
 User = get_user_model() # models.py에서 User 모델을 가져옴
 
-class CustomPasswordValidator:
+class CustomPasswordValidator: 
     def validate(self, password, user=None):
         if len(password) < 8 or len(password) > 12: # 8자 미만, 12자 이상일 경우
             raise ValidationError(_('비밀번호는 8자 이상 12자 이하여야 합니다.'))
