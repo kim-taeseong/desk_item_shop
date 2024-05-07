@@ -1,11 +1,10 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
-from logistics.models import Product, Category
+from logistics.models import Product
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
-from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -14,7 +13,6 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 from django.utils import timezone
@@ -61,7 +59,7 @@ class LoginView(auth_views.LoginView):
     template_name = 'login_password/login.html'
 
     def form_invalid(self, form):
-        # 비활성화된 계정으로 로그인 시도 시, 계정 삭제 안내 페이지로
+        # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
         user = User.objects.filter(username=username).first()
         if user and not user.is_active:
@@ -71,9 +69,9 @@ class LoginView(auth_views.LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_authenticated:
-            if user.is_customer: # 아이디가 Customer라면 메인 페이지로
+            if user.is_customer: # 아이디가 Customer라면 logistics:main 페이지로
                 return reverse('logistics:main')
-            elif user.is_store: # 아이디가 Store라면 Store 메인 페이지로
+            elif user.is_store: # 아이디가 Store라면 store_home 페이지로
                 return reverse('users:store_home')
         else: # 잘못 입력하면 다시
             return reverse('login') 
@@ -91,7 +89,7 @@ def account_delete(request):
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
             user.is_active = False  # 탈퇴(비활성화) 처리
-            user.deactivetime = timezone.now()  # 비활성화한 시간 기록
+            user.deactivetime = timezone.now()  # 비활성화 했을 당시의 시간을 저장
             user.save()
             logout(request)
             return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
@@ -100,7 +98,7 @@ def account_delete(request):
             return render(request, 'account_delete/account_delete.html')
     return render(request, 'account_delete/account_delete.html')
 
-# 회원탈퇴 알림 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시 표시(실제 로그인 처리되지는 않음 last_login 시간에 반영 X)
+# 탈퇴한 계정 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시 표시(실제 로그인 처리되는것은 아니기에 last_login 시간에 반영 X)
 def account_delete_alert(request):
     return render(request, 'account_delete/account_delete_alert.html')
 
@@ -112,9 +110,9 @@ def account_delete_cancel(request):
     try:
             user = User.objects.get(username=username, is_active=False)
             if user.check_password(password):
-                # 비밀번호가 일치하는 경우에만 계정을 활성화 상태로 변경
+                # 비밀번호가 일치하는 경우
                 user.is_active = True # 활성화 처리
-                user.deactivetime = None  # 비활성화한 시간을 None으로 변경 
+                user.deactivetime = None  # 비활성화 했던 시간을 None으로 변경
                 user.save()
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
@@ -172,7 +170,7 @@ def find_username(request):
             user = users.first()
             # 이메일 문구
             send_mail(
-                '사이트 아이디 찾기',
+                '안녕하세요,Desker 입니다.',
                 f'귀하의 아이디는 {user.username} 입니다.',
                 settings.EMAIL_HOST_USER,
                 [email],
