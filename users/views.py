@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, get_user_model, logout
 from django.views.generic import *
 from .models import User, Customer, Store
-from logistics.models import Product
+from logistics.models import Product, Category
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth import views as auth_views
@@ -19,6 +19,7 @@ from django import forms
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
 
@@ -74,25 +75,47 @@ class LoginView(auth_views.LoginView):
         else:
             return reverse('login') # 잘못 입력하면 다시
         
-# customer_home
-@login_required
-@customer_required
-def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페이지로 연결시켜야 함
-    product = Product.objects.all()
-    context = {
-        'products': product
-    }
-    return render(request, 'users/customer_home.html', context)
 
-# store_home
-@login_required
-@store_required
-def store_home(request): # 스토어 페이지가 개발되면 그 페이지로 연결시켜야 함
-    product = Product.objects.all()
-    context = {
-        'products': product
-    }
-    return render(request, 'users/store_home.html', context)
+# store_home http://127.0.0.1:8000/users/store/
+class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상품 정렬
+    model = Product
+    template_name = 'users/store_home.html'  # 연결되는 templates url
+    context_object_name = 'products'  # 컨텍스트 객체 이름 설정
+
+    def get_queryset(self):
+        # 로그인한 사용자의 스토어에 연결된 최근에 등록된 상품 5개를 가져옴
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'store'):
+            return Product.objects.filter(store=user.store).order_by('-product_date')[:5]
+        else:
+            return Product.objects.none()  # 상품이 없는 경우 빈 쿼리셋 반환
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+# customer 기준의 store_home
+class CustomerStoreHomeView(ListView):  
+    model = Product
+    template_name = 'users/customer_store_view.html'  # 연결되는 templates url
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        store_id = self.kwargs['store_id']  # URL에서 스토어 ID를 받음
+        store = get_object_or_404(Store, pk=store_id)  # 해당 스토어가 없는 경우 404 에러
+        return Product.objects.filter(store=store).select_related('category', 'store')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        store_id = self.kwargs['store_id']
+        store = get_object_or_404(Store, pk=store_id)  # 스토어 객체를 가져옴
+        # 제품 목록을 조회하여 해당 스토어의 모든 카테고리를 가져옴
+        products = self.get_queryset()
+        categories = set(product.category for product in products if product.category)
+        context['store'] = store  # 스토어 정보를 컨텍스트에 추가
+        context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
+        return context
+
 
 # 아이디 찾기
 def find_username(request):

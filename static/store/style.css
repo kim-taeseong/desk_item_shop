@@ -12,7 +12,6 @@ a {
     color: #333; /* 링크 색상을 어두운 회색으로 변경 */
 }
 
-
 /* 래퍼 설정 */
 #wrap {
     width: auto;
@@ -42,8 +41,6 @@ header {
     height: 100px; /* 로고 이미지 높이 조정 */
 }
 
-
-
 /* 로그인 메뉴 */
 .login-menu ul {
     width: auto;
@@ -68,7 +65,6 @@ header {
     text-decoration: underline;
 }
 
-
 /* 네비바 */
 #nav {
     background: rgb(255, 255, 255);
@@ -87,7 +83,6 @@ header {
     display: inline-block;
 }
 
-/* 네비바 링크 스타일 */
 #nav a {
     font-weight: bold; /* 링크 글씨를 굵게 설정 */
 }
@@ -109,7 +104,6 @@ header {
     flex: 0.98;
 }
 
-
 /* footer */
 #footer {
     background: rgb(221, 221, 221);
@@ -117,7 +111,7 @@ header {
     padding: 20px 0; /* 상단 및 하단 패딩 추가 */
 }
 
-/* 상품 카드*/
+/* 상품 카드 */
 .products {
     display: flex;
     flex-wrap: wrap;
@@ -126,16 +120,9 @@ header {
 }
 
 .products a {
-    text-decoration: none;
+    text-decoration: none; /* 밑줄 제거 */
     color: black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 125px;
-    height: 300px;
-    margin: 10px; /* 상품 카드 사이의 간격 유지 */
-    background-color: #f8f8f8;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: none; /* 박스 테두리 제거 */
 }
 
 .products img {
@@ -188,7 +175,6 @@ header {
     height: auto;
     margin: 0 auto;
 }
-
 
 .store-name {
     margin-bottom: 20px; /* 스토어 이름 아래에 20px의 마진 추가 */

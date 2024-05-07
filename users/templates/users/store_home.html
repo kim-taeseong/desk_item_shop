@@ -1,26 +1,78 @@
 {% extends "store_base.html" %}
 
 {% block content %}
-    <script>
-        document.getElementById('logout-button').addEventListener('click', function() {
-        // 사용자에게 로그아웃을 묻는 알림
-        const isLogout = confirm('로그아웃 하시겠습니까?');
-        
-        if (isLogout) {
-            // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
-            window.location.href = '/logout/';
-        }
-        });
-    </script>
+<style>
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* 카드 간의 간격 */
+      justify-content: left; /* 왼쪽 정렬 */
+    }
+    .product {
+      border: 1px solid #ccc; /* 테두리 */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 효과 */
+      border-radius: 8px; /* 모서리 둥글게 */
+      width: 200px; /* 카드의 너비 */
+      height: 280px; /* 카드의 높이 */
+      display: flex;
+      flex-direction: column; /* 요소들을 세로로 정렬 */
+      align-items: center; /* 가로 중앙 정렬 */
+      overflow: hidden; /* 내용이 넘칠 때 처리 */
+    }
+    .products a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black;
+    border: none; /* 박스 테두리 제거 */
+    }
+    .product img {
+      width: 100%; /* 이미지 전체 너비 */
+      max-height: 150px; /* 이미지 최대 높이 제한 */
+      object-fit: cover; /* 이미지 비율 유지하면서 맞춤 */
+    }
+    .product h6 {
+      background-color: #f7f7f7; /* 제목 배경색 */
+      width: 100%; /* 전체 너비 */
+      text-align: left; /* 왼쪽 정렬 */
+      white-space: nowrap; /* 텍스트를 한 줄로 만듦 */
+      overflow: hidden; /* 내용이 넘칠 때 처리 */
+      text-overflow: clip; /* 오버플로 텍스트를 자름 */
+      font-size: 14px; /* 폰트 크기 조정 */
+      margin: 0; /* 마진 제거 */
+    }
+    .product p {
+      padding: 0 10px; /* 문단 패딩 */
+      margin: 10px 0; /* 문단 여백 */
+      font-size: 15px; /* 글자 크기 */
+      text-align: right; /* 오른쪽 정렬 */
+      width: 100%; /* 전체 너비 */
+    }
+</style>
 
-    <br><br>
 
-    <!-- 상품등록 -->
-    <a href="{% url 'logistics:add_product' %}" class="btn btn-primary">상품등록</a>
+  
 
-    <br><br>
 
-    <!-- 등록 상품 리스트 -->
-    <a href="{% url 'logistics:product_list' %}" class="btn btn-primary">상품조회</a>
+<h3>정산내역</h3>
+<p>정산내역 연결</p>
+
+<br>
+
+<h3>새로 등록한 상품</h3>
+<div class="products">
+  {% for product in products %}
+    <div class="product">
+      <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+      <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
+      <p>{{ product.product_price }}원</p>
+    </div>
+  {% empty %}
+    <p>등록된 상품이 없습니다.</p>
+  {% endfor %}
+</div>
+
+
+<br>
+
+<h3>상품문의</h3>
+<p>상품문의 게시판 연결</p>
 {% endblock %}
-
