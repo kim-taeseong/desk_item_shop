@@ -38,7 +38,6 @@ class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'logistics/list.html'  # 연결되는 templates url (수정)
     context_object_name = 'products'
-    paginate_by = 10
 
     def get_queryset(self):
         # 로그인한 사용자의 스토어에 속한 상품만 필터링
