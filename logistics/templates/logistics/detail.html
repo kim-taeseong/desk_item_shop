@@ -1,9 +1,65 @@
-<h1>상품 디테일</h1>
-<p>Product Name: {{ product.product_name }}</p>
-<p>Description: {{ product.product_description }}</p>
-<p>Price: {{ product.product_price }}</p>
+{% extends "store_base.html" %}
 
-{#<a href="{% url 'update' product.pk %}" class="btn btn-primary">편집</a>#}
-<!-- 위 부분을 아래와 같이 수정했습니다 (주석 처리되어 있음)-->
-<a href="{% url 'logistics:update_product' product.pk %}" class="btn btn-primary">편집</a>
-<a href="{% url 'logistics:update_product' product.pk %}" class="btn btn-primary">편집</a>
+{% block content %}
+<style>
+    .product-detail {
+        display: flex;
+        align-items: flex-start; /* 세로 축 기준으로 상단 정렬 */
+        width: 90%;
+        margin: auto;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+
+    .products a {
+        text-decoration: none;
+        color: black;
+        flex-direction: column;
+        align-items: center;
+        border: none; /* 박스 테두리 제거 */
+    }
+        
+    .product-detail img {
+        width: 500px; /* 이미지 고정 너비 */
+        height: 500px; /* 이미지 고정 높이 */
+        object-fit: cover; /* 이미지 비율 유지 */
+        border-radius: 8px;
+    }
+    
+    .product-info {
+        margin-left: 50px; /* 이미지와 정보 사이의 간격 */
+        flex-grow: 1; /* 나머지 공간을 채움 */
+        text-align: left; /* 모든 텍스트 왼쪽 정렬 */
+    }
+    
+    .product-info h1, .product-info h2, .product-info p {
+        margin-top: 0;
+    }
+
+    .product-info h2 {
+        font-size: 30px; /* 폰트 사이즈 */
+    }    
+
+    .store-button {
+        padding: 5px 5px;
+        background-color: #2d3743;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 10px;
+        align-self: flex-start; /* 버튼을 정보 섹션의 왼쪽 정렬로 설정 */
+    }
+</style>
+
+<div class="product-detail">
+    <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+    <div class="product-info">
+        <h1>{{ product.product_name }}</h1>  <!-- 상품명 -->
+        <p>{{ product.product_description }}</p>  <!-- 상품 설명 -->
+        <h2>{{ product.product_sale }}% {{ product.product_price }}원</h2>  <!-- 상품 가격, 상품 할인율 -->
+        <a href="{% url 'users:cus_store_home' product.store.pk %}" class="store-button">Store</a> <!-- 스토어 페이지 버튼 -->
+    </div>
+</div>
+{% endblock %}
