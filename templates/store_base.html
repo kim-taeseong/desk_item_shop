@@ -24,7 +24,8 @@
             <ul>
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url 'users:logout' %}" id="logout-button">LOGOUT</a></li>
-                <li><a href="{% url 'users:edit_store' %}">MYPAGE</a></li>
+                <li><a href="{% url 'users:store_home' %}">MYSTORE</a></li>
+                <li><a href="{% url 'users:edit_store' %}">MYPROFILE</a></li>
                 {% else %}
                 <li><a href="{% url 'users:login' %}">LOGIN</a></li>
                 {% endif %}
