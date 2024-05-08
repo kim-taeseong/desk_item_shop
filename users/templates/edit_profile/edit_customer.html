@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-    <h1>회원정보수정</h1>
+    <h2>회원정보수정</h2>
     <!-- 변경된 정보 저장 -->
     <form action="{% url 'users:edit_customer' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -38,4 +38,3 @@
 </body>
 </html>
 {% endblock %}
-
