@@ -21,5 +21,5 @@ class UsersConfig(AppConfig):
         # 스케줄러 생성
         if not hasattr(self, 'scheduler'):
             self.scheduler = BackgroundScheduler() # APScheduler 라이브러리에서 제공하는 스케줄러 클래스
-            self.scheduler.add_job(delete_inactive_users, 'interval', minutes=1)  # 1분간격으로 실행
+            self.scheduler.add_job(delete_inactive_users, 'interval', hours=24)  # 매일 실행
             self.scheduler.start() # 스케줄러 시작

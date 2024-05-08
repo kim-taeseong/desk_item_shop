@@ -32,8 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
     'order',
-    'users.apps.UsersConfig', 
-    'django.contrib.humanize',  # intcomma 필터를 사용하기 위한 앱 설치
+    'users.apps.UsersConfig',
+    'django.contrib.humanize',
+    'inquiry',
 ]
 
 MIDDLEWARE = [

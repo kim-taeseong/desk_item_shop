@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
@@ -81,18 +82,38 @@ def logout_view(request):
     logout(request)
     return redirect('users:login')  # 로그인 화면으로 리다이렉트
 
+# 회원 탈퇴 - 실제 삭제가 아닌 비활성화 is_active = 0
 @login_required
-# 회원탈퇴 - 실제 삭제가 아닌 비활성화
 def account_delete(request):
     if request.method == 'POST':
         password = request.POST.get('password')
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
-            user.is_active = False  # 탈퇴(비활성화) 처리
-            user.deactivetime = timezone.now()  # 비활성화 했을 당시의 시간을 저장
+            user_email = user.email  # 사용자 이메일 주소
+            user.is_active = False # 탈퇴(비활성화) 처리
+            user.deactivetime = timezone.now() # 비활성화 했을 당시의 시간을 저장
             user.save()
             logout(request)
-            return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
+            
+            # 이메일 발송
+            send_mail(
+                subject='Desker에서 귀하의 계정 탈퇴를 확인합니다.',
+                message=f"""
+                        안녕하세요, {user.username}님.
+
+                        귀하의 Desker 계정이 성공적으로 탈퇴되었습니다.
+
+                        이용해 주셔서 감사합니다. 더 나은 서비스로 다시 만날 수 있기를 바랍니다.
+
+                        감사합니다,
+                        Desker 팀
+                                        """,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user_email],
+                fail_silently=False,
+            )
+            
+            return redirect('users:login') # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
             return render(request, 'account_delete/account_delete.html')
@@ -167,15 +188,34 @@ def find_username(request):
         email = request.POST['email']
         users = User.objects.filter(email=email)
         if users.exists():
+            current_site = get_current_site(request)
+            domain = current_site.domain
+            protocol = 'https' if request.is_secure() else 'http'
             user = users.first()
+            login_url = reverse('users:login')  # 로그인 화면
+            login_url = f"{protocol}://{domain}{login_url}"  # 전체 URL 생성
             # 이메일 문구
             send_mail(
-                '안녕하세요,Desker 입니다.',
-                f'귀하의 아이디는 {user.username} 입니다.',
-                settings.EMAIL_HOST_USER,
-                [email],
+                subject='Desker에서 귀하의 계정 정보를 안내드립니다.',
+                message=f"""
+            안녕하세요, Desker 입니다!
+
+            귀하의 계정 아이디는 다음과 같습니다: "{user.username}"
+
+            로그인 화면으로 이동하려면 다음 링크를 클릭하세요: {login_url}
+
+            Desker와 함께 더욱 효율적인 업무 환경을 만들어 가세요.
+
+            만약 이 메일이 잘못 전송되었다고 생각되시거나, 추가적인 도움이 필요하시면 언제든지 저희 고객 지원팀으로 연락 주시기 바랍니다.
+
+            감사합니다, 
+            Desker 팀
+            
+            """,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
                 fail_silently=False,
-            ) 
+            )
             return render(request, 'find/find_username_done.html')  # 이메일 발송 완료시 발송 완료 페이지로 이동
         else:
             # 등록된 이메일이 아닐 경우, 에러 메시지와 함께 find_username 템플릿을 다시 렌더링

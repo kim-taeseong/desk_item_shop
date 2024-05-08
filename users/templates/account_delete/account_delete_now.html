@@ -1,8 +1,7 @@
 {% extends "noncategory_base.html" %}
 
 {% block content %}
-
-<h1>즉시 탈퇴하기</h1>
+<h2>즉시 탈퇴하기</h2>
 <p>계정을 영구적으로 삭제하시려면 아이디와 비밀번호를 입력해주세요.</p>
 
 <form method="post" action="{% url 'users:account_delete_now' %}" onsubmit="confirmDeleteNow(event)">
