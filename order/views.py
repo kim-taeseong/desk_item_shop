@@ -13,11 +13,12 @@ def order(request):
         if amount <= product.product_inventory:
             product.product_inventory -= amount
             product.save()
-            data, created = Order.objects.get_or_create(product=product, customer=request.user.customer)
+            price = product.product_price * amount
+            address = request.user.customer.cus_address
+            data, created = Order.objects.get_or_create(product=product, customer=request.user.customer, address=address, defaults={'amount': amount, 'price': price})
             if not created:
                 data.amount += amount
-            data.price = product.product_price * data.amount
-            data.address = request.user.customer.cus_address
+                data.price += price
             data.save()
             return render(request, 'order/order.html', {'status': 'success'})
         # 주문한 수량 < 재고
