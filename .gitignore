@@ -166,4 +166,5 @@ media/
 logistics/migrations
 users/migrations
 order/migrations
+inquiry/migrations
 .vscode/
