@@ -10,7 +10,7 @@
     <title>판매자 회원가입</title>
 </head>
 <body>
-    <h1>판매자 회원가입</h1>
+    <h2>판매자 회원가입</h2>
     <form action="{% url 'users:store_signup' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
