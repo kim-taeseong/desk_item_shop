@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.contrib.auth.views import PasswordChangeDoneView  # Django 제공 view
+from django.contrib.auth.views import PasswordChangeDoneView
 from .views import *
 
 app_name = 'users'
