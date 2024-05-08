@@ -145,6 +145,19 @@ class MainListView(ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         return self.model.objects.all()
+    
+    # context에 담아 템플릿으로 전달
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = context['products']
+        context['products_with_discount'] = []
+        for product in products:
+            discounted_price = product.product_price * (1 - product.product_sale / 100)
+            context['products_with_discount'].append((product, discounted_price))
+        return context
+
+
+
 
 
 #-- 카테고리별 상품리스트 조회

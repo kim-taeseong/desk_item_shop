@@ -1,5 +1,5 @@
 {% extends "store_base.html" %}
-
+{% load humanize %} 
 {% block content %}
 <style>
     .products {
@@ -13,10 +13,10 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 효과 */
       border-radius: 8px; /* 모서리 둥글게 */
       width: 200px; /* 카드의 너비 */
-      height: 280px; /* 카드의 높이 */
+      height: 230px; /* 카드의 높이 */
       display: flex;
       flex-direction: column; /* 요소들을 세로로 정렬 */
-      align-items: center; /* 가로 중앙 정렬 */
+      align-items: left; /* 가로 중앙 정렬 */
       overflow: hidden; /* 내용이 넘칠 때 처리 */
     }
     .products a {
@@ -30,14 +30,13 @@
       object-fit: cover; /* 이미지 비율 유지하면서 맞춤 */
     }
     .product h6 {
-      background-color: #f7f7f7; /* 제목 배경색 */
       width: 100%; /* 전체 너비 */
       text-align: left; /* 왼쪽 정렬 */
       white-space: nowrap; /* 텍스트를 한 줄로 만듦 */
       overflow: hidden; /* 내용이 넘칠 때 처리 */
       text-overflow: clip; /* 오버플로 텍스트를 자름 */
-      font-size: 14px; /* 폰트 크기 조정 */
-      margin: 0; /* 마진 제거 */
+      font-size: 15px; /* 폰트 크기 조정 */
+      margin-left: 5px; /* 상품명 왼쪽 마진 추가 */
     }
     .product p {
       padding: 0 10px; /* 문단 패딩 */
@@ -57,16 +56,17 @@
 
 <h3>새로 등록한 상품</h3>
 <div class="products">
-  {% for product in products %}
+  {% for product, discounted_price in products_with_discount %}
     <div class="product">
       <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
       <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
-      <p>{{ product.product_price }}원</p>
+      <p>{{ discounted_price|floatformat:0|intcomma }}원</p>
     </div>
   {% empty %}
     <p>등록된 상품이 없습니다.</p>
   {% endfor %}
 </div>
+
 
 
 <br>
