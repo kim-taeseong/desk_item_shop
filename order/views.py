@@ -41,8 +41,8 @@ def display_order(request, pk):
     return HttpResponse(order)
 
 def delete_order(request, pk):
-    order = get_object_or_404(Order, id=pk)
+    order = Order.objects.get(id=pk)
     if request.method == 'POST':
         order.delete()
-        return HttpResponse('ok')
-    return HttpResponse('ok')
+        return redirect('orders:display_orders')
+    return render(request, 'order/order_delete.html', {'order': order})

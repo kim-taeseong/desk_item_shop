@@ -1,0 +1,23 @@
+{% extends 'customer_base.html' %}
+
+{% block content %}
+<div class="container">
+    {% with page_title="주문 취소하기" %}
+        <h1>{{ page_title }}</h1>
+    {% endwith %}
+</div>
+
+<div>
+    <h3>다음 주문을 취소하시겠습니까?</h3>
+    <p><strong>주문상품:</strong>{{ order.product.product_name }}</p>
+    <p><strong>주문수량:</strong>{{ order.amount }}</p>
+    <p><strong>총 금액:</strong>{{ order.price }}</p>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        <input type="submit" value="Confirm" class="btn btn-danger btn-sm">
+        <a href="{% url 'orders:display_orders' %}"><button type="button">뒤로 가기</button></a>
+    </form>
+</div>
+
+{% endblock %}
