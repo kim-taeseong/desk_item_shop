@@ -92,8 +92,6 @@
         <h1><strong>{{ product.product_name }}</strong></h1>  <!-- 상품명 -->
         <h5 style="color: #5a5a5a;">{{ product.product_sale }}% <del style="color: #bababa;">{{ product.product_price|intcomma }}원</del></h5>  <!-- 할인율 -->
         <h2><strong>{{ discounted_price|floatformat:0|intcomma }}</strong> 원</h2> <!-- 상품 가격 -->
-
-
         <p>{{ product.product_description }}</p>  <!-- 상품 설명 -->
         <a href="{% url 'users:cus_store_home' product.store.pk %}" class="store-button">Store</a> <!-- 스토어 페이지 버튼 -->
         <form class="horizontal-form" action="{% url 'orders:order' %}" method="post">
