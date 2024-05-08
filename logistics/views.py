@@ -94,14 +94,25 @@ class UpdateProductView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         product = self.get_object()
         return self.request.user == product.store.user
 
-
-# Page not found (404) - 쿼리 결과에 product가 없습니다.(수정필요) > 수정완료했습니다 product_detail.html
+# 상품 detail
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'logistics/detail.html'  # 연결되는 templates url (수정)
     context_object_name = 'product'
+
     def get_queryset(self) -> QuerySet[Any]:
         return self.model.objects.all()
+    
+    # 할인율만큼 제품 가격 할인
+    def discounted_price(self):
+        discounted_price = self.get_object().product_price * (1 - self.get_object().product_sale / 100)
+        return discounted_price
+    
+    # context에 담아 템플릿으로 전달
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['discounted_price'] = self.discounted_price()  # discounted_price 이름으로 전달
+        return context
 
 
 #-- 상품 삭제
