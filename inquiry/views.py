@@ -32,11 +32,16 @@ def create_question(request):
             question = form.save(commit=False)
             question.customer = request.user.customer
             question.save()
-            return redirect('inquiry:QnA_list')
+            # 등록 후에 'my_qna' 페이지로 리디렉션, 질문의 ID를 전달
+            return redirect('inquiry:my_qna')  # 질문의 ID를 전달
     else:
         form = QuestionForm()
 
-    return render(request, 'question.html', {'form': form, 'question': question})
+    return render(request, 'question.html', {'form': form})
+
+
+
+
 
 @login_required
 @store_required

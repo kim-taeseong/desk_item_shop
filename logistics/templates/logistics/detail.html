@@ -111,6 +111,30 @@
                 {% endif %}
             </div>
         </form>
+        <br>
+        <a href="{% url 'inquiry:question_create' %}" class="btn btn-dark">상품문의 작성</a>
+
+        {% if not inquiries %}
+            <p>작성한 상품문의가 없습니다.</p>
+        {% else %}
+        <h2>작성한 상품문의 목록</h2>
+        <ul>
+            {% for inquiry in inquiries %}
+                <li>
+                    <strong>질문:</strong> {{ inquiry.question_title }}
+                    <br>
+                    <strong>내용:</strong> {{ inquiry.question_content }}
+                    <br>
+                    {% if inquiry.answer %}
+                        <strong>답변:</strong> {{ inquiry.answer.answer_content }}
+                    {% else %}
+                        <em>아직 답변이 없습니다.</em>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
     </div>
 </div>
 {% endblock %}

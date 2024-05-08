@@ -4,7 +4,6 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>제목</th>
                 <th>상품</th>
                 <th>작성일</th>
@@ -15,7 +14,6 @@
         <tbody>
             {% for question in user_questions %}
                 <tr>
-                    <td>{{ question.pk }}</td>
                     <td>{{ question.question_title }}</td>
                     <td>{{ question.product }}</td>
                     <td>{{ question.question_date }}</td>
