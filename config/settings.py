@@ -32,12 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     "logistics.apps.LogisticsConfig",
-<<<<<<< Updated upstream
-=======
-    'cart',
     'users',
     'inquiry',
->>>>>>> Stashed changes
+    'order',
 ]
 
 MIDDLEWARE = [
