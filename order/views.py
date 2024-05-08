@@ -13,8 +13,12 @@ def order(request):
         if amount <= product.product_inventory:
             product.product_inventory -= amount
             product.save()
-            order = Order(product=product, customer=request.user.customer, amount=amount, price=product.product_price, address=request.user.customer.cus_address)
-            order.save()
+            data, created = Order.objects.get_or_create(product=product, customer=request.user.customer)
+            if not created:
+                data.amount += amount
+            data.price = product.product_price * data.amount
+            data.address = request.user.customer.cus_address
+            data.save()
             return render(request, 'order/order.html', {'status': 'success'})
         # 주문한 수량 < 재고
         else:
@@ -23,8 +27,8 @@ def order(request):
         
 def display_orders_history(request):
     orders = Order.objects.filter(customer=request.user.customer)
-    result = list(orders.values())
-    return JsonResponse(result, safe=False)
+    context = {'orders': orders}
+    return render(request, 'order/order_list.html', context)
 
 def display_order(request, pk):
     # if request.user.is_authenticated
