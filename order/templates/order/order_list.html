@@ -28,7 +28,7 @@
                 <td style="border: 1px solid #ddd; text-align: center;">{{ order.price }}</td>
                 <td style="border: 1px solid #ddd; text-align: center;">미정</td>
                 <td style="border: 1px solid #ddd; text-align: center;">
-                    <a href="{% url 'orders:delete_order' order.id}">
+                    <a href="{% url 'orders:delete_order' order.id %}">
                         <button>주문 취소</button>
                     </a>
                 </td>
