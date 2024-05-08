@@ -152,8 +152,8 @@ class MainListView(ListView):
         products = context['products']
         context['products_with_discount'] = []
         for product in products:
-            discounted_price = product.product_price * (1 - product.product_sale / 100)
-            context['products_with_discount'].append((product, discounted_price))
+            discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
+            context['products_with_discount'].append((product, discounted_price))  # products_with_discount로 전달
         return context
 
 

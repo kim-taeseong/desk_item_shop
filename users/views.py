@@ -303,13 +303,13 @@ class CustomerStoreHomeView(ListView):
         # 할인된 가격 계산 및 컨텍스트에 추가
         products_with_discount = []
         for product in products:
-            discounted_price = product.product_price * (1 - product.product_sale / 100)
-            products_with_discount.append((product, discounted_price))
+            discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
+            products_with_discount.append((product, discounted_price))  
         
         context.update({
             'store': store,
             'categories': categories,
-            'products_with_discount': products_with_discount,
+            'products_with_discount': products_with_discount,  # products_with_discount로 전달
         })
         return context
 
