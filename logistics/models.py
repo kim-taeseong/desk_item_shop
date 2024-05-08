@@ -30,7 +30,7 @@ class Product(models.Model):
     product_inventory = models.IntegerField(verbose_name='재고') # 재고
     product_img = ThumbnailImageField(upload_to='photo/%Y/%m',verbose_name='이미지') # 상품이미지
     product_sale = models.IntegerField(default=0,verbose_name='할인율') # 할인율
-    is_active = models.BooleanField(default=True) # 활성화 상태
+    is_active = models.BooleanField(default=True) # 활성화 상태 
 
     # 기본 매니저를 ActiveProductManager로 변경
     objects = ActiveProductManager()

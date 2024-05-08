@@ -142,7 +142,7 @@ def account_delete_cancel(request):
                 if hasattr(user, 'store') and user.store:
                     Product.all_objects.filter(store=user.store).update(is_active=True)
 
-                user.save()
+                user.save() 
 
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
