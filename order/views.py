@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from logistics.models import Product
 from .models import Order
+from django.contrib.auth.decorators import login_required
+from users.decorators import customer_required
 
+@login_required(login_url='users:login')
+@customer_required
 def order(request):
     if request.method == 'POST':
         # 해당 제품 가져오기
