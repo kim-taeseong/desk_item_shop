@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
-    'cart',
     'order',
     'users.apps.UsersConfig', 
     'django.contrib.humanize',  # intcomma 필터를 사용하기 위한 앱 설치

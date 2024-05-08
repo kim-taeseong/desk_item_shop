@@ -1,11 +1,10 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
-from logistics.models import Product, Category
+from logistics.models import Product
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
-from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -14,18 +13,17 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
 User = get_user_model()
 
-# 구매자 회원가입
+# Customer 회원가입
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
-    template_name = 'customer/customer_signup.html' # 구매자 회원가입 페이지로 이동
+    template_name = 'customer/customer_signup.html' # Customer 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'customer'
@@ -36,11 +34,11 @@ class CustomerSignUpView(CreateView):
         login(self.request, user)
         return redirect('users:signup_done')
     
-# 판매자 회원가입
+# Store 회원가입
 class StoreSignUpView(CreateView):
     model = User
     form_class = StoreSignUpForm
-    template_name = 'store/store_signup.html' # 판매자 회원가입 페이지로 이동
+    template_name = 'store/store_signup.html' # Store 회원가입 페이지로 이동
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'store'
@@ -61,7 +59,7 @@ class LoginView(auth_views.LoginView):
     template_name = 'login_password/login.html'
 
     def form_invalid(self, form):
-        # 비활성화된 계정으로 로그인 시도 시, 계정 삭제 안내 페이지로
+        # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
         user = User.objects.filter(username=username).first()
         if user and not user.is_active:
@@ -71,9 +69,9 @@ class LoginView(auth_views.LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_authenticated:
-            if user.is_customer: # 아이디가 고객이면 메인 페이지로
+            if user.is_customer: # 아이디가 Customer라면 logistics:main 페이지로
                 return reverse('logistics:main')
-            elif user.is_store: # 아이디가 스토어면 스토어 메인 페이지로
+            elif user.is_store: # 아이디가 Store라면 store_home 페이지로
                 return reverse('users:store_home')
         else: # 잘못 입력하면 다시
             return reverse('login') 
@@ -91,7 +89,7 @@ def account_delete(request):
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
             user.is_active = False  # 탈퇴(비활성화) 처리
-            user.deactivetime = timezone.now()  # 비활성화한 시간 기록
+            user.deactivetime = timezone.now()  # 비활성화 했을 당시의 시간을 저장
             user.save()
             logout(request)
             return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
@@ -100,7 +98,7 @@ def account_delete(request):
             return render(request, 'account_delete/account_delete.html')
     return render(request, 'account_delete/account_delete.html')
 
-# 회원탈퇴 알림 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시(실제 로그인 처리되지는 않음 last_login 시간에 반영 X)
+# 탈퇴한 계정 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시 표시(실제 로그인 처리되는것은 아니기에 last_login 시간에 반영 X)
 def account_delete_alert(request):
     return render(request, 'account_delete/account_delete_alert.html')
 
@@ -112,9 +110,9 @@ def account_delete_cancel(request):
     try:
             user = User.objects.get(username=username, is_active=False)
             if user.check_password(password):
-                # 비밀번호가 일치하는 경우에만 계정을 활성화 상태로 변경
+                # 비밀번호가 일치하는 경우
                 user.is_active = True # 활성화 처리
-                user.deactivetime = None  # 비활성화한 시간을 None으로 변경 
+                user.deactivetime = None  # 비활성화 했던 시간을 None으로 변경
                 user.save()
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
@@ -152,10 +150,10 @@ def account_delete_now(request):
     return render(request, 'account_delete/account_delete_now.html')
 
 
-# 구매자 홈
+# Customer 홈
 @login_required
 @customer_required
-def customer_home(request): # 구매자 메인 페이지가 개발되면 그 페이지로 연결시켜야 함
+def customer_home(request):
     product = Product.objects.all()
     context = {
         'products': product
@@ -172,7 +170,7 @@ def find_username(request):
             user = users.first()
             # 이메일 문구
             send_mail(
-                '사이트 아이디 찾기',
+                '안녕하세요,Desker 입니다.',
                 f'귀하의 아이디는 {user.username} 입니다.',
                 settings.EMAIL_HOST_USER,
                 [email],
@@ -187,7 +185,7 @@ def find_username(request):
         return render(request, 'find/find_username.html')
 
 
-# 고객 회원정보 수정
+# Customer 회원정보 수정
 @login_required
 @customer_required
 def edit_customer(request):
@@ -201,7 +199,7 @@ def edit_customer(request):
             updated_customer = form.save()  # 변경사항을 DB에 저장
             return redirect('users:edit_customer_done')  # 고객 회원정보수정 완료 페이지로 리다이렉션
     else:
-        # POST 요청이 아니라면 CustomerEditForm이 customer 인스턴스로 초기화되어 현재 정보를 customer 정보 폼에 채움
+        # POST 요청이 아니라면 CustomerEditForm이 Customer 인스턴스로 초기화되어 현재 정보를 Customer 정보 폼에 채움
         form = CustomerEditForm(instance=customer)
     return render(request, 'edit_profile/edit_customer.html', {'form': form})
 
@@ -213,7 +211,7 @@ class EditCustomerDoneView(TemplateView):
         return HttpResponseRedirect(reverse('users:edit_customer_done'))
 
 
-# 스토어 회원정보 수정
+# Store 회원정보 수정
 @login_required
 @store_required
 def edit_store(request):
@@ -225,7 +223,7 @@ def edit_store(request):
         form = StoreEditForm(request.POST, request.FILES, instance=store) 
         if form.is_valid():  # 폼이 유효할 경우
             updated_store = form.save()  # 변경 사항을 DB에 저장
-            return redirect('users:edit_store_done')  # 스토어 회원정보수정 완료 페이지로 리다이렉션
+            return redirect('users:edit_store_done')  # Store 회원정보수정 완료 페이지로 리다이렉션
     else:
         # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
         form = StoreEditForm(instance=store)
@@ -233,7 +231,7 @@ def edit_store(request):
     return render(request, 'edit_profile/edit_store.html', {'form': form})
 
 class EditStoreDoneView(TemplateView):
-    template_name = 'edit_profile/edit_store_done.html' # 스토어 회원정보수정완료 페이지
+    template_name = 'edit_profile/edit_store_done.html' # Store 회원정보수정완료 페이지
 
     def post(self, request):
         return HttpResponseRedirect(reverse('users:edit_store_done'))
@@ -263,6 +261,7 @@ class StoreDashboardView(LoginRequiredMixin, ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
+        # 로그인한 사용자의 Store에 연결된 최근에 등록된 상품 5개를 가져옴
         user = self.request.user
         if user.is_authenticated and hasattr(user, 'store'):
             return Product.objects.filter(store=user.store).order_by('-product_date')[:5]
@@ -280,8 +279,7 @@ class StoreDashboardView(LoginRequiredMixin, ListView):
         context['products_with_discount'] = products_with_discount
         return context
 
-
-# customer 기준의 store_home
+# Customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  
     model = Product
     template_name = 'customer/customer_store_view.html'
@@ -299,6 +297,8 @@ class CustomerStoreHomeView(ListView):
         store = get_object_or_404(Store, pk=store_id)
         products = self.get_queryset()
         categories = list(set(product.category for product in products if product.category))
+        context['store'] = store  # Store 정보를 컨텍스트에 추가
+        context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
         
         # 할인된 가격 계산 및 컨텍스트에 추가
         products_with_discount = []
