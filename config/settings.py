@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users',
     'inquiry',
     'order',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
