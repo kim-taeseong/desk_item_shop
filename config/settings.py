@@ -31,9 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
-    'users',
-    'inquiry',
     'order',
+    'users.apps.UsersConfig',
+    'django.contrib.humanize',
+    'inquiry',
 ]
 
 MIDDLEWARE = [
