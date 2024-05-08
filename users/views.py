@@ -82,18 +82,38 @@ def logout_view(request):
     logout(request)
     return redirect('users:login')  # 로그인 화면으로 리다이렉트
 
+# 회원 탈퇴 - 실제 삭제가 아닌 비활성화 is_active = 0
 @login_required
-# 회원탈퇴 - 실제 삭제가 아닌 비활성화
 def account_delete(request):
     if request.method == 'POST':
         password = request.POST.get('password')
         user = authenticate(username=request.user.username, password=password)
         if user is not None:
-            user.is_active = False  # 탈퇴(비활성화) 처리
-            user.deactivetime = timezone.now()  # 비활성화 했을 당시의 시간을 저장
+            user_email = user.email  # 사용자 이메일 주소
+            user.is_active = False # 탈퇴(비활성화) 처리
+            user.deactivetime = timezone.now() # 비활성화 했을 당시의 시간을 저장
             user.save()
             logout(request)
-            return redirect('users:login')  # 탈퇴 후 로그인 페이지로 리다이렉트
+            
+            # 이메일 발송
+            send_mail(
+                subject='Desker에서 귀하의 계정 탈퇴를 확인합니다.',
+                message=f"""
+                        안녕하세요, {user.username}님.
+
+                        귀하의 Desker 계정이 성공적으로 탈퇴되었습니다.
+
+                        이용해 주셔서 감사합니다. 더 나은 서비스로 다시 만날 수 있기를 바랍니다.
+
+                        감사합니다,
+                        Desker 팀
+                                        """,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user_email],
+                fail_silently=False,
+            )
+            
+            return redirect('users:login') # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
             return render(request, 'account_delete/account_delete.html')
