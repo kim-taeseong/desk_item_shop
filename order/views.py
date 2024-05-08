@@ -24,7 +24,7 @@ def order(request):
                 data.amount += amount
                 data.price += price
             data.save()
-            return render(request, 'order/order.html', {'status': 'success'})
+            return render(request, 'order/order.html', {'status': '주문이 완료되었습니다.'})
         # 주문한 수량 < 재고
         else:
             
