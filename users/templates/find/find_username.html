@@ -1,7 +1,8 @@
 {% extends "noncategory_base.html" %}
 
 {% block content %}
-    <h1>아이디 찾기</h1>
+    <h2>아이디 찾기</h2>
+    <p>가입하신 이메일을 입력하시면 등록된 아이디를 찾을 수 있습니다.</p>
     <form action="{% url 'users:find_username' %}" method="POST">
         {% csrf_token %}
         <label for="email">이메일:</label>

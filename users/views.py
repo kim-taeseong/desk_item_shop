@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
 
@@ -167,15 +168,34 @@ def find_username(request):
         email = request.POST['email']
         users = User.objects.filter(email=email)
         if users.exists():
+            current_site = get_current_site(request)
+            domain = current_site.domain
+            protocol = 'https' if request.is_secure() else 'http'
             user = users.first()
+            login_url = reverse('users:login')  # 로그인 화면
+            login_url = f"{protocol}://{domain}{login_url}"  # 전체 URL 생성
             # 이메일 문구
             send_mail(
-                '안녕하세요,Desker 입니다.',
-                f'귀하의 아이디는 {user.username} 입니다.',
-                settings.EMAIL_HOST_USER,
-                [email],
+                subject='Desker에서 귀하의 계정 정보를 안내드립니다.',
+                message=f"""
+            안녕하세요, Desker 입니다!
+
+            귀하의 계정 아이디는 다음과 같습니다: "{user.username}"
+
+            로그인 화면으로 이동하려면 다음 링크를 클릭하세요: {login_url}
+
+            Desker와 함께 더욱 효율적인 업무 환경을 만들어 가세요.
+
+            만약 이 메일이 잘못 전송되었다고 생각되시거나, 추가적인 도움이 필요하시면 언제든지 저희 고객 지원팀으로 연락 주시기 바랍니다.
+
+            감사합니다,
+            Desker 팀
+            
+            """,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
                 fail_silently=False,
-            ) 
+            )
             return render(request, 'find/find_username_done.html')  # 이메일 발송 완료시 발송 완료 페이지로 이동
         else:
             # 등록된 이메일이 아닐 경우, 에러 메시지와 함께 find_username 템플릿을 다시 렌더링
