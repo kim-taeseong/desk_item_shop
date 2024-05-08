@@ -59,6 +59,11 @@ class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'login_password/login.html'
 
+    def dispatch(self, request, *args, **kwargs): # 이미 로그인된 사용자가 login 페이지로 접근하면 logistics:main 페이지로 리다이렉트
+        if self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('logistics:main'))
+        return super().dispatch(request, *args, **kwargs)
+
     def form_invalid(self, form):
         # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
