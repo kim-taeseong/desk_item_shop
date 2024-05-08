@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
+from order.models import Order
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
@@ -180,10 +181,8 @@ def account_delete_now(request):
 @login_required
 @customer_required
 def customer_home(request):
-    product = Product.objects.all()
-    context = {
-        'products': product
-    }
+    orders = Order.objects.filter(customer=request.user.customer)
+    context = {'orders': orders}
     return render(request, 'customer/customer_home.html', context)
 
 
