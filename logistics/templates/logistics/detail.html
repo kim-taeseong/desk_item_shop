@@ -1,5 +1,5 @@
 {% extends "noncategory_base.html" %}
-
+{% load humanize %} 
 {% block content %}
 <style>
     .product-detail {
@@ -32,13 +32,22 @@
         flex-grow: 1; /* 나머지 공간을 채움 */
         text-align: left; /* 모든 텍스트 왼쪽 정렬 */
     }
-    
-    .product-info h1, .product-info h2, .product-info p {
-        margin-top: 0;
+
+    .product-info h1 { /* 상품명 */
+        margin-top: 0px;
+    }
+     
+    .product-info h2 { /* 할인율, 상품가격 */
+        margin-top: 30px;
     }
 
-    .product-info h2 {
-        font-size: 30px; /* 폰트 사이즈 */
+    .product-info h5 {  /* 정상가 */
+        margin-top: 30px;
+    }
+
+    
+    .product-info p {  /* 상품설명 */
+        margin-top: 30px;
     }    
 
     .store-button {
@@ -48,28 +57,60 @@
         text-decoration: none;
         border-radius: 5px;
         display: inline-block;
-        margin-top: 10px;
+        margin-top: 60px;
+        margin-bottom: 35px;
         align-self: flex-start; /* 버튼을 정보 섹션의 왼쪽 정렬로 설정 */
     }
+
+    .product-form {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+    }
+
+    .horizontal-form {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .horizontal-form .form-group {
+        flex: 1;
+        margin-right: 5px; /* form과 button 사이의 간격 조정 */
+    }
+
+    .horizontal-form .form-group:last-child {
+        margin-right: 0; /* 마지막 요소의 오른쪽 마진을 제거하여 간격이 일정하게 유지 */
+    }
+
+
 </style>
 
 <div class="product-detail">
     <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
     <div class="product-info">
-        <h1>{{ product.product_name }}</h1>  <!-- 상품명 -->
+        <h1><strong>{{ product.product_name }}</strong></h1>  <!-- 상품명 -->
+        <h5 style="color: #5a5a5a;">{{ product.product_sale }}% <del style="color: #bababa;">{{ product.product_price|intcomma }}원</del></h5>  <!-- 할인율 -->
+        <h2><strong>{{ discounted_price|floatformat:0|intcomma }}</strong> 원</h2> <!-- 상품 가격 -->
         <p>{{ product.product_description }}</p>  <!-- 상품 설명 -->
-        <h2>{{ product.product_sale }}% {{ product.product_price }}원</h2>  <!-- 상품 가격, 상품 할인율 -->
         <a href="{% url 'users:cus_store_home' product.store.pk %}" class="store-button">Store</a> <!-- 스토어 페이지 버튼 -->
+        <form class="horizontal-form" action="{% url 'orders:order' %}" method="post">
+            {% csrf_token %}
+            <!-- 수량 -->
+            <div class="form-group">
+                {% if product.product_inventory %}
+                    <input class="form-control" type="number" name="amount" id="amount" min="1" value="1" placeholder="수량">
+                {% else %}
+                    <button class="form-control btn btn-dark" disabled>품절</button>
+                {% endif %}
+            </div>
+            <!-- 주문 -->
+            <div class="form-group">
+                {% if product.product_inventory %}
+                    <button class="form-control btn btn-dark" type="submit" name="product" value="{{ product.id }}">바로구매</button>
+                {% endif %}
+            </div>
+        </form>
     </div>
-    <form class="row" action="{% url 'orders:order' %}" method="post">
-        {% csrf_token %}
-        {% if product.product_inventory %}
-            <p class="col">재고: {{ product.product_inventory }}</p>
-            <input class="form-control col" type="number" name="amount" id="amount" min="1" value="1">
-            <button class="form-control col btn btn-primary" type="submit" name="product" value="{{ product.id }}">주문하기</button>
-        {% else %}
-            <button class="form-control col btn btn-primary" disabled>품절</button>
-        {% endif %}
-    </form>
 </div>
 {% endblock %}

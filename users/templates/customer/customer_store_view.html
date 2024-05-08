@@ -1,5 +1,5 @@
 {% extends "customer_store_base.html" %}
-
+{% load humanize %} 
 {% block content %}
 <style>
   .products {
@@ -26,7 +26,7 @@
 
   .product-card img {
     width: 100%; /* 이미지 너비 */
-    height: 180px; /* 이미지 높이 */
+    height: 225px; /* 이미지 높이 */
     object-fit: cover; /* 이미지 비율 유지 */
   }
 
@@ -40,28 +40,37 @@
     padding: 10px; /* 제목 패딩 */
     margin: 0;
     text-align: left; /* 제목 중앙 정렬 */
+    white-space: nowrap; /* 텍스트를 한 줄로 만듦 */
+    overflow: hidden; /* 내용이 넘칠 때 처리 */
+    text-overflow: clip; /* 오버플로 텍스트를 자름 */
   }
 
   .product-card p {
     padding: 0 10px 10px; /* 문단 패딩 */
-    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 0px;
     font-size: 14px; /* 폰트 사이즈 */
     color: #666; /* 폰트 색상 */
     text-align: left; /* 폰트 왼쪽 정렬 */
   }
+
+  .discounted-price {
+  display: inline-block;
+  text-align: right; /* 오른쪽 정렬을 위한 설정 */
+  width: 85%; /* 부모 요소의 너비를 가득 채우도록 설정 */
+  }
+
 </style>
 
 <div class="products">
-  {% for product in products %}
-    <div class="product-card">
-      <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
-      <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
-      <p>{{ product.product_sale }}% {{ product.product_price }}원</p>
-    </div>
-  {% empty %}
-    <p>No products found.</p>
-  {% endfor %}
+    {% for product, discounted_price in products_with_discount %}
+      <div class="product-card">
+        <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+        <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
+        <p>{{ product.product_sale }}% <span class="discounted-price">{{ discounted_price|floatformat:0|intcomma }}원</span></p>
+      </div>
+    {% empty %}
+      <p>등록된 상품이 없습니다.</p>
+    {% endfor %}
 </div>
 {% endblock %}
-
-

@@ -274,11 +274,11 @@ def edit_password(request):
     return render(request, 'login_password/edit_password.html', {'form': form})
 
 
-# Store_home http://127.0.0.1:8000/users/store/
-class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상품 정렬
+# store_home
+class StoreDashboardView(LoginRequiredMixin, ListView):
     model = Product
-    template_name = 'store/store_home.html'  # 연결되는 templates url
-    context_object_name = 'products'  # 컨텍스트 객체 이름 설정
+    template_name = 'store/store_home.html'
+    context_object_name = 'products'
 
     def get_queryset(self):
         # 로그인한 사용자의 Store에 연결된 최근에 등록된 상품 5개를 가져옴
@@ -286,31 +286,52 @@ class StoreDashboardView(LoginRequiredMixin, ListView):  # 새로 등록한 상�
         if user.is_authenticated and hasattr(user, 'store'):
             return Product.objects.filter(store=user.store).order_by('-product_date')[:5]
         else:
-            return Product.objects.none()  # 상품이 없는 경우 빈 쿼리셋 반환
-
+            return Product.objects.none()
+        
+    # context에 담아 템플릿으로 전달
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        products = context['products']
+        products_with_discount = []
+        for product in products:
+            discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
+            products_with_discount.append((product, discounted_price))
+        context['products_with_discount'] = products_with_discount
         return context
 
 # Customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  
     model = Product
-    template_name = 'customer/customer_store_view.html'  # 연결되는 templates url
+    template_name = 'customer/customer_store_view.html'
     context_object_name = 'products'
 
     def get_queryset(self):
-        store_id = self.kwargs['store_id']  # URL에서 스토어 ID를 받음
-        store = get_object_or_404(Store, pk=store_id)  # 해당 스토어가 없는 경우 404 에러
+        store_id = self.kwargs['store_id']
+        store = get_object_or_404(Store, pk=store_id)
         return Product.objects.filter(store=store).select_related('category', 'store')
 
+    # context에 담아 템플릿으로 전달
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         store_id = self.kwargs['store_id']
-        store = get_object_or_404(Store, pk=store_id)  # Store 객체를 가져옴
-        # 제품 목록을 조회하여 해당 Store의 모든 카테고리를 가져옴
+        store = get_object_or_404(Store, pk=store_id)
         products = self.get_queryset()
-        # list로 값 전달, 중복 카테고리 제거: id를 기반으로
         categories = list(set(product.category for product in products if product.category))
         context['store'] = store  # Store 정보를 컨텍스트에 추가
         context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
+        
+        # 할인된 가격 계산 및 컨텍스트에 추가
+        products_with_discount = []
+        for product in products:
+            discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
+            products_with_discount.append((product, discounted_price))  
+        
+        context.update({
+            'store': store,
+            'categories': categories,
+            'products_with_discount': products_with_discount,  # products_with_discount로 전달
+        })
         return context
+
+
+
