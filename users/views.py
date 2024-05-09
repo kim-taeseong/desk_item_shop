@@ -115,7 +115,6 @@ def account_delete(request):
                 recipient_list=[user_email],
                 fail_silently=False,
             )
-            
             return redirect('users:login') # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
@@ -138,12 +137,10 @@ def account_delete_cancel(request):
                 user.is_active = True # 사용자의 활성화 상태를 True로 설정
                 user.deactivetime = None  # 비활성화 했던 시간을 None으로 변경
 
-                # 사용자가 판매자 계정인 경우에만 상품들의 활성화 상태를 True로 설정
+                # store 계정인 경우엔 상품들을 다시 활성화
                 if hasattr(user, 'store') and user.store:
                     Product.all_objects.filter(store=user.store).update(is_active=True)
-
                 user.save() 
-
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
@@ -163,7 +160,7 @@ def account_delete_now(request):
             if user.check_password(password):
 
                 if hasattr(user, 'store'): # store 계정인 경우 연결된 모든 상품 삭제
-                    user.store.product_set.all().delete()  
+                    user.store.product_set.all().delete()   
                 # 계정 삭제
                 user.delete()
                 messages.success(request, '계정이 성공적으로 삭제되었습니다.')
