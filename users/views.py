@@ -33,7 +33,6 @@ class CustomerSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
         return redirect('users:signup_done')
     
 # Store 회원가입
@@ -48,7 +47,6 @@ class StoreSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
         return redirect('users:signup_done')
     
 # 회원가입 완료
