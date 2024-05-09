@@ -128,10 +128,15 @@ def account_delete_cancel(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+
+        # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
+        if not username or not password:
+            messages.error(request, '탈퇴를 취소하려는 아이디와 비밀번호를 입력해주세요.')
+            return render(request, 'account_delete/account_delete_cancel.html')
+
         try:
             user = User.objects.get(username=username, is_active=False)
-            if user.check_password(password):
-                # 비밀번호가 일치하는 경우
+            if user.check_password(password): # 비밀번호가 일치하는 경우
                 user.is_active = True # 사용자의 활성화 상태를 True로 설정
                 user.deactivetime = None  # 비활성화 했던 시간을 None으로 변경
 
@@ -153,14 +158,18 @@ def account_delete_now(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+
+        # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
+        if not username or not password:
+            messages.error(request, '즉시 탈퇴하려는 아이디와 비밀번호를 입력해주세요.')
+            return render(request, 'account_delete/account_delete_now.html')
+
         try:
             user = User.objects.get(username=username)
-            if user.check_password(password):
-
+            if user.check_password(password): # 비밀번호가 일치하는 경우
                 if hasattr(user, 'store'): # store 계정인 경우 연결된 모든 상품 삭제
                     user.store.product_set.all().delete()   
-                # 계정 삭제
-                user.delete()
+                user.delete() # 계정 삭제
                 messages.success(request, '계정이 성공적으로 삭제되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
