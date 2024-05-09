@@ -131,7 +131,7 @@ def account_delete_cancel(request):
 
         # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
         if not username or not password:
-            messages.error(request, '탈퇴를 취소하려는 아이디와 비밀번호를 입력해주세요.')
+            messages.error(request, '탈퇴를 취소하려는 계정의 아이디와 비밀번호를 입력해주세요.')
             return render(request, 'account_delete/account_delete_cancel.html')
 
         try:
@@ -161,7 +161,7 @@ def account_delete_now(request):
 
         # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
         if not username or not password:
-            messages.error(request, '즉시 탈퇴하려는 아이디와 비밀번호를 입력해주세요.')
+            messages.error(request, '즉시 탈퇴하려는 계정의 아이디와 비밀번호를 입력해주세요.')
             return render(request, 'account_delete/account_delete_now.html')
 
         try:
