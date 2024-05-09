@@ -8,7 +8,7 @@ from .forms import QuestionForm, AnswerForm
 from django.views.generic import *
 from .models import Product
 
-@login_required
+@login_required(login_url='users:login')
 @store_required
 def question_list(request):
     store_products = Product.objects.filter(store=request.user.store)
@@ -19,7 +19,8 @@ def question_list(request):
     }
     return render(request, template_name, context)
 
-@login_required
+@login_required(login_url='users:login')
+@customer_required
 def my_questions(request):
     # 현재 로그인한 유저가 작성한 상품문의 내역을 가져옵니다.
     user_questions = Question.objects.filter(customer=request.user.customer)
@@ -30,7 +31,7 @@ def my_questions(request):
     return render(request, 'user_QnA.html', {'user_questions': user_questions})
 
 
-@login_required
+@login_required(login_url='users:login')
 @customer_required
 def create_question(request):
     if request.method == 'POST':
@@ -50,7 +51,7 @@ def create_question(request):
 
 
 
-@login_required
+@login_required(login_url='users:login')
 @store_required
 def create_answer(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
