@@ -5,11 +5,12 @@ from django.urls import reverse
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
 from django.views.generic import *
+from .models import Product
 
-@login_required
 @store_required
 def question_list(request):
-    questions = Question.objects.all()
+    store_products = Product.objects.filter(store=request.user.store)
+    questions = Question.objects.filter(product__in=store_products)
     template_name = 'QnA_list.html'
     context = {
         'object_list': questions
