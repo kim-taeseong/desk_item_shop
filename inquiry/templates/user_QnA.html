@@ -1,5 +1,12 @@
 {% extends "noncategory_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <h1>내가 등록한 상품문의 내역</h1>
     <table>
         <thead>
@@ -32,7 +39,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6">등록된 상품문의 내역이 없습니다.</td>
+                    <td colspan="5" class="empty-message">등록된 상품문의 내역이 없습니다.</td>
                 </tr>
             {% endfor %}
         </tbody>
