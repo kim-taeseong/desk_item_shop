@@ -11,9 +11,9 @@ class UsersConfig(AppConfig):
     def ready(self):
         User = apps.get_model('users', 'User')  # User 모델
 
-        # 비활성화된 시점으로부터 7일 후에 계정을 삭제
+        # 비활성화된 시점으로부터 지정한 시간 후에 계정을 삭제
         def delete_inactive_users():
-            delete_time = timezone.now() - timedelta(days=7)
+            delete_time = timezone.now() - timedelta(minutes=2) # 시간 지정
             
             # deactivetime이 지정한 시간보다 오래된 계정을 삭제
             User.objects.filter(is_active=False, deactivetime__lte=delete_time).delete()
@@ -21,5 +21,5 @@ class UsersConfig(AppConfig):
         # 스케줄러 생성
         if not hasattr(self, 'scheduler'):
             self.scheduler = BackgroundScheduler() # APScheduler 라이브러리에서 제공하는 스케줄러 클래스
-            self.scheduler.add_job(delete_inactive_users, 'interval', hours=24)  # 매일 실행
+            self.scheduler.add_job(delete_inactive_users, 'interval', minutes = 1)  # 실행 간격
             self.scheduler.start() # 스케줄러 시작
