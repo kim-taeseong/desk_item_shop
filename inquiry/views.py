@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from users.decorators import customer_required, store_required
 from django.urls import reverse
@@ -21,6 +22,10 @@ def question_list(request):
 def my_questions(request):
     # 현재 로그인한 유저가 작성한 상품문의 내역을 가져옵니다.
     user_questions = Question.objects.filter(customer=request.user.customer)
+
+    if not user_questions:
+        raise Http404("작성한 상품문의가 없습니다.")
+
     return render(request, 'user_QnA.html', {'user_questions': user_questions})
 
 
