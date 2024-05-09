@@ -7,6 +7,7 @@ urlpatterns = [
     path('qna/list/', question_list, name='QnA_list'),
     
     path('question/', create_question, name='question_create'),
+    path('question/not/', my_questions, name='none_question'),
     path('answer/<int:question_id>/', create_answer, name='answer_create'),
 
     path('myqna/', my_questions, name='my_qna'),
