@@ -1,27 +1,11 @@
 {% extends "noncategory_base.html" %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/profile_edit.css' %}">
+{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구매자-회원정보수정</title>
-    <!-- 비밀번호 수정 버튼 style -->
-    <style>
-        .button-box {
-          display: inline-block;
-          padding: 3px 5px;
-          border: 1px solid #979797;
-          background-color: #ededed;
-          border-radius: 3px;
-          font-size: 16px; /* 텍스트 크기 */
-          color: #000000; /* 텍스트 색상 */
-        }
-    </style>
-</head>
-<body>
     <h2>회원정보수정</h2>
     <!-- 변경된 정보 저장 -->
     <form action="{% url 'users:edit_customer' %}" method="post" enctype="multipart/form-data">
@@ -35,6 +19,4 @@
 
     <!-- 회원탈퇴(비활성화) 페이지로 이동하는 버튼 -->
     <button onclick="location.href='{% url 'users:account_delete' %}'" class="btn btn-danger">회원탈퇴</button>
-</body>
-</html>
 {% endblock %}
