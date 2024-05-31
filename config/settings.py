@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'django.contrib.humanize',
     'inquiry',
+    'support',
 ]
 
 MIDDLEWARE = [
