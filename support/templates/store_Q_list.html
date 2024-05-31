@@ -1,0 +1,16 @@
+<h1>Store Questions</h1>
+<ul>
+    {% for question in questions %}
+        <li>
+            <strong>{{ question.question_title }}</strong><br>
+            {{ question.question_content }}<br>
+            <small>{{ question.question_date }}</small>
+        </li>
+    {% endfor %}
+</ul>
+<h2>Ask a Question</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
