@@ -1,16 +1,27 @@
-<h1>My Questions</h1>
-<ul>
-    {% for question in questions %}
-        <li>
-            <strong>{{ question.question_title }}</strong><br>
-            {{ question.question_content }}<br>
-            <small>{{ question.question_date }}</small>
-        </li>
-    {% endfor %}
-</ul>
-<h2>Ask a Question</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
+{% extends "customer_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1>고객센터 문의 : Customer</h1>
+    <ul>
+        {% for question in questions %}
+            <li>
+                <strong>{{ question.question_title }}</strong><br>
+                {{ question.question_content }}<br>
+                <small>{{ question.question_date }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>질문하기</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">제출</button>
 </form>
+
+{% endblock %}
