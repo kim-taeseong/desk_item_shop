@@ -8,7 +8,7 @@ class Customer_Question(models.Model):
     question_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Question from {self.customer.name}: {self.question_title[:50]}"
+        return f"Question from {self.customer.cus_name}: {self.question_title[:50]}"
 
 class Store_Question(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='questions')
@@ -17,7 +17,7 @@ class Store_Question(models.Model):
     question_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Question for {self.store.name}: {self.question_title[:50]}"
+        return f"Question for {self.store.store_name}: {self.question_title[:50]}"
 
 class Answer(models.Model):
     customer_question = models.ForeignKey(Customer_Question, on_delete=models.CASCADE, null=True, blank=True, related_name='answers')
@@ -27,4 +27,3 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"Answer: {self.answer_content[:50]}"
-

@@ -1,0 +1,25 @@
+{% extends "customer_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1>질문 & 답변 상세 정보</h1>
+    <h2>{{ question.question_title }}</h2>
+    <p>{{ question.question_content }}</p>
+    <small>등록일: {{ question.question_date }}</small>
+    <hr>
+    {% if question.answers.exists %}
+        <h3>답변</h3>
+        {% for answer in question.answers.all %}
+            <p>{{ answer.answer_content }}</p>
+            <small>등록일: {{ answer.answer_date }}</small>
+        {% endfor %}
+    {% else %}
+        <p>아직 답변이 등록되지 않았습니다.</p>
+    {% endif %}
+    <a href="{% url 'support:QnA_list' %}"><button>목록으로 돌아가기</button></a> <!-- 목록으로 돌아가는 버튼 -->
+{% endblock %}

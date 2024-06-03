@@ -8,20 +8,12 @@
 {% block content %}
 
     <h1>고객센터 문의 : Customer</h1>
-    <ul>
-        {% for question in questions %}
-            <li>
-                <strong>{{ question.question_title }}</strong><br>
-                {{ question.question_content }}<br>
-                <small>{{ question.question_date }}</small>
-            </li>
-        {% endfor %}
-    </ul>
+
     <h2>질문하기</h2>
-    <form method="post">
+    <form method="post" action="{% url 'support:customer_question' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">제출</button>
-</form>
+    </form>
 
 {% endblock %}

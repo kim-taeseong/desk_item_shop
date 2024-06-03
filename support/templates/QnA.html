@@ -1,0 +1,40 @@
+{% extends "customer_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>고객센터 질문 & 답변 목록</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>등록일</th>
+                <th>답변</th>
+                <th>상세보기</th> <!-- 추가된 열 -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td><strong>{{ question.question_title }}</strong></td>
+                <td><small>{{ question.question_date }}</small></td>
+                <td>
+                    {% if question.answers.exists %}
+                        {% for answer in question.answers.all %}
+                            <p>{{ answer.answer_content }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>아직 답변이 등록되지 않았습니다.</p>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'support:QnA_detail' question.id %}"><button>상세보기</button></a> <!-- 상세보기 버튼 -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

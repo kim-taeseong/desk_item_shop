@@ -18,7 +18,7 @@
         {% endfor %}
     </ul>
     <h2>질문하기</h2>
-    <form method="post">
+    <form method="post" action="{% url 'support:store_question' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">제출</button>
