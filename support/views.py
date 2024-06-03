@@ -4,6 +4,8 @@ from .forms import StoreQuestionForm, CustomerQuestionForm
 from .models import Store_Question, Customer_Question
 from users.decorators import customer_required, store_required
 
+def support_home(request):
+    return render(request, 'support_home.html')
 
 @login_required(login_url='users:login')
 @store_required

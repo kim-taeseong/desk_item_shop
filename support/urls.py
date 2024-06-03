@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 
 app_name = 'support'
-urlpatterns = [    
+urlpatterns = [
+    path('', views.support_home, name='support_home'),
+        
     #질문한 내역
     path('cus/list/', views.QnA_list, name='QnA_list'),
     path('store/list/', views.QnA_list, name='QnA_list'),
