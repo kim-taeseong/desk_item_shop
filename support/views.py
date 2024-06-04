@@ -20,7 +20,7 @@ def customer_question(request):
             question = form.save(commit=False)
             question.customer = request.user.customer
             question.save()
-            return redirect('support:QnA_list')
+            return redirect('support:customer_list')
     else:
         form = CustomerQuestionForm()
     
@@ -51,37 +51,42 @@ def customer_detail(request, question_id):
 
 # store
 # main페이지
-def support_home(request):
-    return render(request, 'customer/main.html')
+def store_main(request):
+    return render(request, 'store/main.html')
 
 # 질문 하기
 @login_required(login_url='users:login')
-@customer_required
-def customer_question(request):
+@store_required
+def store_question(request):
     if request.method == 'POST':
         form = CustomerQuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
-            question.customer = request.user.customer
+            question.store = request.user.store
             question.save()
-            return redirect('support:QnA_list')
+            return redirect('support:store_list')
     else:
         form = CustomerQuestionForm()
     
-    questions = Customer_Question.objects.filter(customer=request.user.customer)
-    return render(request, 'customer/add.html', {'questions': questions, 'form': form})
+    questions = Customer_Question.objects.filter(store=request.user.store)
+    return render(request, 'store/add.html', {'questions': questions, 'form': form})
 
 # 질문 목록
 @login_required(login_url='users:login')
-@customer_required
-def customer_list(request, question_id=None):
+@store_required
+def store_list(request, question_id=None):
     if question_id:
         # 단일 질문의 상세 정보를 가져와야 할 경우
-        question = Customer_Question.objects.get(id=question_id)
-        return render(request, 'customer/detail.html', {'question': question})
+        question = Store_Question.objects.get(id=question_id)
+        return render(request, 'store/detail.html', {'question': question})
     else:
         # 모든 질문 목록을 가져와야 할 경우
-        customer_questions = Customer_Question.objects.filter(customer=request.user.customer).prefetch_related('answers')
-        return render(request, 'customer/list.html', {'questions': customer_questions})
+        store_questions = Store_Question.objects.filter(store=request.user.store).prefetch_related('answers')
+        return render(request, 'store/list.html', {'questions': store_questions})
 
-
+# 질문 상세 정보
+@login_required(login_url='users:login')
+@store_required
+def store_detail(request, question_id):
+    question = get_object_or_404(Store_Question, id=question_id)
+    return render(request, 'store/detail.html', {'question': question})

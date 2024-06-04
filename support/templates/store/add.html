@@ -10,7 +10,7 @@
     <h1>고객센터 문의 : Customer</h1>
 
     <h2>질문하기</h2>
-    <form method="post" action="{% url 'support:customer_question' %}">
+    <form method="post" action="{% url 'support:store_question' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">제출</button>
