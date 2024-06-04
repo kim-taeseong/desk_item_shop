@@ -1,0 +1,57 @@
+/* QnA_detail.css */
+
+/* Styles for question title */
+h1, h2, h3 {
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+/* Styles for question content */
+p {
+    color: #666;
+    font-family: Arial, sans-serif;
+}
+
+/* Styles for date */
+small {
+    color: #999;
+    font-size: 12px;
+}
+
+/* Styles for answers */
+.answer {
+    margin-bottom: 20px;
+}
+
+/* Styles for buttons */
+button {
+    background-color: #0c2b4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for hr */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+/* Styles for box */
+.box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}

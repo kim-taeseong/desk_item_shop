@@ -1,0 +1,30 @@
+{% extends "customer_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'support/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>고객센터</h1>
+
+    <section id="faq">
+        <h2>자주 묻는 질문 (FAQ)</h2>
+        <div>
+            <h3>질문 1: 배송 기간은 얼마나 걸리나요?</h3>
+            <p>답변: 보통 배송은 3-5일이 소요됩니다.</p>
+        </div>
+        <div>
+            <h3>질문 2: 반품 정책은 어떻게 되나요?</h3>
+            <p>답변: 상품 수령 후 7일 이내에 반품이 가능합니다.</p>
+        </div>
+        <!-- 추가 FAQ 항목들 -->
+    </section>
+
+    <section id="one-to-one">
+        <h2>1대1 질문하기</h2>
+        <a href="{% url 'support:customer_question' %}">1대1 질문하기</a>
+        <a href="{% url 'support:customer_list' %}">질문 목록</a>
+    </section>
+
+{% endblock %}
