@@ -1,0 +1,36 @@
+{% extends "community_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>게시글 수정</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="id_community_category">카테고리</label>
+            {{ form.community_category }}
+        </div>
+        <div class="form-group mb-3">
+            <label for="id_community_title">제목</label>
+            {{ form.community_title }}
+        </div>
+        <div class="form-group mb-3">
+            <label for="id_community_img">이미지 선택</label>
+            <input type="file" name="community_img" class="form-control-file" id="id_community_img">
+            {% if form.community_img.value %}
+            <img src="{{ form.community_img.value.url }}" alt="이미지" class="img-thumbnail mt-2" style="max-width: 200px;">
+            {% endif %}
+        </div>
+        <div class="form-group mb-3">
+            <label for="id_community_content">내용</label>
+            {{ form.community_content }}
+        </div>
+        <div class="form-group mb-3">
+            <label for="id_product">상품 선택</label>
+            {{ form.product }}
+        </div>
+
+        <button type="submit" class="btn btn-dark text-white">저장</button>
+    </form>
+</div>
+{% endblock %}

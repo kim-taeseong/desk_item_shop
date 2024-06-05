@@ -1,0 +1,15 @@
+{% extends "community_base.html" %}
+
+{% block content %}
+<div class="container text-center">
+    <p style="font-size: 15px;"><strong>다음 게시물을 삭제하시겠습니까?</strong></p>
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+        <h2>{{ post.community_title }}</h2>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">삭제</button>
+        <a href="{% url 'community:post_detail' post.pk %}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+{% endblock %}

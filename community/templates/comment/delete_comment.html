@@ -1,0 +1,12 @@
+{% extends "community_base.html" %}
+
+{% block content %}
+<div class="container text-center">
+    <p style="font-size: 15px;"><strong>댓글을 삭제하시겠습니까?</strong></p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">삭제</button>
+        <a href="{% url 'community:post_detail' comment.community.pk %}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+{% endblock %}

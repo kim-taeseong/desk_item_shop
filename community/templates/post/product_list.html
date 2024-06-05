@@ -1,0 +1,21 @@
+{% extends "noncategory_base.html" %}
+
+{% block content %}
+    <h1>{{ category.name }} 상품 목록</h1>
+
+    <div style="margin-top: 20px;">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-2 mb-4">
+                    <div class="card" style="width: 220px; height: 230px;">
+                        <img src="{{ product.product_img.url }}" class="card-img" alt="{{ product.product_name }}">
+                        <div class="card-body">
+                            <p class="card-title">{{ product.product_name }}</p>
+                            <p class="card-text">가격: {{ product.product_price }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

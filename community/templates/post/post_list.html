@@ -1,0 +1,52 @@
+{% extends "community_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-auto">
+                <a href="{% url 'community:create_post' %}" class="btn btn-dark text-white">글 작성</a>
+            </div>
+        </div>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-3 mb-4">
+                <div class="card mb-3 box-shadow" style="width: 250px;">
+                    <!--  게시글 제목 클릭하면 상세 페이지로 이동 -->
+                    <a href="{% url 'community:post_detail' pk=post.pk %}"> 
+                        <img src="{{ post.community_img.url }}" class="card-img-top" alt="{{ post.community_title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.community_title }}</h5>
+                            <p class="card-text">{{ post.community_content }}</p>
+                        </div>
+                    </a> 
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-12">
+                <p>작성된 게시글이 없습니다.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    <!-- 페이지 링크 표시 -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-auto">
+                <ul class="pagination">
+                    {% if posts.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">이전</a></li>
+                    {% endif %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ posts.number }}">{{ posts.number }}</a></li>
+                    {% if posts.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">다음</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

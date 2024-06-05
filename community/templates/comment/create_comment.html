@@ -1,0 +1,8 @@
+<form method="post" action="{% url 'community:create_comment' pk=community.pk %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_community_comment_content">댓글 내용:</label>
+        <textarea class="form-control" id="id_community_comment_content" name="community_comment_content" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">댓글 작성</button>
+</form>

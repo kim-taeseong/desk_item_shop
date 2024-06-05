@@ -1,0 +1,78 @@
+{% extends "community_base.html" %}
+
+{% block content %}
+    <style>
+        .form-field {
+            margin-bottom: 10px;
+        }
+    </style>
+    <h3>게시글 작성하기</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-field">
+            <label for="id_community_category">게시글 카테고리:</label>
+            {{ form.community_category }}
+        </div>
+        <div class="form-field">
+            <label for="id_community_title">제목:</label>
+            {{ form.community_title }}
+        </div>
+        <div class="form-field">
+            <label for="id_community_img"></label>
+            {{ form.community_img }}
+        </div>
+        <div class="form-field">
+            <label for="id_community_content"></label>
+            {{ form.community_content }}
+        </div>
+
+        <!-- 카테고리 -->
+        <div>
+            <label>상품 카테고리</label><br>
+            <form action="{% url 'community:product_list_by_category' category_id=category.id %}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-dark text-white">테이블·책상·의자</button>
+            </form>
+            
+
+            <form action="{% url 'logistics:cat_products' 2 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">PC주변용품</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 3 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">타공판·보드</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 4 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">모니터받침대·노트북거치대</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 5 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">데스크 수납·정리</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 6 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">데스크매트·마우스패드</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 7 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">데스크스탠드·조명</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 8 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">스위치·콘센트</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 9 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">데코용품</button>
+            </form>
+            <form action="{% url 'logistics:cat_products' 10 %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark text-white">디자인문구</button>
+            </form>
+        </div>
+        
+        
+        <button type="submit" class="btn btn-dark text-white">작성완료</button>
+    </form>
+{% endblock %}
