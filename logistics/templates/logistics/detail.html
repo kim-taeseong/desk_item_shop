@@ -99,7 +99,7 @@
             <!-- 수량 -->
             <div class="form-group">
                 {% if product.product_inventory %}
-                    <input class="form-control" type="number" name="amount" id="amount" min="1" value="1" placeholder="수량">
+                    <input class="form-control" type="number" name="amount" id="amount1" min="1" value="1" placeholder="수량">
                 {% else %}
                     <button class="form-control btn btn-dark" disabled>품절</button>
                 {% endif %}
@@ -111,6 +111,16 @@
                 {% endif %}
             </div>
         </form>
+        <form class="horizontal-form" action="{% url 'cart:add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <!-- 장바구니 담기 -->
+            <div class="form-group">
+                {% if product.product_inventory %}
+                    <button class="form-control btn btn-dark" type="submit">담기</button>
+                {% endif %}
+                    <input type="hidden" name="amount" id="amount2" min="1" value="1" placeholder="수량">
+            </div>
+        </form>
         <br>
         <a href="{% url 'inquiry:question_create' %}" class="btn btn-dark">상품문의 작성</a>
         <a href="{% url 'inquiry:my_qna' %}" class="btn btn-dark">작성한 상품문의 확인하기</a>
@@ -118,4 +128,14 @@
     
     </div>
 </div>
+
+
+<script>
+    // 첫 번째 폼에서 수량이 변경될 때 두 번째 폼의 수량도 함께 변경되도록 합니다.
+    document.getElementById('amount1').addEventListener('change', function() {
+        let amount = this.value;
+        document.getElementById('amount2').value = amount;
+    });
+</script>
+
 {% endblock %}

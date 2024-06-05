@@ -18,6 +18,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from cart.views import transfer_session_cart_to_user
 
 User = get_user_model()
 
@@ -76,6 +77,8 @@ class LoginView(auth_views.LoginView):
         user = self.request.user
         if user.is_authenticated:
             if user.is_customer: # 아이디가 Customer라면 logistics:main 페이지로
+                # 세션의 정보 데이터베이스로 이동
+                transfer_session_cart_to_user(self.request, user)
                 return reverse('logistics:main')
             elif user.is_store: # 아이디가 Store라면 store_home 페이지로
                 return reverse('users:store_home')

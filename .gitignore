@@ -167,4 +167,5 @@ logistics/migrations
 users/migrations
 order/migrations
 inquiry/migrations
+cart/migrations
 .vscode/
