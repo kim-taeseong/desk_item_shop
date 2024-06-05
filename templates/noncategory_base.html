@@ -46,7 +46,17 @@
         <ul>
             <li><a href="{% url 'logistics:main' %}">홈</a></li>
             <li><a href="#">커뮤니티</a></li>
-            <li><a href="#">고객센터</a></li>
+
+            {% if request.user.is_authenticated %}
+                {% if request.user.is_store %}
+                    <li><a href="{% url 'support:support_home' %}">고객센터</a></li>
+                {% else %}
+                    <li><a href="{% url 'support:main' %}">고객센터</a></li>
+                {% endif %}
+            {% else %}
+                <li><a href="#">고객센터</a></li>
+            {% endif %}
+
         </ul>       
     </nav>
 

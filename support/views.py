@@ -7,6 +7,8 @@ from users.decorators import customer_required, store_required
 
 # customer 
 # main페이지
+@login_required(login_url='users:login')
+@customer_required
 def customer_main(request):
     return render(request, 'customer/main.html')
 
@@ -51,6 +53,8 @@ def customer_detail(request, question_id):
 
 # store
 # main페이지
+@login_required(login_url='users:login')
+@store_required
 def store_main(request):
     return render(request, 'store/main.html')
 
@@ -59,16 +63,16 @@ def store_main(request):
 @store_required
 def store_question(request):
     if request.method == 'POST':
-        form = CustomerQuestionForm(request.POST)
+        form = StoreQuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
             question.store = request.user.store
             question.save()
             return redirect('support:store_list')
     else:
-        form = CustomerQuestionForm()
+        form = StoreQuestionForm()
     
-    questions = Customer_Question.objects.filter(store=request.user.store)
+    questions = Store_Question.objects.filter(store=request.user.store)
     return render(request, 'store/add.html', {'questions': questions, 'form': form})
 
 # 질문 목록
