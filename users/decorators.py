@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import user_passes_test
 
 def customer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='users:login'):
     '''
-    Decorator for views that checks that the logged in user is a student,
-    redirects to the log-in page if necessary.
+    로그인한 유저가 고객인지 확인하는 데코레이터
+    필요하다면 로그인 페이지로 이동
     '''
     actual_decorator = user_passes_test(
         lambda u: u.is_active and u.is_customer,
@@ -18,8 +18,8 @@ def customer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, lo
 
 def store_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='users:login'):
     '''
-    Decorator for views that checks that the logged in user is a teacher,
-    redirects to the log-in page if necessary.
+    로그인한 유저가 판매자인지 확인하는 데코레이터
+    필요하다면 로그인 페이지로 이동
     '''
     actual_decorator = user_passes_test(
         lambda u: u.is_active and u.is_store,
