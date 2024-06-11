@@ -1,67 +1,63 @@
 {% extends 'store_base.html' %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logistics/list.css' %}">
+{% endblock %}
+
 {% block content %}
-<div>
+<div class="store-name">
     <strong>{{ store.store_name|upper }}</strong>  <!-- 스토어 이름 표시 --> 
-    {% with page_title="상품 목록" %} <h3>{{ page_title }}</span></h3> {% endwith %}
+    {% with page_title="상품 목록" %}
+        <h3 class="page-title">{{ page_title }}</h3>
+    {% endwith %}
 </div>
 
-
-<style>
-    .store-name {
-        margin-bottom: 20px; /* 스토어 이름 아래에 20px의 마진 추가 */
-    }
-
-    .page-title {
-        margin-top: 20px; /* 페이지 타이틀 위에 20px의 마진 추가 */
-    }
-</style>
-
-
 <div>
-    <table style="width: 100%; border-collapse: collapse;">
+    <table class="product-table">
         <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #ddd; text-align: center;">카테고리</th> <!-- 카테고리 열 추가 -->
-                <th style="border: 1px solid #ddd; text-align: center;">상품명</th>
-                <th style="border: 1px solid #ddd; text-align: center;">가격</th>
-                <th style="border: 1px solid #ddd; text-align: center;">할인율</th>
-                <th style="border: 1px solid #ddd; text-align: center;">재고</th>
-                <th style="border: 1px solid #ddd; text-align: center;">등록일</th>
-                <th style="border: 1px solid #ddd; text-align: center;">상세 설명</th>
-                <th style="border: 1px solid #ddd; text-align: center;">수정</th>
-                <th style="border: 1px solid #ddd; text-align: center;">삭제</th>
+            <tr>
+                <th>카테고리</th> <!-- 카테고리 열 추가 -->
+                <th>상품명</th>
+                <th>가격</th>
+                <th>할인율</th>
+                <th>재고</th>
+                <th>등록일</th>
+                <th>상세 설명</th>
+                <th>수정</th>
+                <th>삭제</th>
             </tr>
         </thead>
         <tbody>
             {% for product in object_list %}
             <tr>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.category.category_name }}</td> <!-- 카테고리 이름 출력 -->
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_name }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_price }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_sale }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_inventory }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_date }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ product.product_description }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">
+                <td>{{ product.category.category_name }}</td> <!-- 카테고리 이름 출력 -->
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.product_price }}</td>
+                <td>{{ product.product_sale }}</td>
+                <td>{{ product.product_inventory }}</td>
+                <td>{{ product.product_date }}</td>
+                <td class="product-description">{{ product.product_description }}</td>
+                <td class="product-buttons">
                     <a href="{% url 'logistics:update_product' pk=product.pk %}">
-                    <button>상품수정</button></a></td>
-                <td style="border: 1px solid #ddd; text-align: center;">
+                        <button>상품수정</button>
+                    </a>
+                </td>
+                <td class="product-buttons">
                     <a href="{% url 'logistics:del_product' pk=product.pk %}">
-                    <button>상품삭제</button></a></td>
+                        <button>상품삭제</button>
+                    </a>
+                </td>
             </tr>
             {% endfor %} 
-
         </tbody>
-
     </table>
 </div>
 
 <!-- 상품 등록 버튼 -->
-<div style="margin-top: 20px; text-align: right;">
+<div class="product-buttons" style="margin-top: 20px; text-align: right;">
     <a href="{% url 'logistics:add_product' %}">
-        <button style="padding: 5px 10px; font-size: 15px; cursor: pointer; background-color: #ff4d4d; color: white; border: none; border-radius: 5px;">상품 등록</button>
+        <button>상품 등록</button>
     </a>
 </div>
-
 {% endblock %}

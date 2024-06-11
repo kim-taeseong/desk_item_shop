@@ -1,5 +1,10 @@
 {% extends 'main_base.html' %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logistics/cat_products.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <h4>{{ category.category_name }}</h4>
@@ -7,14 +12,11 @@
             <div class="row">
                 {% for product in products %}
                     <div class="col-md-3">
-                        <div class="card mb-3 box-shadow" style="width: 250px;">
-                            <img class="card-img-top" src="{{ product.product_img.url }}" alt="{{ product.product_name }}" style="height: 225px; width: 100%; display: block;">
+                        <div class="card mb-3 box-shadow custom-card">
+                            <img class="card-img-top" src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
                             <div class="card-body">
-                                <!--  상품 이름을 클릭하면 상세 페이지로 이동 -->
                                 <p class="card-text">
-                                    <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: inherit;">
-                                        {{ product.product_name }}
-                                    </a>
+                                    <a href="{{ product.get_absolute_url }}" class="product-link">{{ product.product_name }}</a>
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">{{ product.product_sale }}%</small>
