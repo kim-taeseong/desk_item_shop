@@ -18,44 +18,4 @@
         <p>구매한 상품이 없습니다.</p>
     {% endfor %}
 </div>
-
-<br>
-<h3>팔로우/팔로잉</h3>
-
-<div class="row">
-    <div class="col-md-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>팔로우</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for person in followers %}
-                <tr>
-                    <td>{{ person.cus_nickname }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div class="col-md-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>팔로잉</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for person in following %}
-                <tr>
-                    <td>{{ person.cus_nickname }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
 {% endblock %}
