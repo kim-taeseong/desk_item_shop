@@ -67,7 +67,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
         self.fields['username'].label = '아이디'
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name','cus_img','cus_height','cus_weight','cus_job',
                 'cus_address','cus_zipcode','cus_birth','cus_telnum') # 입력받을 항목들
@@ -137,7 +137,7 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
         self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
         self.fields['username'].label = '아이디'
 
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'store_name','store_img' ,'store_num', 'store_address', 'store_zipcode',
                 'store_telnum') # 입력받을 항목들
