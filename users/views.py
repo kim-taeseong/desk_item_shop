@@ -68,7 +68,7 @@ class LoginView(auth_views.LoginView):
     def form_invalid(self, form):
         # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
-        user = User.objects.filter(username=username).first()
+        user = User.objects.get(username=username)
         if user and not user.is_active:
             return HttpResponseRedirect(reverse('users:account_delete_alert'))
         return super().form_invalid(form)
@@ -194,7 +194,7 @@ def customer_home(request):
 def find_username(request):
     if request.method == 'POST':
         email = request.POST['email']
-        users = User.objects.filter(email=email)
+        users = User.objects.get(email=email)
         if users.exists():
             current_site = get_current_site(request)
             domain = current_site.domain
