@@ -1,12 +1,12 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.db import transaction
-from .models import User, Customer, Store
-from django import forms
 from django.contrib.auth import get_user_model
-import re
-from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms.widgets import DateInput
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
+from django.db import transaction
+from django import forms
+from .models import User, Customer, Store
+import re
 
 User = get_user_model() # models.py에서 User 모델을 가져옴
 
@@ -70,7 +70,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name','cus_img','cus_height','cus_weight','cus_job',
-                  'cus_address','cus_zipcode','cus_birth','cus_telnum') # 입력받을 항목들
+                'cus_address','cus_zipcode','cus_birth','cus_telnum') # 입력받을 항목들
         help_texts = {
             'username': '아이디는 6-16자, 영문 대소문자와 "_"만 사용 가능합니다.',
             'password1': '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다 . 연속되는 숫자를 포함할 수 없습니다'
@@ -140,7 +140,7 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'store_name','store_img' ,'store_num', 'store_address', 'store_zipcode',
-                   'store_telnum') # 입력받을 항목들
+                'store_telnum') # 입력받을 항목들
         help_texts = {
             'username': '아이디는 6-16자, 영문 대소문자와 "_"만 사용 가능합니다.',
             'password1': '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다 . 연속되는 숫자를 포함할 수 없습니다'
