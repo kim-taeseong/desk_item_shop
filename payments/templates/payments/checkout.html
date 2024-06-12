@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <script src="https://js.tosspayments.com/v1"></script>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <button id="payment-button">결제하기</button>
+
+    <script>
+        document.getElementById('payment-button').addEventListener('click', function () {
+            const clientKey = "{{ portone_shop_id }}";  // settings.TOSS_API_KEY
+            const tossPayments = TossPayments(clientKey);
+
+            tossPayments.requestPayment('카드', {
+                amount: 15000,
+                orderId: 'ORDER_ID',
+                orderName: '토스 티셔츠 외 2건',
+                customerName: '홍길동',
+                successUrl: 'http://localhost:8000/success',
+                failUrl: 'http://localhost:8000/fail',
+            });
+        });
+    </script>
+</body>
+</html>
