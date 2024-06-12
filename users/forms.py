@@ -10,23 +10,27 @@ import re
 
 User = get_user_model() # models.py에서 User 모델을 가져옴
 
+def contains_consecutive_chars(password):
+    for i in range(len(password) - 2):
+        if ord(password[i+1]) == ord(password[i]) + 1 and ord(password[i+2]) == ord(password[i]) + 2:
+            return True
+        if password[i:i+3].isdigit() and int(password[i+1]) == int(password[i]) + 1 and int(password[i+2]) == int(password[i]) + 2:
+            return True
+    return False
+
 class CustomPasswordValidator: # password 유효성 검사
     def validate(self, password, user=None):
         if len(password) < 8 or len(password) > 12: # 8자 미만, 12자 이상일 경우
             raise ValidationError(_('비밀번호는 8자 이상 12자 이하여야 합니다.'))
         if not any(char.isdigit() for char in password): # 숫자가 없는 경우
             raise ValidationError(_('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.'))
-        if not any(char.isupper() for char in password): # 대문자가 없는 경우
-            raise ValidationError(_('비밀번호는 적어도 하나의 대문자를 포함해야 합니다.'))
-        if not any(char.islower() for char in password): # 소문자가 없는 경우
-            raise ValidationError(_('비밀번호는 적어도 하나의 소문자를 포함해야 합니다.'))
-        for i in range(len(password) - 2): 
-            if password[i].isdigit() and password[i+1].isdigit() and password[i+2].isdigit():
-                if int(password[i+1]) == int(password[i]) + 1 and int(password[i+2]) == int(password[i]) + 2:
-                    raise ValidationError(_('비밀번호는 연속되는 숫자를 포함할 수 없습니다.'))
+        if not re.search(r'[a-zA-Z]', password):
+            raise ValidationError(_('비밀번호는 적어도 하나의 문자를 포함해야 합니다.'))
+        if contains_consecutive_chars(password):
+            raise ValidationError(_('비밀번호는 연속되는 숫자나 문자를 포함할 수 없습니다.'))
 
     def get_help_text(self):
-        return _('비밀번호는 8자 이상 12자 이하이며, 대문자, 소문자, 숫자를 각각 적어도 하나씩 포함해야 하며, 연속되는 숫자를 포함할 수 없습니다.')
+        return _('비밀번호는 8자 이상 12자 이하이며, 문자, 숫자를 각각 적어도 하나씩 포함해야 하며, 연속되는 숫자나 문자를 포함할 수 없습니다.')
 
 class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
 
@@ -45,7 +49,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
         return cus_telnum
 
     email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'example@example.com'}),label='이메일')
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '대소문자, 숫자 포함 8-12자'}),label='비밀번호')
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '문자, 숫자 포함 8-12자'}),label='비밀번호')
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),label='비밀번호 확인')
 
     # Customer 모델에 맞춰 필드 추가
@@ -65,15 +69,16 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
 
     def __init__(self, *args, **kwargs): # 비밀번호 입력 필드 옆 안내메시지
         super(CustomerSignUpForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
+        self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 문자+숫자를 포함해야 합니다. 연속되는 숫자나 문자를 포함할 수 없습니다.'
         self.fields['username'].label = '아이디'
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name','cus_img','cus_height','cus_weight','cus_job',
                 'cus_address','cus_zipcode','cus_birth','cus_telnum') # 입력받을 항목들
         help_texts = {
             'username': '아이디는 6-16자, 영문 대소문자와 "_"만 사용 가능합니다.',
-            'password1': '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다 . 연속되는 숫자를 포함할 수 없습니다'
+            'password1': '비밀번호는 8-12자, 영문 문자+숫자를 포함해야 합니다 . 연속되는 숫자나 문자를 포함할 수 없습니다'
         } # 필드 옆 안내메시지
     
     @transaction.atomic
@@ -121,7 +126,7 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
         return store_telnum
 
     email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'example@example.com'}),label='이메일')
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '대소문자, 숫자 포함 8-12자'}),label='비밀번호')
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '문자, 숫자 포함 8-12자'}),label='비밀번호')
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),label='비밀번호 확인')
 
     # Store 모델에 맞춰 필드 추가
@@ -134,7 +139,7 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
 
     def __init__(self, *args, **kwargs): # 비밀번호 입력 필드 옆 안내메시지
         super(StoreSignUpForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다. 연속되는 숫자를 포함할 수 없습니다.'
+        self.fields['password1'].help_text = '비밀번호는 8-12자, 영문 문자+숫자를 포함해야 합니다. 연속되는 숫자나 문자를 포함할 수 없습니다.'
         self.fields['username'].label = '아이디'
 
     class Meta:
@@ -143,7 +148,7 @@ class StoreSignUpForm(UserCreationForm): # 판매자 계정 회원가입 폼
                 'store_telnum') # 입력받을 항목들
         help_texts = {
             'username': '아이디는 6-16자, 영문 대소문자와 "_"만 사용 가능합니다.',
-            'password1': '비밀번호는 8-12자, 영문 대문자+소문자+숫자를 포함해야 합니다 . 연속되는 숫자를 포함할 수 없습니다'
+            'password1': '비밀번호는 8-12자, 영문 문자+숫자를 포함해야 합니다 . 연속되는 숫자나 문자를 포함할 수 없습니다'
         } # 필드 옆 안내메시지
 
     @transaction.atomic
