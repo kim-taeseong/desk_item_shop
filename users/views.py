@@ -1,24 +1,24 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import CreateView, TemplateView, ListView
-from .models import User, Customer, Store
-from logistics.models import Product
-from order.models import Order
-from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
-from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
 from cart.views import transfer_session_cart_to_user
+from logistics.models import Product
+from order.models import Order
+from .models import User, Customer, Store
+from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
+from .decorators import customer_required, store_required
 
 User = get_user_model()
 
