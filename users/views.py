@@ -244,8 +244,6 @@ def edit_customer(request):
 # Customer 회원정보 수정완료
 class EditCustomerDoneView(TemplateView):
     template_name = 'edit_profile/edit_customer_done.html'  # Customer 회원정보 수정완료 페이지
-    def post(self, request):
-        return HttpResponseRedirect(reverse('users:edit_customer_done'))
 
 # Store 회원정보 수정
 @login_required
@@ -269,9 +267,6 @@ def edit_store(request):
 # Store 회원정보 수정완료
 class EditStoreDoneView(TemplateView):
     template_name = 'edit_profile/edit_store_done.html' # Store 회원정보 수정완료 페이지
-    def post(self, request):
-        return HttpResponseRedirect(reverse('users:edit_store_done'))
-
 
 # 비밀번호 수정
 @login_required
