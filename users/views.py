@@ -28,10 +28,6 @@ class CustomerSignUpView(CreateView):
     form_class = CustomerSignUpForm
     template_name = 'customer/customer_signup.html' # Customer 회원가입 페이지로 이동
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'customer'
-        return super().get_context_data(**kwargs)
-
     def form_valid(self, form):
         user = form.save()
         return redirect('users:signup_done')
@@ -41,10 +37,6 @@ class StoreSignUpView(CreateView):
     model = User
     form_class = StoreSignUpForm
     template_name = 'store/store_signup.html' # Store 회원가입 페이지로 이동
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'store'
-        return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
         user = form.save()
