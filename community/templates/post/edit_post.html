@@ -1,36 +1,59 @@
 {% extends "community_base.html" %}
 {% load static %}
-
 {% block content %}
-<div class="container">
-    <h2>게시글 수정</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group mb-3">
-            <label for="id_community_category">카테고리</label>
-            {{ form.community_category }}
-        </div>
-        <div class="form-group mb-3">
-            <label for="id_community_title">제목</label>
-            {{ form.community_title }}
-        </div>
-        <div class="form-group mb-3">
-            <label for="id_community_img">이미지 선택</label>
-            <input type="file" name="community_img" class="form-control-file" id="id_community_img">
-            {% if form.community_img.value %}
-            <img src="{{ form.community_img.value.url }}" alt="이미지" class="img-thumbnail mt-2" style="max-width: 200px;">
-            {% endif %}
-        </div>
-        <div class="form-group mb-3">
-            <label for="id_community_content">내용</label>
-            {{ form.community_content }}
-        </div>
-        <div class="form-group mb-3">
-            <label for="id_product">상품 선택</label>
-            {{ form.product }}
-        </div>
+<style>
+    .form-field {
+        margin-bottom: 10px;
+    }
+    .selected-product-item {
+        margin: 5px 0;
+        cursor: pointer;
+    }
+</style>
+<h3>게시글 수정하기</h3>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-field">
+        <label for="id_community_category">게시글 카테고리</label>
+        {{ form.community_category }}
+    </div>
+    <div class="form-field">
+        <label for="id_community_title">제목</label>
+        {{ form.community_title }}
+    </div>
+    <div class="form-field">
+        <label for="id_community_img">이미지</label>
+        {{ form.community_img }}
+    </div>
+    <div class="form-field">
+        <label for="id_community_content">내용</label>
+        {{ form.community_content }}
+    </div>
 
-        <button type="submit" class="btn btn-dark text-white">저장</button>
-    </form>
-</div>
+    <!-- 상품검색 -->
+    <div id="product-container">        
+        <input type="text" id="searchInput" placeholder="상품을 검색하세요">
+        <button id="searchButton" type="button">검색</button>
+    </div>
+
+    <!-- 게시물 작성시 선택된 상품 리스트 -->
+    <div id="selectedProductList" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; margin-bottom: 10px;">
+        <div id="noSelectedProductMessage">선택된 상품이 없습니다.</div>
+
+    </div>
+
+    <!-- products-data 스크립트의 ID -->
+    <div id="selectedProductData" data-selected-product-id="{{ selected_product_ids|join:',' }}" style="display: none;">
+        {{ selected_products_json|safe }}
+    </div>
+
+    <!-- 검색된 상품을 표시 -->
+    <div id="searchedProductList"></div>
+
+    <!-- 작성완료 버튼 -->
+    <button type="submit" class="btn btn-dark text-white">작성완료</button>
+</form>
+
+<!-- product.js 스크립트 추가 -->
+<script src="{% static 'community/product.js' %}"></script>
 {% endblock %}

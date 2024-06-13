@@ -14,6 +14,7 @@ class CommunityCategory(models.Model):
 class Community(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product, related_name='communities', blank=True)  # 여러개의 상품 가져오기
+    selected_products = models.ManyToManyField(Product, related_name='selected_communities', blank=True)  # 선택된 상품 (상품링크로 연결)
     community_category = models.ForeignKey(CommunityCategory, on_delete=models.CASCADE)
     community_title = models.CharField(max_length=30)  # 게시판 제목
     community_content = models.TextField()  # 게시판 본문
@@ -22,6 +23,7 @@ class Community(models.Model):
     liked_by = models.ManyToManyField(Customer, related_name='liked_posts')  # 좋아요를 누른 회원
     community_shotform = models.FileField(upload_to='community/videos', null=True, blank=True) # 숏폼
     community_date = models.DateTimeField(auto_now_add=True)  # 작성일 자동생성
+
 
     def __str__(self):
         return self.community_title

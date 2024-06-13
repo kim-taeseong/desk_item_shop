@@ -45,23 +45,33 @@
                         </form>
                     {% endif %}
                     
-                    
-                    <div style="margin-top: 10px; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 10px;">
-                        <!-- 상품 링크 -->
-                        {% if community.product.exists %}
-                        {% for product in community.product.all %}
-                            <a href="{{ product.get_absolute_url }}" target="_blank" style="text-decoration: none;">
-                                <div style="border: 1px solid #ddd; border-radius: 5px; padding: 5px; width: 130px; height: 180px; display: flex; flex-direction: column; align-items: center;">
-                                    <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}" style="max-width: 100%; height: auto;">
-                                    <p style="margin-top: 10px; text-align: center; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">{{ product.product_name }}</p>
+                    <!-- 상품 링크, product 연결, 선택된 상품 정보 표시 -->
+                    {% if selected_products %}
+                        <div id="selected-product-info" style="margin-top: 10px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
+                            {% for selected_product in selected_products %}
+                                <!-- 선택된 상품 정보 컨테이너 -->
+                                <div style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 115px; height: 145px; overflow: hidden;">
+                                    <!-- 각 상품 링크 -->
+                                    <a href="{{ selected_product.get_absolute_url }}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; width: 100%;">
+                                        <!-- 선택된 상품 이미지 -->
+                                        <img src="{{ selected_product.product_img.url }}" alt="{{ selected_product.product_name }}" style="max-width: 100px; height: auto; align-items: center; margin-top: 5px; margin-bottom: 10px;">
+                                        <!-- 선택된 상품 이름 -->
+                                        <div style="width: 100%; overflow: hidden; text-align: center;">
+                                            <p style="font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;"><strong>{{ selected_product.product_name }}</strong></p>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+
+
+
+
+
+
                 </p>
-
-
 
                 <!-- 작성자 닉네임 및 수정 삭제 버튼 // 팔로우 버튼 추가해야함 --> 
                 <div style="display: flex; align-items: center; justify-content: space-between;">

@@ -19,16 +19,26 @@ class PostForm(forms.ModelForm):
         label="상품 카테고리"
     )
 
+    # 선택된 상품 필드
+    selected_products = forms.ModelMultipleChoiceField(
+        queryset=Product.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="선택된 상품"
+    )
+
     class Meta:
         model = Community
-        fields = ['community_category', 'community_title', 'community_img', 'community_content', 'category'] 
+        fields = ['community_category', 'community_title', 'community_img', 'community_content', 'category', 'selected_products'] 
         labels = {
             'community_category': '게시글 카테고리', 
             'community_title': '제목',  
             'community_img': '이미지',
             'community_content': '내용',
             'category': '상품 카테고리',
+            'selected_products': '선택된 상품'
         }
+
 
     
 # 게시글 수정
@@ -57,6 +67,7 @@ class PostEditForm(forms.ModelForm):
             'community_content': '내용',
             'category': '상품 카테고리',
         }
+
 
 
 # 댓글 작성

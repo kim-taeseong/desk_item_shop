@@ -16,9 +16,17 @@ urlpatterns = [
     path('', views.post_list, name='post_list'),  
     path('post/create/', views.create_post, name='create_post'),  
 
+    
+    # 상품 연결
     path('products/categories/<int:category_id>/', views.product_list_by_category, name='product_list_by_category'),
+    # 상품 검색
+    path('post/search/product/', views.search_product, name='search_product'),  
+    # 상품 선택
+    path('post/selected/product/', views.selected_product, name='selected_product'),  
+
 
     path('post/<int:pk>/', views.post_detail, name='post_detail'),  
+    path('post/<int:pk>/create/', views.create_post, name='create_post'),  
     path('post/<int:pk>/edit/', views.edit_post, name='edit_post'),  
     path('post/<int:pk>/delete/', views.delete_post, name='delete_post'),  
     path('post/<int:pk>/like/', views.like_post, name='like_post'),
