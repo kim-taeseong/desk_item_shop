@@ -30,7 +30,6 @@
         <div id="product-container">       
             <input type="text" id="searchInput" placeholder="상품을 검색하세요">
             <button id="searchButton">검색</button>
-            <!-- <input type="hidden" id="communityId" value="{{ community.id }}"> -->
         </div>
 
         <!-- products-data 스크립트의 ID -->
@@ -38,8 +37,6 @@
             {{ selected_products_json }} <!-- JSON 데이터를 스크립트로 삽입 -->
         </div>
 
-         <!-- 검색 결과를 화면에 표시 -->
-        <div id="resultsContainer"></div>
 
         <!-- 검색 결과를 화면에 표시하는 함수와 연결 -->
         <div id="searchedProductList">          
@@ -52,8 +49,9 @@
             <p id="noSelectedProductMessage">선택된 상품이 없습니다</p> <!-- 선택된 상품이 없을 때 보여질 문구 -->
         </div>
 
-        <!-- 작성완료 버튼 -->
-        <button type="submit" class="btn btn-dark text-white">작성완료</button>
+
+        <!-- 작성완료 버튼 // 버튼 누르면 서버로 데이터 전송-->
+        <button id="completeButton" type="submit" class="btn btn-dark text-white">작성완료</button>
     </form>
 
     <!-- search_product.js 스크립트 추가 -->

@@ -11,8 +11,9 @@ from django.urls import reverse_lazy, reverse
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import Q
+import json
 
 # 커뮤니티 카테고리 ##############################################################################
 
@@ -60,8 +61,8 @@ class MainPostListView(ListView):
 
 
 
-
 # 상품검색 ##############################################################################
+
 
 
 # 상품 연결
@@ -77,10 +78,6 @@ def search_product(request):
         product_name = request.GET.get('product_name', '') if request.method == 'GET' else request.POST.get('product_name', '')
         product_name = product_name.strip()  # 공백 제거
         
-        # community_id = request.GET.get('communityId', '')  # communityId 가져오기
-
-        # # 세션에 community_id 저장
-        # request.session['community_id'] = community_id
         
         if product_name:
             # 상품명에 대해 부분 일치, 정확한 일치, 혹은 유사한 결과를 반환할 수 있도록 검색 조건 추가
@@ -103,24 +100,35 @@ def search_product(request):
         return HttpResponseNotAllowed(['GET', 'POST'])
 
 
-# 검색한 상품 선택
-def selected_product(request):
-    if request.method == 'POST' and request.is_ajax():
-        selected_product_ids = request.POST.getlist('selected_products')
+# # 검색한 상품 선택
+# @csrf_exempt
+# def selected_product(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             selected_product_ids = data.get('selected_product_ids', [])
+#             community_id = data.get('community_id')
 
-        # 현재 사용자가 속한 커뮤니티 가져오기
-        community = Community.objects.get(customer=request.user.customer)
+#             if not community_id:
+#                 return JsonResponse({'status': 'error', 'message': '커뮤니티 ID가 필요합니다.'}, status=400)
 
-        # 선택된 상품들을 community 모델의 selected_products 필드에 저장
-        community.selected_products.clear()  # 기존에 선택된 상품들을 모두 제거
-        for product_id in selected_product_ids:
-            community.selected_products.add(product_id)
+#             try:
+#                 community = Community.objects.get(id=community_id)
+#             except Community.DoesNotExist:
+#                 return JsonResponse({'status': 'error', 'message': 'no'}, status=404)
 
-        # 성공적으로 처리된 경우
-        return JsonResponse({'message': '선택된 상품들을 저장했습니다.'}, status=200)
-    else:
-        # 잘못된 요청일 경우
-        return JsonResponse({'error': '잘못된 요청입니다.'}, status=400)
+#             products = Product.objects.filter(id__in=selected_product_ids)
+#             community.selected_products.set(products)
+#             community.save()
+
+#             return JsonResponse({'status': 'success', 'message': '데이터가 성공적으로 전송되었습니다.'})
+#         except json.JSONDecodeError:
+#             return JsonResponse({'status': 'error', 'message': 'JSON .'}, status=400)
+#     else:
+#         return JsonResponse({'status': 'error', 'message': 'POST 요청만 허용됩니다.'}, status=405)
+
+
+
     
 
 # 게시글 ##############################################################################
@@ -128,57 +136,48 @@ def selected_product(request):
 
 
 # 커뮤니티 글 작성
-# def create_post(request):
-#     community_id = None  # 기본값으로 None 설정
-
-#     if request.method == 'POST':
-#         form = PostForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-
-#             # POST 요청일 때, 커뮤니티 ID를 세션에서 가져와서 사용
-#             community_id = request.session.get('community_id')
-#             if community_id:
-#                 # post.community_id = community_id
-#                 post.community_id = request.community.id
-#                 post.customer = request.user.customer
-#                 post.save()
-#                 form.save_m2m()
-#                 return redirect('community:post_detail', pk=post.pk)
-#             else:
-#                 return JsonResponse({'error': '커뮤니티 ID가 세션에 존재하지 않습니다.'}, status=400)
-            
-#         else:
-#             return JsonResponse({'error': '폼이 유효하지 않습니다. 다시 시도해 주세요.'}, status=400)
-            
-#     else:
-#         # GET 요청일 때, 커뮤니티 ID를 세션에 저장
-#         community_id = request.GET.get('community_id')
-#         if community_id:
-#             request.session['community_id'] = community_id
-
-#         form = PostForm()
-
-#     context = {'form': form, 'community_id': community_id}
-#     return render(request, 'post/create_post.html', context)
 @login_required
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            # 폼이 유효한 경우, 데이터를 저장
-            post = form.save(commit=False)
-            # 현재 로그인 한 사용자
-            post.customer = request.user.customer
-            post.save()
-            form.save_m2m()
-            # 저장 후 페이지 이동
-            return redirect('community:post_detail', pk=post.pk)
+        try:
+            # # JSON 데이터 로드
+            # if hasattr(request, '_body_saved'):
+            #     json_data = json.loads(request._body_saved.decode('utf-8'))
+
+            # # request.POST에서 폼 데이터 접근
+            # form_data = request.POST
+
+            # 폼 데이터와 파일 데이터 함께 처리
+            form_data = request.POST
+            form = PostForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.customer = request.user.customer
+                post.save()
+                form.save_m2m()
+
+                # JSON 데이터 파싱
+                data = json.loads(request.body.decode('utf-8'))
+                selected_product_ids = data.get('selected_product_ids', [])
+
+                # 선택된 상품 ID들을 Community 모델의 selected_products 필드에 추가
+                community = Community.objects.get(pk=post.pk)
+                for product_id in selected_product_ids:
+                    community.selected_products.add(product_id)
+
+                return JsonResponse({'message': '게시글이 성공적으로 작성되었습니다.'})
+            else:
+                return JsonResponse({'error': '폼이 유효하지 않습니다.'}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '올바른 JSON 형식이 아닙니다.'}, status=400)
+
     else:
-        # GET 요청일 경우, 빈 폼을 생성합니다.
         form = PostForm()
-    
+
     return render(request, 'post/create_post.html', {'form': form})
+
 
 
 

@@ -21,8 +21,8 @@ urlpatterns = [
     path('products/categories/<int:category_id>/', views.product_list_by_category, name='product_list_by_category'),
     # 상품 검색
     path('post/search/product/', views.search_product, name='search_product'),  
-    # 상품 선택
-    path('post/selected/product/', views.selected_product, name='selected_product'),  
+    # # 상품 선택
+    # path('post/selected/product/', views.selected_product, name='selected_product'),  
 
 
     path('post/<int:pk>/', views.post_detail, name='post_detail'),  
