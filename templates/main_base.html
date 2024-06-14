@@ -98,17 +98,19 @@
 
 <!-- 로그아웃 버튼 -->
 <script>
-    document.getElementById('logout-button').addEventListener('click', function(event) {
-        event.preventDefault(); // 기본 동작 방지
-
-        // 사용자에게 로그아웃을 묻는 알림
-        const isLogout = confirm('로그아웃 하시겠습니까?');
-        
-        if (isLogout) {
-            // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
-            window.location.href = '/users/logout/';
-        }
-    });
+    if (document.getElementById('logout-button')) {
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+    
+            // 사용자에게 로그아웃을 묻는 알림
+            const isLogout = confirm('로그아웃 하시겠습니까?');
+            
+            if (isLogout) {
+                // 사용자가 '예'를 선택한 경우, 로그아웃 처리를 위한 URL로 요청을 보냄
+                window.location.href = '/users/logout/';
+            }
+        });
+    }
 </script>
 
 </body>
