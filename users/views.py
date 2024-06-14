@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 from cart.views import transfer_session_cart_to_user
 from logistics.models import Product
 from order.models import Order
@@ -61,10 +62,15 @@ class LoginView(auth_views.LoginView):
     def form_invalid(self, form):
         # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
-        user = User.objects.get(username=username)
-        if user and not user.is_active:
-            return HttpResponseRedirect(reverse('users:account_delete_alert'))
-        return super().form_invalid(form)
+        try:
+            user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            # messages.error(self.request, '아이디가 존재하지 않습니다.')
+            return super().form_invalid(form)
+        else:
+            if user and not user.is_active:
+                return HttpResponseRedirect(reverse('users:account_delete_alert'))
+            return super().form_invalid(form)
 
     def get_success_url(self):
         user = self.request.user
