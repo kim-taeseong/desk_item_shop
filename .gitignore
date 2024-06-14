@@ -169,4 +169,5 @@ order/migrations
 inquiry/migrations
 cart/migrations
 support/migrations
+favorites/migrations
 .vscode/
