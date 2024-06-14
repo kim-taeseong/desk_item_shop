@@ -18,4 +18,27 @@
         <p>구매한 상품이 없습니다.</p>
     {% endfor %}
 </div>
+<br>
+<h3>스토어찜</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>스토어</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in favorites %}
+                <tr>
+                    <td><a href="{% url 'users:cus_store_home' item.store.user_id %}">{{ item.store.store_name }}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8"></div>
+</div>
+
 {% endblock %}

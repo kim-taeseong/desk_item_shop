@@ -18,4 +18,61 @@
       <p>등록된 상품이 없습니다.</p>
     {% endfor %}
 </div>
+<button type="button" id="favorites" data-user-id="{{ store.user_id }}">
+  {% if saved %}
+    Remove Store
+  {% else %}
+    Save Store
+  {% endif %}
+</button>
+<p id="message"></p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    const saveStore = function(userId, element) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '{% url "save_and_remove_store" %}', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-CSRFToken', csrftoken);  // CSRF token 설정
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          const response = JSON.parse(xhr.responseText);
+          document.getElementById('message').innerText = response.message;
+          if (response.check) {
+            element.textContent = 'Remove Store';
+          } else {
+            element.textContent = 'Save Store';
+          }
+        }
+      };
+
+      xhr.send(`user_id=${userId}`);
+    };
+    favoriteButton = document.getElementById('favorites');
+    favoriteButton.addEventListener('click', function() {
+      userId = this.getAttribute('data-user-id');
+      saveStore(userId, this);
+    })
+  });
+</script>
 {% endblock %}

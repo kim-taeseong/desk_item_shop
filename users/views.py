@@ -16,6 +16,7 @@ from django.utils import timezone
 from cart.views import transfer_session_cart_to_user
 from logistics.models import Product
 from order.models import Order
+from favorites.models import UserFavoriteStore
 from .models import User, Customer, Store
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from .decorators import customer_required, store_required
@@ -179,7 +180,11 @@ def account_delete_now(request):
 @customer_required
 def customer_home(request):
     orders = Order.objects.filter(customer=request.user.customer)
-    context = {'orders': orders}
+    customer = Customer.objects.get(user=request.user)
+    context = {
+        'orders': orders,
+        'favorites': customer.favorites.all()
+    }
     return render(request, 'customer/customer_home.html', context)
 
 # 아이디 찾기
@@ -334,4 +339,6 @@ class CustomerStoreHomeView(ListView):
             'categories': categories,
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
         })
+        saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+        context['saved'] = saved
         return context
