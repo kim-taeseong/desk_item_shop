@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
+from community.models import Community
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
@@ -180,9 +181,16 @@ def account_delete_now(request):
 @login_required
 @customer_required
 def customer_home(request):
+    # 상품 목록 가져오기
     product = Product.objects.all()
+
+    # 현재 로그인한 사용자의 커뮤니티 글 가져오기
+    customer = request.user.customer 
+    community_posts = Community.objects.filter(customer=customer)
+    
     context = {
-        'products': product
+        'products': product,
+        'community_posts': community_posts,  
     }
     return render(request, 'customer/customer_home.html', context)
 
@@ -323,6 +331,7 @@ class StoreDashboardView(LoginRequiredMixin, ListView):
             products_with_discount.append((product, discounted_price))
         context['products_with_discount'] = products_with_discount
         return context
+
 
 # Customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  

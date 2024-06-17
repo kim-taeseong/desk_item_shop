@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import Q
 import json
+from django.views.decorators.http import require_POST
 
 # 커뮤니티 카테고리 ##############################################################################
 
@@ -100,36 +101,6 @@ def search_product(request):
         return HttpResponseNotAllowed(['GET', 'POST'])
 
 
-# # 검색한 상품 선택
-# @csrf_exempt
-# def selected_product(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             selected_product_ids = data.get('selected_product_ids', [])
-#             community_id = data.get('community_id')
-
-#             if not community_id:
-#                 return JsonResponse({'status': 'error', 'message': '커뮤니티 ID가 필요합니다.'}, status=400)
-
-#             try:
-#                 community = Community.objects.get(id=community_id)
-#             except Community.DoesNotExist:
-#                 return JsonResponse({'status': 'error', 'message': 'no'}, status=404)
-
-#             products = Product.objects.filter(id__in=selected_product_ids)
-#             community.selected_products.set(products)
-#             community.save()
-
-#             return JsonResponse({'status': 'success', 'message': '데이터가 성공적으로 전송되었습니다.'})
-#         except json.JSONDecodeError:
-#             return JsonResponse({'status': 'error', 'message': 'JSON .'}, status=400)
-#     else:
-#         return JsonResponse({'status': 'error', 'message': 'POST 요청만 허용됩니다.'}, status=405)
-
-
-
-    
 
 # 게시글 ##############################################################################
 
@@ -140,15 +111,18 @@ def search_product(request):
 def create_post(request):
     if request.method == 'POST':
         try:
-            # # JSON 데이터 로드
-            # if hasattr(request, '_body_saved'):
-            #     json_data = json.loads(request._body_saved.decode('utf-8'))
+            # 폼 데이터에서 선택된 상품 ID 가져오기
+            hidden_input = request.POST.get('hiddenInput')
+            # hidden_input 값이 존재하면 리스트 변환
+            selected_product_ids = []
 
-            # # request.POST에서 폼 데이터 접근
-            # form_data = request.POST
+            if hidden_input:
+                try:
+                    selected_product_ids = json.loads(hidden_input)
+                except json.JSONDecodeError:
+                    return JsonResponse({'error': '잘못된 형식의 데이터입니다.'}, status=400)
 
             # 폼 데이터와 파일 데이터 함께 처리
-            form_data = request.POST
             form = PostForm(request.POST, request.FILES)
 
             if form.is_valid():
@@ -157,27 +131,24 @@ def create_post(request):
                 post.save()
                 form.save_m2m()
 
-                # JSON 데이터 파싱
-                data = json.loads(request.body.decode('utf-8'))
-                selected_product_ids = data.get('selected_product_ids', [])
-
                 # 선택된 상품 ID들을 Community 모델의 selected_products 필드에 추가
-                community = Community.objects.get(pk=post.pk)
                 for product_id in selected_product_ids:
-                    community.selected_products.add(product_id)
+                    try:
+                        product = Product.objects.get(pk=product_id)  # selected_product_ids와 product_id가 같은 객체 조회
+                        post.selected_products.add(product_id)  # selected_products 필드에 추가
+                    except Product.DoesNotExist:
+                        return JsonResponse({'error': f'상품 ID {product_id}가 존재하지 않습니다.'}, status=400)
 
                 return JsonResponse({'message': '게시글이 성공적으로 작성되었습니다.'})
             else:
                 return JsonResponse({'error': '폼이 유효하지 않습니다.'}, status=400)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'error': '올바른 JSON 형식이 아닙니다.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
 
     else:
         form = PostForm()
-
-    return render(request, 'post/create_post.html', {'form': form})
-
+        return render(request, 'post/create_post.html', {'form': form})
 
 
 
@@ -276,7 +247,6 @@ def delete_post(request, pk):
     
     # GET 요청을 받으면 확인 페이지를 표시
     return render(request, 'post/delete_post.html', {'post': post})
-
 
 
 # 게시글 좋아요 ##############################################################################

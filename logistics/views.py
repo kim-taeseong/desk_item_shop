@@ -1,4 +1,5 @@
 from .models import Product, Category, Store
+from community.models import Community 
 from django.views.generic import *
 from django.urls import reverse_lazy
 from typing import Any
@@ -146,18 +147,21 @@ class MainListView(ListView):
     def get_queryset(self) -> QuerySet[Any]:
         return self.model.objects.all()
     
-    # context에 담아 템플릿으로 전달
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+    
+        # 제품 리스트와 할인율 적용 가격을 context에 추가
         products = context['products']
         context['products_with_discount'] = []
         for product in products:
             discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
             context['products_with_discount'].append((product, discounted_price))  # products_with_discount로 전달
+    
+        # 좋아요 수 기준으로 인기 글 20개를 context에 추가
+        popular_posts = Community.objects.order_by('-community_like')[:12]  # community_like 필드 기준 내림차순
+        context['popular_posts'] = popular_posts
+
         return context
-
-
-
 
 
 #-- 카테고리별 상품리스트 조회

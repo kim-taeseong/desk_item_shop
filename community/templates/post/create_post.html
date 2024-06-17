@@ -6,8 +6,10 @@
             margin-bottom: 10px;
         }
     </style>
+    
+    
     <h3>게시글 작성하기</h3>
-    <form method="post" enctype="multipart/form-data">
+    <form action="{% url 'community:create_post' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-field">
             <label for="id_community_category">게시글 카테고리</label>
@@ -26,33 +28,39 @@
             {{ form.community_content }}
         </div>
 
+
+        
         <!-- 상품 검색 -->
         <div id="product-container">       
             <input type="text" id="searchInput" placeholder="상품을 검색하세요">
             <button id="searchButton">검색</button>
         </div>
 
-        <!-- products-data 스크립트의 ID -->
-        <div id="selectedProductData" data-selected-product-id="{{ selected_product_id }}" style="display: none;">
-            {{ selected_products_json }} <!-- JSON 데이터를 스크립트로 삽입 -->
-        </div>
 
 
-        <!-- 검색 결과를 화면에 표시하는 함수와 연결 -->
+        <!-- 검색 결과를 화면에 표시하는 컨테이너-->
         <div id="searchedProductList">          
         </div>
         
 
-        <!-- 상품목록에 상품을 1개 이상 추가하는 함수와 연결-->
+
+        <!-- 선택된 상품 목록-->
         <div id="selectedProductListContainer" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; margin-bottom: 10px;">
             <div id="selectedProductList"></div>
             <p id="noSelectedProductMessage">선택된 상품이 없습니다</p> <!-- 선택된 상품이 없을 때 보여질 문구 -->
         </div>
 
 
-        <!-- 작성완료 버튼 // 버튼 누르면 서버로 데이터 전송-->
+
+        <!-- Hidden input : JSON 문자열 서버로 전달 -->
+        <input type="hidden" id="hiddenInput" name="hiddenInput">
+
+
+
+        <!-- 작성완료 버튼 -->
         <button id="completeButton" type="submit" class="btn btn-dark text-white">작성완료</button>
     </form>
+
 
     <!-- search_product.js 스크립트 추가 -->
     <script src="{% static 'community/search_product.js' %}"></script>
