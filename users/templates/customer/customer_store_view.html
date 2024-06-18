@@ -18,14 +18,16 @@
       <p>등록된 상품이 없습니다.</p>
     {% endfor %}
 </div>
-<button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
-  {% if saved %}
-    Remove Store
-  {% else %}
-    Save Store
-  {% endif %}
-</button>
-<p id="message"></p>
+{% if not is_store %}
+  <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
+    {% if saved %}
+      Remove Store
+    {% else %}
+      Save Store
+    {% endif %}
+  </button>
+  <p id="message"></p>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

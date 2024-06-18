@@ -26,8 +26,13 @@
             <ul>
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url 'users:logout' %}">LOGOUT</a></li>
-                <li><a href="{% url 'users:customer_home' %}">MYPAGE</a></li>
-                <li><a href="{% url 'users:edit_customer' %}">MYPROFILE</a></li>
+                    {% if request.user.is_customer %}
+                    <li><a href="{% url 'users:customer_home' %}">MYPAGE</a></li>
+                    <li><a href="{% url 'users:edit_customer' %}">MYPROFILE</a></li>
+                    {% elif request.user.is_store %}
+                    <li><a href="{% url 'users:store_home' %}">MYSTORE</a></li>
+                    <li><a href="{% url 'users:edit_store' %}">MYPROFILE</a></li>
+                    {% endif %}
                 {% else %}
                 <li><a href="{% url 'users:login' %}">LOGIN</a></li>
                 {% endif %}
