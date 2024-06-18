@@ -18,7 +18,7 @@
       <p>등록된 상품이 없습니다.</p>
     {% endfor %}
 </div>
-<button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
+<button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}" {% if not saved %} disabled {% endif %}>
   {% if saved %}
     Remove Store
   {% else %}

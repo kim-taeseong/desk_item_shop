@@ -347,6 +347,8 @@ class CustomerStoreHomeView(ListView):
         })
         if self.request.user.id == None:
             saved = False
+        elif self.request.user.is_store:
+            saved = False
         else:
             saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
         context['saved'] = saved
