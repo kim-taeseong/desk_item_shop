@@ -2,18 +2,21 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'support/question.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'support/add.css' %}">
 {% endblock %}
 
 {% block content %}
-
-    <h1>고객센터 문의 : Customer</h1>
-
-    <h2>질문하기</h2>
-    <form method="post" action="{% url 'support:customer_question' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">제출</button>
-    </form>
-
+    <div class="container">
+        <div class="header">
+            <h1>고객센터 문의 : Customer</h1>
+            <h2>질문하기</h2>
+        </div>
+        <div class="form-container">
+            <form method="post" action="{% url 'support:customer_question' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">제출</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

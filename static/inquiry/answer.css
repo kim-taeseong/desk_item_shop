@@ -1,0 +1,94 @@
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 공통 컨테이너 스타일 */
+.question-section {
+    padding: 20px;
+    background-color: #dcdcdc; /* 배경색 */
+    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.answer-section {
+    padding: 20px;
+    background-color: #fff; /* 배경색 */
+    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검정색 밑줄 */
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input[type="text"],
+form input[type="file"],
+form textarea,
+form select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input[type="text"]:focus,
+form input[type="file"]:focus,
+form textarea:focus,
+form select:focus {
+    border-color: #3f3f3f;
+    box-shadow: 0 0 5px rgba(12, 43, 77, 0.3);
+    outline: none;
+}
+
+.submit-button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #16181b60;
+    transform: translateY(-2px);
+}
+
+/* 목록보기 링크 스타일 */
+.back-link {
+    color: #000; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+    margin-top: 10px; /* 위쪽 여백 */
+    display: inline-block;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #3f3f3f; /* 호버 시 색상 변경 */
+}

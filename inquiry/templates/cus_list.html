@@ -1,4 +1,4 @@
-{% extends "store_base.html" %}
+{% extends "noncategory_base.html" %}
 
 {% load static %}
 {% block extra_css %}
@@ -6,27 +6,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1>상품문의 목록</h1>
-    <table>
+    <div class="title-container">
+        <h3>내가 등록한 상품문의 내역</h3>
+    </div>
+        <table>
         <thead>
             <tr>
                 <th>제목</th>
                 <th>상품</th>
                 <th>작성일</th>
                 <th>내용</th>
-                <th>고객명</th>
                 <th>답변</th>
-                <th>답변하러가기</th>
             </tr>
         </thead>
         <tbody>
-            {% for question in object_list %}
+            {% for question in user_questions %}
                 <tr>
                     <td>{{ question.question_title }}</td>
                     <td>{{ question.product }}</td>
                     <td>{{ question.question_date }}</td>
                     <td>{{ question.question_content }}</td>
-                    <td>{{ question.customer }}</td>
                     <td>
                         {% if question.answer_set.all %}
                             <ul>
@@ -35,18 +34,13 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
-                            답변이 달리지 않았습니다.
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not question.answer_set.all %}
-                            <a href="{% url 'inquiry:answer_create' question.pk %}">답변하러가기</a>
+                            아직 답변이 달리지 않았습니다.
                         {% endif %}
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="8">게시물이 없습니다.</td>
+                    <td colspan="5" class="empty-message">등록된 상품문의 내역이 없습니다.</td>
                 </tr>
             {% endfor %}
         </tbody>

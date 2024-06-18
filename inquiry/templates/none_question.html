@@ -1,4 +1,13 @@
 {% extends "noncategory_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<h2>작성된 상품문의가 없습니다.</h2>
+<div class="title-container">
+    <h3>작성된 상품문의가 없습니다.</h3>
+</div>
 {% endblock %}

@@ -1,28 +1,39 @@
 {% extends 'store_base.html' %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logistics/delete.css' %}">
+{% endblock %}
+
+
 {% block content %}
 <div class="container">
-    <!-- 페이지의 제목을 정의함 -->
-    {% with page_title="상품 삭제하기" %}
-    <h1>{{ page_title }}</h1>
-    {% endwith %}
+    <div class="title-container">
+        <h3><strong>상품 삭제하기</strong></h3>
+    </div>
+
+    <div class="form-container">
+        <h3>다음 상품을 삭제하시겠습니까?</h3>
+        <form action="." method="post">{% csrf_token %}
+            <div class="form-group">
+                <p><strong>상품명:</strong> {{ object.product_name }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>가격:</strong> {{ object.product_price }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>재고:</strong> {{ object.product_inventory }}</p>
+            </div>
+            <div class="form-group">
+                <p><strong>상세 설명:</strong> {{ object.product_description }}</p>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="삭제하기" class="submit-button" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="back-button" onclick="window.location.href='{% url 'logistics:del_list' %}'">뒤로 가기</button>
+            </div>
+        </form>
+    </div>
 </div>
-
-<div>
-    <h3>다음 상품을 삭제하시겠습니까?</h3>
-    <p><strong>상품명:</strong> {{ object.product_name }}</p>
-    <p><strong>가격:</strong> {{ object.product_price }}</p>
-    <p><strong>재고:</strong> {{ object.product_inventory }}</p>
-    <p><strong>상세 설명:</strong> {{ object.product_description }}</p>
-    
-
-    <form action="." method="post">{% csrf_token %}
-        <input type="submit" value="Confirm" class="btn btn-danger btn-sm" />
-    </form>
-    
-    <button onclick="window.location.href='{% url 'logistics:del_list' %}'" 
-        >뒤로 가기</button>
-
-</div>
-
 {% endblock %}
