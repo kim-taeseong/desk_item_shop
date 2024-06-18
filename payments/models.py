@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from django.http import Http404
 import logging
 from order.models import Order
-from iamport import Iamport
 import requests
 
 User = get_user_model()

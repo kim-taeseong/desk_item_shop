@@ -1,6 +1,5 @@
 from pathlib import Path
 from dotenv import load_dotenv
-from decouple import config
 
 import os
 
@@ -16,18 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
-
-# Toss API 키
+EXTERNAL_BASE_URL = "https://example.com"
 TOSS_API_KEY = 'sk_test_w5lNQylNqa5lNQe013Nq'
 
-# Toss API 시크릿
-# TOSS_API_SECRET = 'your_toss_api_secret'
-#포트원
 
-# PORTONE_SHOP_ID = config('PORTONE_SHOP_ID')
-# PORTONE_API_KEY = config('PORTONE_API_KEY')
-# PORTONE_API_SECRET = config('PORTONE_API_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -130,6 +121,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]

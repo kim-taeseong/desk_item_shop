@@ -10,6 +10,8 @@ from django.conf import settings
 from logistics.models import Product
 from users.models import Customer
 from django.views.decorators.http import require_http_methods
+import uuid
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -23,19 +25,23 @@ def create_order(request, product_id):
         
         order = Order.objects.create(product=product, customer=customer, amount=amount, price=price)
         
-        result_callback_url = request.build_absolute_uri(reverse('payments:callback'))
+        # 고유한 orderNo 생성 (desk 접두사 추가)
+        order_no = f"desk{order.id}"
+        
+        external_base_url = settings.EXTERNAL_BASE_URL
+        result_callback_url = f"{external_base_url}{reverse('payments:callback')}"
         
         toss_payment_data = {
-            "orderNo": str(order.id),
+            "orderNo": order_no,
             "amount": price,
             "amountTaxFree": 0,
             "productDesc": product.product_name,
             "apiKey": settings.TOSS_API_KEY,
             "autoExecute": True,
-            "resultCallback": 'https://your-site.com/callback',
+            "resultCallback": result_callback_url,
             "callbackVersion": "V2",
-            "retUrl": request.build_absolute_uri(reverse('payments:success')),
-            "retCancelUrl": request.build_absolute_uri(reverse('payments:error'))
+            "retUrl": f"{external_base_url}{reverse('payments:success')}",
+            "retCancelUrl": f"{external_base_url}{reverse('payments:error')}"
         }
         
         headers = {
@@ -47,12 +53,23 @@ def create_order(request, product_id):
         toss_response = requests.post("https://pay.toss.im/api/v2/payments", json=toss_payment_data, headers=headers)
         toss_response_data = toss_response.json()
         
+        logger.info(f"Toss response data: {toss_response_data}")
+
+        # 응답 데이터 출력
+        print(json.dumps(toss_response_data, indent=4))
+        
         if toss_response.status_code == 200:
-            logger.info(f"Toss response data: {toss_response_data}")
-            return redirect('payments:process_payment', order_id=order.id)
+            pay_url = toss_response_data.get('checkoutPage')
+            if pay_url:
+                return redirect(pay_url)
+            else:
+                error_msg = toss_response_data.get('msg', 'payUrl not found in the response')
+                logger.error(f"Toss API error: {error_msg}")
+                return render(request, 'payments/error.html', {'error': error_msg})
         else:
-            logger.error(f"Toss API error: {toss_response_data}")
-            return render(request, 'payments/error.html', {'error': toss_response_data})
+            error_msg = toss_response_data.get('msg', 'Unknown error')
+            logger.error(f"Toss API error: {error_msg}")
+            return render(request, 'payments/error.html', {'error': error_msg})
     
     else:
         product = get_object_or_404(Product, id=product_id)
@@ -69,18 +86,51 @@ def process_payment(request, order_id):
         amount=amount
     )
 
-    context = {
-        'payment_props': {
-            'merchant_uid': str(payment.merchant_uid),
-            'amount': payment.amount,
-            'name': store_name,
-        },
-        'payment_verify_url': request.build_absolute_uri(reverse('payments:verify_payment', args=[payment.id])),
-        'toss_api_key': settings.TOSS_API_KEY,
-        'payment': payment
+    # 고유한 order_no 생성 (desk 접두사 추가)
+    order_no = f"desk{order.id}"
+    
+    external_base_url = settings.EXTERNAL_BASE_URL
+    result_callback_url = f"{external_base_url}{reverse('payments:callback')}"
+    
+    toss_payment_data = {
+        "orderNo": order_no,
+        "amount": amount,
+        "amountTaxFree": 0,
+        "productDesc": order.product.product_name,
+        "apiKey": settings.TOSS_API_KEY,
+        "autoExecute": True,
+        "resultCallback": result_callback_url,
+        "callbackVersion": "V2",
+        "retUrl": f"{external_base_url}{reverse('payments:success')}",
+        "retCancelUrl": f"{external_base_url}{reverse('payments:error')}"
     }
+    
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    logger.info(f"Toss payment data: {toss_payment_data}")
+    
+    toss_response = requests.post("https://pay.toss.im/api/v2/payments", json=toss_payment_data, headers=headers)
+    toss_response_data = toss_response.json()
+    
+    logger.info(f"Toss response data: {toss_response_data}")
 
-    return render(request, 'payments/process_payment.html', context)
+    # 응답 데이터 출력
+    print(json.dumps(toss_response_data, indent=4))
+    
+    if toss_response.status_code == 200:
+        pay_url = toss_response_data.get('checkoutPage')
+        if pay_url:
+            return redirect(pay_url)
+        else:
+            error_msg = toss_response_data.get('msg', 'payUrl not found in the response')
+            logger.error(f"Toss API error: {error_msg}")
+            return render(request, 'payments/error.html', {'error': error_msg})
+    else:
+        error_msg = toss_response_data.get('msg', 'Unknown error')
+        logger.error(f"Toss API error: {error_msg}")
+        return render(request, 'payments/error.html', {'error': error_msg})
 
 def success(request):
     return render(request, 'payments/success.html')
@@ -146,4 +196,3 @@ def cancel_payment(request, payment_id):
 def callback(request):
     # 결제 결과를 처리하는 로직을 여기에 추가합니다.
     return JsonResponse({"status": "callback received"})
-
