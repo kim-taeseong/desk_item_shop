@@ -313,6 +313,37 @@ class StoreDashboardView(LoginRequiredMixin, ListView):
         context['products_with_discount'] = products_with_discount
         return context
 
+@login_required
+@customer_required
+def display_store_home_at_customer(request, store_id):
+    store = get_object_or_404(Store, pk=store_id)
+    products = Product.objects.filter(store=store).select_related('category', 'store')
+    categories = list(set(product.category for product in products if product.category))
+    context = {}
+    context['store'] = store  # Store 정보를 컨텍스트에 추가
+    context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
+    # 할인된 가격 계산 및 컨텍스트에 추가
+    products_with_discount = []
+    for product in products:
+        discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
+        products_with_discount.append((product, discounted_price))  
+    
+    context.update({
+        'store': store,
+        'categories': categories,
+        'products_with_discount': products_with_discount,  # products_with_discount로 전달
+    })
+    if request.user.id == None:
+        saved = False
+    else:
+        saved = UserFavoriteStore.objects.filter(customer=request.user.customer, store=store).exists()
+    context['saved'] = saved
+    if request.user.is_authenticated:
+        context['is_authenticated'] = 1
+    else:
+        context['is_authenticated'] = 0
+    return context
+
 # Customer 기준의 store_home
 class CustomerStoreHomeView(ListView):  
     model = Product
