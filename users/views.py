@@ -371,4 +371,17 @@ class CustomerStoreHomeView(ListView):
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
             'page_obj': page_obj  
         })
+        if self.request.user.is_store:
+            context['is_store'] = True
+        else:
+            if self.request.user.id == None:
+                saved = False
+            else:
+                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+            context['saved'] = saved
+            context['is_store'] = False
+        if self.request.user.is_authenticated:
+            context['is_authenticated'] = 1
+        else:
+            context['is_authenticated'] = 0
         return context
