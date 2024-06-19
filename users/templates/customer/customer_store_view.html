@@ -61,11 +61,73 @@
   }
 
 </style>
+<!-- 커뮤니티 리스트 -->
 <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 10;">스타일링샷</h6>
 
-상품링크-상품판매자 연결
+<div class="container mt-4">
+    <div class="row">
+        {% for post in page_obj %}
+            <div class="col-md-3 mb-4 d-flex align-items-stretch">
+                <div class="card mb-3 box-shadow" style="width: 100%;">
+                    <img class="card-img-top" src="{{ post.community_img.url }}" alt="{{ post.community_title }}" style="height: 225px; width: 100%; display: block;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-text">
+                            <a href="{% url 'community:post_detail' post.pk %}" style="text-decoration: none; color: inherit;">
+                                {{ post.community_title }}
+                            </a>
+                        </h5>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">
+                                    <i class="bi bi-heart-fill" style="color: red;"></i>
+                                    <small class="text-muted">{{ post.community_like }}</small>
+                                </p>
+                                <p class="mb-0"><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일' }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="col-12">등록된 커뮤니티 게시글이 없습니다.</p>
+        {% endfor %}
+    </div>
+</div>
 
 
+<!-- 페이징 네비게이션 -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">처음</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">처음</span></li>
+            <li class="page-item disabled"><span class="page-link">이전</span></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">다음</span></li>
+            <li class="page-item disabled"><span class="page-link">마지막</span></li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+
+
+<!-- 상품 리스트 -->
 <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 5;">모든 상품</h6>
 <div class="products">
     {% for product, discounted_price in products_with_discount %}

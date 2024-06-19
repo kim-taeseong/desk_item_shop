@@ -18,6 +18,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 User = get_user_model()
 
@@ -351,21 +352,26 @@ class CustomerStoreHomeView(ListView):
         store = get_object_or_404(Store, pk=store_id)
         products = self.get_queryset()
         categories = list(set(product.category for product in products if product.category))
-        context['store'] = store  # Store 정보를 컨텍스트에 추가
-        context['categories'] = categories  # 중복 없는 카테고리 목록을 컨텍스트에 추가
+
         
         # 할인된 가격 계산 및 컨텍스트에 추가
         products_with_discount = []
         for product in products:
             discounted_price = product.product_price * (1 - product.product_sale / 100)  # 할인율을 적용한 금액
             products_with_discount.append((product, discounted_price))  
-        
+
+
+        # 현재 store가 등록한 product가 상품링크로 등록된 커뮤니티 게시글 가져오기
+        community_posts = Community.objects.filter(selected_products__store=store).order_by('-community_date')
+        paginator = Paginator(community_posts, 4)  # 페이지당 4개
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context.update({
             'store': store,
             'categories': categories,
+            'products': products,
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
+            'page_obj': page_obj  
         })
         return context
-
-
-

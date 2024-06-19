@@ -107,49 +107,54 @@ def search_product(request):
 
 
 # 커뮤니티 글 작성
-@login_required
 def create_post(request):
-    if request.method == 'POST':
-        try:
-            # 폼 데이터에서 선택된 상품 ID 가져오기
-            hidden_input = request.POST.get('hiddenInput')
-            # hidden_input 값이 존재하면 리스트 변환
-            selected_product_ids = []
-
-            if hidden_input:
+    if request.user.is_authenticated:
+        if request.user.is_customer:
+            if request.method == 'POST':
                 try:
-                    selected_product_ids = json.loads(hidden_input)
-                except json.JSONDecodeError:
-                    return JsonResponse({'error': '잘못된 형식의 데이터입니다.'}, status=400)
+                    # 폼 데이터에서 선택된 상품 ID 가져오기
+                    hidden_input = request.POST.get('hiddenInput')
+                    # hidden_input 값이 존재하면 리스트 변환
+                    selected_product_ids = []
 
-            # 폼 데이터와 파일 데이터 함께 처리
-            form = PostForm(request.POST, request.FILES)
+                    if hidden_input:
+                        try:
+                            selected_product_ids = json.loads(hidden_input)
+                        except json.JSONDecodeError:
+                            return JsonResponse({'error': '잘못된 형식의 데이터입니다.'}, status=400)
 
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.customer = request.user.customer
-                post.save()
-                form.save_m2m()
+                    # 폼 데이터와 파일 데이터 함께 처리
+                    form = PostForm(request.POST, request.FILES)
 
-                # 선택된 상품 ID들을 Community 모델의 selected_products 필드에 추가
-                for product_id in selected_product_ids:
-                    try:
-                        product = Product.objects.get(pk=product_id)  # selected_product_ids와 product_id가 같은 객체 조회
-                        post.selected_products.add(product_id)  # selected_products 필드에 추가
-                    except Product.DoesNotExist:
-                        return JsonResponse({'error': f'상품 ID {product_id}가 존재하지 않습니다.'}, status=400)
+                    if form.is_valid():
+                        post = form.save(commit=False)
+                        post.customer = request.user.customer
+                        post.save()
+                        form.save_m2m()
 
-                return JsonResponse({'message': '게시글이 성공적으로 작성되었습니다.'})
+                        # 선택된 상품 ID들을 Community 모델의 selected_products 필드에 추가
+                        for product_id in selected_product_ids:
+                            try:
+                                product = Product.objects.get(pk=product_id)
+                                post.selected_products.add(product)
+                            except Product.DoesNotExist:
+                                return JsonResponse({'error': f'상품 ID {product_id}가 존재하지 않습니다.'}, status=400)
+
+                        return redirect('community:post_detail', pk=post.id)
+                    else:
+                        return JsonResponse({'error': '폼이 유효하지 않습니다.'}, status=400)
+
+                except Exception as e:
+                    return JsonResponse({'error': str(e)}, status=400)
             else:
-                return JsonResponse({'error': '폼이 유효하지 않습니다.'}, status=400)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-
+                form = PostForm()
+                return render(request, 'post/create_post.html', {'form': form})
+        else:
+            messages.warning(request, '글을 작성할 권한이 없습니다. 사용자 계정으로 로그인 하세요.')  # 로그인 페이지에서 메세지
+            return redirect(reverse('users:logout'))
     else:
-        form = PostForm()
-        return render(request, 'post/create_post.html', {'form': form})
-
+        messages.warning(request, '로그인이 필요합니다.')  # 로그인 페이지에서 메세지
+        return redirect(reverse('users:login'))
 
 
 
@@ -204,29 +209,72 @@ def post_detail(request, pk):
 
 
 # 커뮤니티 글 수정
-@login_required 
-def edit_post(request, pk):
-    community = get_object_or_404(Community, pk=pk)
-    if request.method == 'POST':
-        form = PostEditForm(request.POST, request.FILES, instance=community)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()  # 저장 후 post 객체를 저장
-            form.save_m2m()  # ManyToMany 필드를 처리하기 위해 호출
-            return redirect('community:post_detail', pk=post.pk)
-    else:
-        form = PostEditForm(instance=community)
+@login_required
+def edit_post(request, post_id):
+    try:
+        post = get_object_or_404(Community, pk=post_id)
 
-    # Community 모델의 selected_products 필드 값을 가져옴
-    selected_products = community.selected_products.all()
+        # 현재 게시글의 선택된 상품 ID들 가져오기
+        selected_product_ids = list(post.selected_products.values_list('id', flat=True))
 
-    context = {
-        'form': form,
-        'community': community,
-        'selected_products': selected_products,
-    }
+        # 선택된 상품들의 이름과 ID 가져오기
+        selected_products = Product.objects.filter(id__in=selected_product_ids)
+        selected_products_info = [{'product_id': product.id, 'product_name': product.product_name} for product in selected_products]
 
-    return render(request, 'post/edit_post.html', context)
+        # 선택된 상품 정보들을 JSON 형식으로 변환
+        selected_products_json = json.dumps(selected_products_info)
+
+        if request.method == 'POST':
+            # 폼 데이터와 파일 데이터 함께 처리
+            form = PostForm(request.POST, request.FILES, instance=post)
+
+            if form.is_valid():
+                updated_post = form.save(commit=False)
+                updated_post.save()
+                form.save_m2m()
+
+                # 게시글 수정 후, 선택된 상품 ID들을 업데이트 (프론트에서 보낸 데이터 들어옴)
+                hidden_input = request.POST.get('hiddenInput')
+
+                if hidden_input:
+                    try:
+                        updated_selected_product_ids = json.loads(hidden_input)
+                    except json.JSONDecodeError:
+                        return JsonResponse({'error': '잘못된 형식의 데이터입니다.'}, status=400)
+
+                    # # new_product_ids = 새로 선택한 상품 (초기에 선택한 상품 포함)
+                    new_product_ids = set(updated_selected_product_ids)
+                    for product_id in new_product_ids:
+                        try:
+                            product = Product.objects.get(pk=product_id)
+                            updated_post.selected_products.add(product)
+                        except Product.DoesNotExist:
+                            return JsonResponse({'error': f'상품 ID {product_id}가 존재하지 않습니다.'}, status=400)
+                        
+
+                return redirect('community:post_detail', pk=post.id)
+            else:
+                return JsonResponse({'error': '폼이 유효하지 않습니다.'}, status=400)
+
+        else:
+            # GET 요청일 때 폼을 초기화하여 렌더링
+            form = PostForm(instance=post)
+            # 선택된 상품 ID들을 폼에 전달
+            form.fields['selected_products'].initial = selected_product_ids
+            # 선택된 상품 이름들을 컨텍스트에 담아 전달
+            context = {
+                'form': form,
+                'post_id': post.id,
+                'selected_product_ids': selected_product_ids,
+                'selected_product_names': [product['product_name'] for product in selected_products_info],
+                'selected_products_json': selected_products_json, 
+            }
+            return render(request, 'post/edit_post.html', context)
+
+    except Community.DoesNotExist:
+        return JsonResponse({'error': '게시글을 찾을 수 없습니다.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 
 
