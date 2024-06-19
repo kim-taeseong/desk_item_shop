@@ -1,0 +1,122 @@
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* 헤더 스타일 */
+.title-container {
+    background: #fff; /* 상단 배경 색상 */
+    color: black;
+    padding: 20px 20px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* 제목 */
+.title-container h3 {
+    font-size: 32px;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 */
+.form-container {
+    padding: 20px;
+    border-top: 2px solid #3f3f3f;
+}
+
+.form-container {
+    padding: 20px;
+    border-top: 2px solid #3f3f3f;
+}
+
+/* 폼 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input[type="text"],
+form input[type="file"],
+form textarea,
+form select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form input[type="text"]:focus,
+form input[type="file"]:focus,
+form textarea:focus,
+form select:focus {
+    border-color: #3f3f3f;
+    box-shadow: 0 0 5px rgba(12, 43, 77, 0.3);
+    outline: none;
+}
+
+/* 버튼 */
+.submit-button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #16181b60;
+    transform: translateY(-2px);
+}
+
+
+.back-button {
+    background-color: #5bc0de;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s;
+    margin-top: 10px; /* 상단 여백 추가 */
+    align-self: flex-start; /* 버튼을 왼쪽 정렬 */
+}
+
+.back-button:hover {
+    background-color: #31b0d5;
+    transform: translateY(-2px);
+}
+
+/* 네모 칸 스타일 */
+input, textarea, select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #3f3f3f;
+    box-shadow: 0 0 5px rgba(12, 43, 77, 0.3);
+    outline: none;
+}

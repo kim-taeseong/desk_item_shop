@@ -1,17 +1,29 @@
-/* detail.css */
+/* 웹 폰트 임포트 */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400&display=swap');
+
+body {
+    font-family: 'Nanum Gothic', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
 .product-detail {
     display: flex;
-    align-items: flex-start; 
+    align-items: flex-start;
     width: 90%;
-    margin: auto;
+    margin: 40px auto;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
 .products a {
     text-decoration: none;
     color: black;
+    display: flex;
     flex-direction: column;
     align-items: center;
     border: none;
@@ -31,7 +43,7 @@
 }
 
 .product-info h1 {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .product-info h2 {
@@ -52,7 +64,7 @@
 }
 
 .store-button {
-    padding: 5px 5px;
+    padding: 5px 10px;
     background-color: #2d3743;
     color: white;
     text-decoration: none;
@@ -60,7 +72,6 @@
     display: inline-block;
     margin-top: 60px;
     margin-bottom: 35px;
-    align-self: flex-start;
 }
 
 .product-form {
@@ -73,13 +84,53 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .horizontal-form .form-group {
     flex: 1;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .horizontal-form .form-group:last-child {
+    margin-right: 0;
+}
+
+.horizontal-form .form-group:nth-child(2) {
+    margin-left: 10px;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+a.btn {
+    margin-right: 10px;
+}
+
+a.btn:last-child {
     margin-right: 0;
 }

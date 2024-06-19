@@ -1,12 +1,30 @@
-/* users/login.css */
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
 
-/* h1 요소 스타일 */
-h1 {
-    text-align: center; /* 가운데 정렬 */
-    color: #333; /* 텍스트 색상 지정 */
-    margin-bottom: 20px; /* 아래쪽 간격 추가 */
-    font-size: 24px; /* 폰트 크기 지정 */
-    font-weight: bold; /* 폰트 굵기 지정 */
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
 }
 
 /* 폼 스타일 */

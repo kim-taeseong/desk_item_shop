@@ -2,11 +2,13 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/list.css' %}">
 {% endblock %}
 
 {% block content %}
-    <h1>내가 등록한 상품문의 내역</h1>
+    <div class="title-container">
+        <h2>내가 등록한 상품문의 내역</h2>
+    </div>
     <table>
         <thead>
             <tr>

@@ -1,0 +1,101 @@
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    padding: 20px;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검은색 밑줄 */
+}
+
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
+
+/* 폼 컨테이너 스타일 */
+.form-container {
+    background-color: #ffffff;
+    border: 1px solid #000;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* 폼 요소 스타일 */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 입력 필드 스타일 */
+form input[type="text"],
+form textarea {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input[type="text"]:focus,
+form textarea:focus {
+    border-color: #000;
+    box-shadow: 0 0 5px rgba(12, 43, 77, 0.3);
+    outline: none;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #3f3f3f;
+    transform: translateY(-2px);
+}
+
+/* 폼 라벨 스타일 */
+form label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* 폼 요소 추가 여백 */
+form .form-group {
+    margin-bottom: 20px;
+}

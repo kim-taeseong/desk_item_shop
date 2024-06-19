@@ -6,11 +6,14 @@ class Question(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  # 상품 문의를 한 사용자
 
     question = models.AutoField(primary_key=True)  
-    product = models.ForeignKey('logistics.Product', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     question_title = models.CharField(max_length=30)
     question_content = models.TextField()
-    question_date = models.DateField()
+    question_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question_title
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -22,3 +25,6 @@ class Answer(models.Model):
     class Meta:
         # 하나의 질문에 대해 여러 개의 답변을 허용하지 않음
         unique_together = ('question',)
+
+    def __str__(self):
+        return f"Answer to: {self.question.question_title}"

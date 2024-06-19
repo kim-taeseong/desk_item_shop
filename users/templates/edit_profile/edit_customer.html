@@ -6,17 +6,18 @@
 {% endblock %}
 
 {% block content %}
-    <h2>회원정보수정</h2>
+    <div class="title-container">
+        <h2>회원정보 수정</h2>
+    </div>
     <!-- 변경된 정보 저장 -->
     <form action="{% url 'users:edit_customer' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="수정완료">
     </form>
-    <br>
-    <!-- 비밀번호 수정 페이지로 이동하는 버튼 -->
-    <button onclick="location.href='{% url 'users:edit_password' %}'" class="btn btn-secondary">비밀번호 수정</button>
-
-    <!-- 회원탈퇴(비활성화) 페이지로 이동하는 버튼 -->
-    <button onclick="location.href='{% url 'users:account_delete' %}'" class="btn btn-danger">회원탈퇴</button>
+    <!-- 버튼들을 form 바로 아래로 이동 -->
+    <div class="button-container">
+        <button onclick="location.href='{% url 'users:edit_password' %}'" class="btn btn-secondary btn-edit-password">비밀번호 수정</button>
+        <button onclick="location.href='{% url 'users:account_delete' %}'" class="btn btn-danger btn-account-delete">회원탈퇴</button>
+    </div>
 {% endblock %}

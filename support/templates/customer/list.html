@@ -2,11 +2,13 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'support/QnA.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/list.css' %}">
 {% endblock %}
 
 {% block content %}
-    <h1>고객센터 질문 & 답변 목록</h1>
+    <div class="title-container">
+        <h2>고객센터 질문 & 답변 목록</h2>
+    </div>
     <table>
         <thead>
             <tr>
@@ -19,8 +21,8 @@
         <tbody>
             {% for question in questions %}
             <tr>
-                <td><strong>{{ question.question_title }}</strong></td>
-                <td><small>{{ question.question_date }}</small></td>
+                <td>{{ question.question_title }}</td>
+                <td>{{ question.question_date }}</td>
                 <td>
                     {% if question.answers.exists %}
                         {% for answer in question.answers.all %}

@@ -1,9 +1,41 @@
 {% extends "noncategory_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/question.css' %}">
+{% endblock %}
+
 {% block content %}
-<h2>상품문의 질문</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">등록</button>
-</form>
+    <div class="title-container">
+        <h2>상품 문의</h2>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="form-container">
+        {% csrf_token %}
+        <div class="form-group">
+            제품명 : {{ form.product }}
+        </div>
+        <div class="form-group">
+            제목 : {{ form.question_title }}
+        </div>
+        <div class="form-group">
+            내용 : {{ form.question_content }}
+        </div>
+        <button type="submit" class="submit-button">질문 등록</button>
+    </form>
+    
+    {% if form.errors %}
+        <div class="form-errors">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

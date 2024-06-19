@@ -1,17 +1,21 @@
 {% extends 'store_base.html' %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logistics/create.css' %}">
+{% endblock %}
+
 {% block content %}
-<div>
-    {% with page_title="상품 등록" %} <h3><strong>{{ page_title }}</span></strong></h3> {% endwith %}
-</div>
-
-
-    <form method="post" enctype="multipart/form-data">
+<div class="container">
+    <div class="title-container">
+        {% with page_title="상품 등록" %} 
+            <h3><strong>{{ page_title }}</strong></h3> 
+        {% endwith %}
+    </div>
+    <form method="post" enctype="multipart/form-data" class="form-container">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">상품등록</button>
+        <button type="submit" class="submit-button">상품등록</button>
     </form>
 </div>
-
-
 {% endblock %}

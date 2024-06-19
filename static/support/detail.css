@@ -1,0 +1,99 @@
+/* 웹 폰트 임포트 */
+@font-face {
+    font-family: 'NanumSquare';
+    src: url('/static/fonts/NanumBarunGothicBold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 일반 페이지 스타일 */
+body {
+    font-family: 'NanumSquare', Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검은색 밑줄 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 헤더 스타일 */
+.header {
+    background: #0c2b4d; /* 상단 배경 색상 */
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* Styles for question content */
+p {
+    color: #666;
+    font-family: 'NanumSquare', Arial, sans-serif;
+}
+
+/* Styles for date */
+small {
+    color: #999;
+    font-size: 12px;
+}
+
+/* Styles for answers */
+.answer {
+    margin-bottom: 20px;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #3f3f3f;
+    transform: translateY(-2px);
+}
+
+/* Styles for hr */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+/* Styles for box */
+.box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
