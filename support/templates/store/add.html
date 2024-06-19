@@ -6,14 +6,15 @@
 {% endblock %}
 
 {% block content %}
-
-    <h1>고객센터 문의 : Store</h1>
-
-    <h2>질문하기</h2>
-    <form method="post" action="{% url 'support:store_question' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">제출</button>
-    </form>
-
+    <div class="title-container">
+        <h2>고객센터 문의</h2>
+    </div>
+    <div class="form-container">
+            <form method="post" action="{% url 'support:store_question' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="submit-button">질문 등록</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

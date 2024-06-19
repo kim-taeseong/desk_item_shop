@@ -2,16 +2,17 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'support/QnA_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'support/detail.css' %}">
 {% endblock %}
 
 {% block content %}
 
-    <h1>고객센터 - 질문 & 답변 </h1>
-    
-    <!-- Box for Question -->
+    <div class="title-container">
+        <h2>고객센터 질문 & 답변 목록</h2>
+    </div>
+ 
     <div class="box">
-        <h2>{{ question.question_title }}</h2>
+        <h3>{{ question.question_title }}</h3>
         <p>{{ question.question_content }}</p>
         <small>등록일: {{ question.question_date }}</small>
         <hr>
@@ -31,6 +32,5 @@
             <p>아직 답변이 등록되지 않았습니다.</p>
         </div>
     {% endif %}
-    
-    <a href="{% url 'support:customer_list' %}"><button>목록으로 돌아가기</button></a>
+        <a href="{% url 'support:customer_list' %}"><button>목록으로 돌아가기</button></a>
 {% endblock %}

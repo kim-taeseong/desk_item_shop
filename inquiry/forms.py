@@ -4,14 +4,12 @@ from .models import Question, Answer
 from logistics.models import Product  # 상품 모델 임포트
 
 class QuestionForm(forms.ModelForm):
-    question_date = forms.DateField(initial=timezone.now)
-
     # 상품 선택 드롭다운 목록 추가
     product = forms.ModelChoiceField(queryset=Product.objects.all(), empty_label=None)
 
     class Meta:
         model = Question
-        fields = ['product', 'question_title', 'question_content', 'question_date']
+        fields = ['product', 'question_title', 'question_content']
 
 class AnswerForm(forms.ModelForm):
     answer_date = forms.DateField(initial=timezone.now)  # 오늘 날짜로 초기화
