@@ -1,15 +1,13 @@
 /* 웹 폰트 임포트 */
-/* @font-face {
-    font-family: 'NanumSquare';
-    src: url('/static/fonts/NanumSquareL.otf') format('opentype');
-    font-weight: normal;
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
     font-style: normal;
-} */
+}
 
-/* 일반 페이지 스타일 */
+
 body {
-    font-family: Arial, sans-serif;
-    color: #333;
+    font-family: "Nanum Gothic", Arial, sans-serif;
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
@@ -17,31 +15,26 @@ body {
 
 /* 컨테이너 스타일 */
 .container {
-    max-width: 800px;
-    margin: 0 auto;
     padding: 20px;
 }
 
 /* 헤더 스타일 */
-.header {
-    background: #000; /* 상단 배경 색상 */
-    color: white;
-    padding: 40px 20px;
-    text-align: center;
-    border-radius: 10px;
-    margin-bottom: 20px;
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검은색 밑줄 */
 }
 
-.header h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
 }
 
-.header h2 {
-    font-size: 24px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
 
 /* 폼 컨테이너 스타일 */
 .form-container {

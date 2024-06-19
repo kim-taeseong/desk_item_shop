@@ -36,6 +36,11 @@ body {
     border-bottom: 2px solid #3f3f3f; /* 검정색 밑줄 */
 }
 
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
 
 form {
     display: flex;

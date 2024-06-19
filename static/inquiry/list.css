@@ -32,19 +32,19 @@ thead {
 
 /* 헤더 스타일 */
 .title-container {
-    background: #fff; /* 상단 배경 색상 */
-    color: black;
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
     padding: 20px;
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 20px; /* 하단 여백 */
     border-bottom: 2px solid #3f3f3f; /* 검은색 밑줄 */
 }
 
-/* 제목 */
-.title-container h3 {
-    font-size: 32px;
-    margin-bottom: 5px;
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
     font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
 }
 
 /* 답변 없는 경우 메시지 스타일 */

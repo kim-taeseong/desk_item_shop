@@ -2,11 +2,13 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'support/QnA.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
 {% endblock %}
 
 {% block content %}
-    <h1>고객센터 질문 & 답변 목록</h1>
+    <div class="title-container">
+        <h2>고객센터 질문 & 답변 목록</h2>
+    </div>
     <table>
         <thead>
             <tr>

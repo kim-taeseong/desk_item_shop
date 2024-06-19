@@ -7,17 +7,16 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="header">
-            <h1>고객센터 - 질문 & 답변</h1>
-        </div>
+    <div class="title-container">
+        <h2>고객센터 질문 & 답변 목록</h2>
+    </div>
         <!-- Box for Question -->
-        <div class="box">
-            <h2>{{ question.question_title }}</h2>
-            <p>{{ question.question_content }}</p>
-            <small>등록일: {{ question.question_date }}</small>
-            <hr>
-        </div>
+    <div class="box">
+        <h2>{{ question.question_title }}</h2>
+        <p>{{ question.question_content }}</p>
+        <small>등록일: {{ question.question_date }}</small>
+        <hr>
+    </div>
 
         {% if question.answers.exists %}
             <!-- Box for Answers -->
@@ -35,5 +34,4 @@
         {% endif %}
 
         <a href="{% url 'support:customer_list' %}"><button>목록으로 돌아가기</button></a>
-    </div>
 {% endblock %}
