@@ -25,11 +25,17 @@
         <div class="login-menu">
             <ul>
                 {% if request.user.is_authenticated %}
-                <li><a href="{% url 'users:logout' %}">LOGOUT</a></li>
+                <li><a href="{% url 'users:logout' %}" id="logout-button">LOGOUT</a></li>
+                {% if request.user.is_store %}
+                    <li><a href="{% url 'users:store_home' %}">MYSTORE</a></li>
+                    <li><a href="{% url 'users:edit_store' %}">MYPROFILE</a></li>
+                {% else %}
                 <li><a href="{% url 'users:customer_home' %}">MYPAGE</a></li>
                 <li><a href="{% url 'users:edit_customer' %}">MYPROFILE</a></li>
+                {% endif %}
                 {% else %}
-                <li><a href="{% url 'users:login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'users:login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'users:customer_signup' %}">SIGNUP</a></li>
                 {% endif %}
             </ul>
         </div>
