@@ -1,24 +1,38 @@
 from django.shortcuts import redirect, render, get_object_or_404
+<<<<<<< HEAD
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
 from community.models import Community
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
+=======
+from django.views.generic import CreateView, TemplateView, ListView
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
-from .decorators import customer_required, store_required
 from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import gettext as _
 from django.utils import timezone
+<<<<<<< HEAD
 from django.core.paginator import Paginator
+=======
+from django.core.exceptions import ObjectDoesNotExist
+from cart.views import transfer_session_cart_to_user
+from logistics.models import Product
+from order.models import Order
+from favorites.models import UserFavoriteStore
+from .models import User, Customer, Store
+from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
+from .decorators import customer_required, store_required
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 
 User = get_user_model()
 
@@ -28,13 +42,8 @@ class CustomerSignUpView(CreateView):
     form_class = CustomerSignUpForm
     template_name = 'customer/customer_signup.html' # Customer 회원가입 페이지로 이동
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'customer'
-        return super().get_context_data(**kwargs)
-
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
         return redirect('users:signup_done')
     
 # Store 회원가입
@@ -43,13 +52,8 @@ class StoreSignUpView(CreateView):
     form_class = StoreSignUpForm
     template_name = 'store/store_signup.html' # Store 회원가입 페이지로 이동
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'store'
-        return super().get_context_data(**kwargs)
-
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
         return redirect('users:signup_done')
     
 # 회원가입 완료
@@ -61,7 +65,8 @@ class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'login_password/login.html'
 
-    def dispatch(self, request, *args, **kwargs): # 이미 로그인된 사용자가 login 페이지로 접근하면 logistics:main 페이지로 리다이렉트
+    def dispatch(self, request, *args, **kwargs): 
+        # 이미 로그인된 사용자가 login 페이지로 접근하면 logistics:main 페이지로 리다이렉트
         if self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('logistics:main'))
         return super().dispatch(request, *args, **kwargs)
@@ -69,15 +74,22 @@ class LoginView(auth_views.LoginView):
     def form_invalid(self, form):
         # 비활성화된 계정으로 로그인 시도 시, 탈퇴한 계정 페이지로
         username = form.cleaned_data.get('username')
-        user = User.objects.filter(username=username).first()
-        if user and not user.is_active:
-            return HttpResponseRedirect(reverse('users:account_delete_alert'))
-        return super().form_invalid(form)
+        try:
+            user = User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            # messages.error(self.request, '아이디가 존재하지 않습니다.')
+            return super().form_invalid(form)
+        else:
+            if user and not user.is_active:
+                return HttpResponseRedirect(reverse('users:account_delete_alert'))
+            return super().form_invalid(form)
 
     def get_success_url(self):
         user = self.request.user
         if user.is_authenticated:
             if user.is_customer: # 아이디가 Customer라면 logistics:main 페이지로
+                # 세션의 정보 데이터베이스로 이동
+                transfer_session_cart_to_user(self.request, user)
                 return reverse('logistics:main')
             elif user.is_store: # 아이디가 Store라면 store_home 페이지로
                 return reverse('users:store_home')
@@ -101,25 +113,20 @@ def account_delete(request):
             user.deactivetime = timezone.now() # 비활성화 했을 당시의 시간을 저장
             user.save()
             logout(request)
-            
+            if hasattr(user, 'store'): # 만약 탈퇴하려는 계정이 판매자 계정이라면
+                Product.objects.filter(store=user.store).update(is_active=False) # 해당 store의 상품들을 비활성화
             # 이메일 발송
             send_mail(
                 subject='Desker에서 귀하의 계정 탈퇴를 확인합니다.',
-                message=f"""
-                        안녕하세요, {user.username}님.
-
-                        귀하의 Desker 계정이 성공적으로 탈퇴되었습니다.
-
-                        이용해 주셔서 감사합니다. 더 나은 서비스로 다시 만날 수 있기를 바랍니다.
-
-                        감사합니다,
-                        Desker 팀
-                                        """,
+                message=f"""안녕하세요, {user.username}님.
+                            귀하의 Desker 계정이 성공적으로 탈퇴되었습니다.
+                            이용해 주셔서 감사합니다. 더 나은 서비스로 다시 만날 수 있기를 바랍니다.
+                            감사합니다,
+                            Desker 팀""",
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user_email],
                 fail_silently=False,
             )
-            
             return redirect('users:login') # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
@@ -130,24 +137,33 @@ def account_delete(request):
 def account_delete_alert(request):
     return render(request, 'account_delete/account_delete_alert.html')
 
-# 탈퇴 취소 페이지 - 탈퇴 취소됨
+# 탈퇴 취소 페이지 - 탈퇴 취소됨 is_active = 1
 def account_delete_cancel(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-    try:
+
+        # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
+        if not username or not password:
+            messages.error(request, '탈퇴를 취소하려는 계정의 아이디와 비밀번호를 입력해주세요.')
+            return render(request, 'account_delete/account_delete_cancel.html')
+
+        try:
             user = User.objects.get(username=username, is_active=False)
-            if user.check_password(password):
-                # 비밀번호가 일치하는 경우
-                user.is_active = True # 활성화 처리
+            if user.check_password(password): # 비밀번호가 일치하는 경우
+                user.is_active = True # 사용자의 활성화 상태를 True로 설정
                 user.deactivetime = None  # 비활성화 했던 시간을 None으로 변경
-                user.save()
+
+                # store 계정인 경우엔 상품들을 다시 활성화
+                if hasattr(user, 'store') and user.store:
+                    Product.all_objects.filter(store=user.store).update(is_active=True)
+                user.save() 
                 messages.success(request, '회원 탈퇴가 취소되었습니다. 계정이 활성화되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
                 messages.error(request, '비밀번호가 일치하지 않습니다.') # 비밀번호가 일치하지 않으면
-    except User.DoesNotExist:
-        messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
+        except User.DoesNotExist:
+            messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
     return render(request, 'account_delete/account_delete_cancel.html')
 
@@ -156,18 +172,18 @@ def account_delete_now(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
+        # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
+        if not username or not password:
+            messages.error(request, '즉시 탈퇴하려는 계정의 아이디와 비밀번호를 입력해주세요.')
+            return render(request, 'account_delete/account_delete_now.html')
+
         try:
             user = User.objects.get(username=username)
-            
-            if user.check_password(password):
-                if hasattr(user, 'store'): # 만약 탈퇴하려는 계정이 판매자 계정이라면
-                    Product.objects.filter(store=user.store).delete() # 해당 판매자가 올렸던 상품들 삭제
-                    user.store.delete()
-
-                # 계정 삭제
-                user.delete()
-                
+            if user.check_password(password): # 비밀번호가 일치하는 경우
+                if hasattr(user, 'store'): # store 계정인 경우 연결된 모든 상품 삭제
+                    user.store.product_set.all().delete()   
+                user.delete() # 계정 삭제
                 messages.success(request, '계정이 성공적으로 삭제되었습니다.')
                 return redirect('users:login')  # 로그인 페이지로 리다이렉트
             else:
@@ -177,11 +193,11 @@ def account_delete_now(request):
 
     return render(request, 'account_delete/account_delete_now.html')
 
-
 # Customer 홈
 @login_required
 @customer_required
 def customer_home(request):
+<<<<<<< HEAD
     # 상품 목록 가져오기
     product = Product.objects.all()
 
@@ -192,15 +208,21 @@ def customer_home(request):
     context = {
         'products': product,
         'community_posts': community_posts,  
+=======
+    orders = Order.objects.filter(customer=request.user.customer)
+    customer = Customer.objects.get(user=request.user)
+    context = {
+        'orders': orders,
+        'favorites': customer.favorites.all()
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
     }
     return render(request, 'customer/customer_home.html', context)
-
 
 # 아이디 찾기
 def find_username(request):
     if request.method == 'POST':
         email = request.POST['email']
-        users = User.objects.filter(email=email)
+        users = User.objects.get(email=email)
         if users.exists():
             current_site = get_current_site(request)
             domain = current_site.domain
@@ -211,21 +233,13 @@ def find_username(request):
             # 이메일 문구
             send_mail(
                 subject='Desker에서 귀하의 계정 정보를 안내드립니다.',
-                message=f"""
-            안녕하세요, Desker 입니다!
-
-            귀하의 계정 아이디는 다음과 같습니다: "{user.username}"
-
-            로그인 화면으로 이동하려면 다음 링크를 클릭하세요: {login_url}
-
-            Desker와 함께 더욱 효율적인 업무 환경을 만들어 가세요.
-
-            만약 이 메일이 잘못 전송되었다고 생각되시거나, 추가적인 도움이 필요하시면 언제든지 저희 고객 지원팀으로 연락 주시기 바랍니다.
-
-            감사합니다, 
-            Desker 팀
-            
-            """,
+                message=f"""안녕하세요, Desker 입니다!
+                            귀하의 계정 아이디는 다음과 같습니다: "{user.username}"
+                            로그인 화면으로 이동하려면 다음 링크를 클릭하세요: {login_url}
+                            Desker와 함께 더욱 효율적인 업무 환경을 만들어 가세요.
+                            만약 이 메일이 잘못 전송되었다고 생각되시거나, 추가적인 도움이 필요하시면 언제든지 저희 고객 지원팀으로 연락 주시기 바랍니다.
+                            감사합니다, 
+                            Desker 팀""",
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
                 fail_silently=False,
@@ -238,14 +252,12 @@ def find_username(request):
         # GET 요청 처리
         return render(request, 'find/find_username.html')
 
-
 # Customer 회원정보 수정
 @login_required
 @customer_required
 def edit_customer(request):
     # 현재 로그인한 고객과 연결된 Customer 객체
     customer = get_object_or_404(Customer, user=request.user)
-
     if request.method == 'POST':
         # 고객으로부터 입력받은 데이터와 파일 사용해 초기화
         form = CustomerEditForm(request.POST, request.FILES, instance=customer)
@@ -257,22 +269,19 @@ def edit_customer(request):
         form = CustomerEditForm(instance=customer)
     return render(request, 'edit_profile/edit_customer.html', {'form': form})
 
-
+# Customer 회원정보 수정완료
 class EditCustomerDoneView(TemplateView):
-    template_name = 'edit_profile/edit_customer_done.html'  # 고객 회원정보수정완료 페이지
-
-    def post(self, request):
-        return HttpResponseRedirect(reverse('users:edit_customer_done'))
-
+    template_name = 'edit_profile/edit_customer_done.html'  # Customer 회원정보 수정완료 페이지
 
 # Store 회원정보 수정
 @login_required
 @store_required
 def edit_store(request):
+
     # 현재 로그인한 사용자와 연결된 Store 객체
     store = get_object_or_404(Store, user=request.user) 
-
     if request.method == 'POST':
+        
         # 사용자로부터 입력받은 데이터와 파일 사용해 초기화
         form = StoreEditForm(request.POST, request.FILES, instance=store) 
         if form.is_valid():  # 폼이 유효할 경우
@@ -281,15 +290,11 @@ def edit_store(request):
     else:
         # POST 요청이 아니라면 StoreEditForm이 store 인스턴스로 초기화되어 현재 정보를 store 정보 폼에 채움
         form = StoreEditForm(instance=store)
-    
     return render(request, 'edit_profile/edit_store.html', {'form': form})
 
+# Store 회원정보 수정완료
 class EditStoreDoneView(TemplateView):
-    template_name = 'edit_profile/edit_store_done.html' # Store 회원정보수정완료 페이지
-
-    def post(self, request):
-        return HttpResponseRedirect(reverse('users:edit_store_done'))
-
+    template_name = 'edit_profile/edit_store_done.html' # Store 회원정보 수정완료 페이지
 
 # 비밀번호 수정
 @login_required
@@ -374,4 +379,21 @@ class CustomerStoreHomeView(ListView):
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
             'page_obj': page_obj  
         })
+<<<<<<< HEAD
         return context
+=======
+        if self.request.user.is_store:
+            context['is_store'] = True
+        else:
+            if self.request.user.id == None:
+                saved = False
+            else:
+                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+            context['saved'] = saved
+            context['is_store'] = False
+        if self.request.user.is_authenticated:
+            context['is_authenticated'] = 1
+        else:
+            context['is_authenticated'] = 0
+        return context
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f

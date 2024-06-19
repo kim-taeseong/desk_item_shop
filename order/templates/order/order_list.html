@@ -1,5 +1,10 @@
 {% extends "customer_base.html" %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'order/list.css' %}">
+{% endblock %}
+
 {% block content %}
 <div>
     {% with page_title='상품 목록' %}
@@ -8,28 +13,28 @@
 </div>
 
 <div>
-    <table style="width: 100%; border-collapse: collapse;">
+    <table class="table">
         <thead>
-            <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #ddd; text-align: center;">상품명</th>
-                <th style="border: 1px solid #ddd; text-align: center;">가격</th>
-                <th style="border: 1px solid #ddd; text-align: center;">수량</th>
-                <th style="border: 1px solid #ddd; text-align: center;">총 금액</th>
-                <th style="border: 1px solid #ddd; text-align: center;">배송 상태</th>
-                <th style="border: 1px solid #ddd; text-align: center;">주문 취소</th>
+            <tr>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th>총 금액</th>
+                <th>배송 상태</th>
+                <th>주문 취소</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
             <tr>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ order.product.product_name }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ order.product.product_price }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ order.amount }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">{{ order.price }}</td>
-                <td style="border: 1px solid #ddd; text-align: center;">미정</td>
-                <td style="border: 1px solid #ddd; text-align: center;">
-                    <a href="{% url 'orders:delete_order' order.id}">
-                        <button>주문 취소</button>
+                <td>{{ order.product.product_name }}</td>
+                <td>{{ order.product.product_price }}</td>
+                <td>{{ order.amount }}</td>
+                <td>{{ order.price }}</td>
+                <td>미정</td>
+                <td>
+                    <a href="{% url 'orders:delete_order' order.id %}">
+                        <button type="button">취소</button>
                     </a>
                 </td>
             </tr>

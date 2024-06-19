@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -32,10 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "logistics.apps.LogisticsConfig",
     'order',
-    'users.apps.UsersConfig',
+    'users',
     'django.contrib.humanize',
     'inquiry',
     'community',
+    'cart',
+    'support',
+    'favorites',
 ]
 
 MIDDLEWARE = [

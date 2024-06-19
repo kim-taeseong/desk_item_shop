@@ -1,0 +1,169 @@
+{% extends "customer_base.html" %}
+
+{% block content %}
+
+<h3>장바구니</h3>
+{% if cart_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"><input class="form-check-input me-1" type="checkbox" value="" id="selectAll"></th>
+                <th scope="col">상품명</th>
+                <th scope="col">가격</th>
+                <th scope="col">수량</th>
+                <th scope="col">주문 금액</th>
+                <th scope="col">삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in cart_items %}
+            <tr>
+                <th scope="row"><input class="form-check-input me-1 checkbox" type="checkbox" value=""></th>
+                <td style="width: 350px;" data-item-id="{{ entry.item.id }}"><a href="{% url 'logistics:product_detail' entry.item.id %}"><img src="{{ entry.item.product_img.url }}" alt="{{ entry.item.product_name }}" width="100" height="100">{{ entry.item.product_name }}</a></td>
+                <td class="sales-price">{{ entry.sales_price }}</td>
+                <td style="width: 160px;"><input type="number" value="{{ entry.quantity }}" min="1" data-cart-item-id="{{ entry.id }}" class="quantity-input form-control"></td>
+                <td class="quantity-price">{{ entry.quantity_price }}</td>
+                <td>
+                    <form action="{% url 'cart:remove_from_cart' entry.item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-close" aria-label="Close"></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- <p>Total: {{ cart.cartitem_set.all|length }} items</p> -->
+    <p>총 금액 : <span id="total-price">0</span></p>
+    <button id="order" class="btn btn-dark">주문</button>
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const itemCheckboxes = document.querySelectorAll('.checkbox');
+    const totalPriceElement = document.getElementById('total-price');
+
+
+    selectAllCheckbox.addEventListener('change', function() {
+        itemCheckboxes.forEach(function(checkbox) {
+            // 한 개 선택되었을 때 전체 선택 클릭하면 금액이 중복 계산되는 문제 해결
+            if (checkbox.checked == true && checkbox.checked == selectAllCheckbox.checked) {
+                return;
+            }
+            checkbox.checked = selectAllCheckbox.checked;
+            const row = checkbox.parentNode.parentNode;
+            const itemPrice = parseFloat(row.querySelector('.quantity-price').innerText);
+            if (checkbox.checked) {
+                updateTotalPrice(itemPrice);
+            } else {
+                updateTotalPrice(-itemPrice);
+            }
+        });
+    });
+
+    itemCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const row = checkbox.parentNode.parentNode;
+            const itemPrice = parseInt(row.querySelector('.quantity-price').innerText);
+            if (this.checked) {
+                updateTotalPrice(itemPrice);
+            } else {
+                updateTotalPrice(-itemPrice);
+            }
+            const allChecked = Array.from(itemCheckboxes).every(function(checkbox) {
+                return checkbox.checked;
+            });
+            selectAllCheckbox.checked = allChecked;
+        });
+    });
+    
+    function updateTotalPrice(itemPrice) {
+        let totalPrice = parseInt(totalPriceElement.innerText);
+        totalPrice += itemPrice;
+        totalPriceElement.innerText = totalPrice;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrfToken = getCookie('csrftoken');
+
+    document.querySelectorAll('.quantity-input').forEach(function(input) {
+        input.addEventListener('change', function() {
+            const cartItemId = this.getAttribute('data-cart-item-id');
+            const quantity = this.value;
+            const salesPrice = parseInt(this.closest('tr').querySelector('.sales-price').innerText);
+            const quantityPriceCell = this.closest('tr').querySelector('.quantity-price');
+
+            quantityPriceCell.innerText = parseInt(quantity) * salesPrice;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "cart:update_cart_item" %}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert('수량이 변경되었습니다');
+                        } else {
+                            alert(response.error);
+                        }
+                    }
+                }
+            };
+
+            xhr.send('cart_item_id=' + cartItemId + '&quantity=' + quantity);
+        });
+    });
+});
+
+document.getElementById('order').addEventListener('click', function() {
+    let selectedRows = [];
+    const checkboxes = document.querySelectorAll('.checkbox:checked');
+    
+    checkboxes.forEach(function(checkbox) {
+        const row = checkbox.closest('tr');
+        const rowData = {
+            item_id: row.cells[1].getAttribute('data-item-id'),
+            quantity: row.cells[3].querySelector('.quantity-input').getAttribute('value'),
+            quantity_price: row.cells[4].innerText
+        };
+        selectedRows.push(rowData);
+    });
+    
+    // 서버로 데이터 전송 (예: AJAX 요청)
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // 성공적으로 서버로 전송되었을 때 수행할 작업
+        }
+    };
+    xhr.send(JSON.stringify(selectedRows));
+});
+
+</script>
+{% endblock %}

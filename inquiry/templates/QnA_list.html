@@ -1,10 +1,15 @@
-{% extends "noncategory_base.html" %}
+{% extends "store_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>상품문의 목록</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>제목</th>
                 <th>상품</th>
                 <th>작성일</th>
@@ -17,7 +22,6 @@
         <tbody>
             {% for question in object_list %}
                 <tr>
-                    <td>{{ question.pk }}</td>
                     <td>{{ question.question_title }}</td>
                     <td>{{ question.product }}</td>
                     <td>{{ question.question_date }}</td>

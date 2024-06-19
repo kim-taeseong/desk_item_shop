@@ -1,10 +1,15 @@
 {% extends "noncategory_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/userQnA.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>내가 등록한 상품문의 내역</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>제목</th>
                 <th>상품</th>
                 <th>작성일</th>
@@ -15,7 +20,6 @@
         <tbody>
             {% for question in user_questions %}
                 <tr>
-                    <td>{{ question.pk }}</td>
                     <td>{{ question.question_title }}</td>
                     <td>{{ question.product }}</td>
                     <td>{{ question.question_date }}</td>
@@ -34,7 +38,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6">등록된 상품문의 내역이 없습니다.</td>
+                    <td colspan="5" class="empty-message">등록된 상품문의 내역이 없습니다.</td>
                 </tr>
             {% endfor %}
         </tbody>

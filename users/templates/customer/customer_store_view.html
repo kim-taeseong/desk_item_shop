@@ -1,6 +1,13 @@
 {% extends "customer_store_base.html" %}
 {% load humanize %} 
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/customer/store_view.css' %}">
+{% endblock %}
+
 {% block content %}
+<<<<<<< HEAD
 <style>
   .products {
     display: flex;
@@ -129,6 +136,8 @@
 
 <!-- 상품 리스트 -->
 <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 5;">모든 상품</h6>
+=======
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 <div class="products">
     {% for product, discounted_price in products_with_discount %}
       <div class="product-card">
@@ -140,8 +149,75 @@
       <p>등록된 상품이 없습니다.</p>
     {% endfor %}
 </div>
+<<<<<<< HEAD
 
 
 
 
+=======
+{% if not is_store %}
+  <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
+    {% if saved %}
+      Remove Store
+    {% else %}
+      Save Store
+    {% endif %}
+  </button>
+  <p id="message"></p>
+{% endif %}
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    const saveStore = function(userId, element) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '{% url "save_and_remove_store" %}', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-CSRFToken', csrftoken);  // CSRF token 설정
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          const response = JSON.parse(xhr.responseText);
+          document.getElementById('message').innerText = response.message;
+          if (response.check) {
+            element.textContent = 'Remove Store';
+          } else {
+            element.textContent = 'Save Store';
+          }
+        }
+      };
+
+      xhr.send(`user_id=${userId}`);
+    };
+    favoriteButton = document.getElementById('favorites');
+    favoriteButton.addEventListener('click', function() {
+      userId = this.getAttribute('data-user-id');
+      isAuthenticated = parseInt(this.getAttribute('data-authentication'));
+      if (!!isAuthenticated === false) {
+        window.location.href = '{% url "users:login" %}'
+        return;
+      }
+      saveStore(userId, this);
+    })
+  });
+</script>
 {% endblock %}

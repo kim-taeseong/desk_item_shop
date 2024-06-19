@@ -1,12 +1,18 @@
 {% extends "noncategory_base.html" %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/login_password/login.css' %}">
+{% endblock %}
+
+
 {% block content %}
-    <h1>로그인</h1>
+    <h2>로그인</h2>
     <!-- 메시지 표시 부분 -->
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -17,9 +23,10 @@
     </form>
     <br>
     <br>
-    <a href="{% url 'users:customer_signup' %}">고객 회원가입</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'users:store_signup' %}">스토어 회원가입</a>
-    <br>
-    <br>
-    <a href="{% url 'users:find_username' %}">아이디 찾기</a>&nbsp;&nbsp;&nbsp;<a href="{% url 'password_reset' %}">비밀번호 찾기</a>
-
+    <div style="text-align: center;">
+        <span style="margin-right: 20px;"><a href="{% url 'users:customer_signup' %}">고객 회원가입</a></span>
+        <span style="margin-right: 20px;"><a href="{% url 'users:store_signup' %}">스토어 회원가입</a></span>
+        <span style="margin-right: 20px;"><a href="{% url 'users:find_username' %}">아이디 찾기</a></span>
+        <span><a href="{% url 'password_reset' %}">비밀번호 찾기</a></span>
+    </div>
 {% endblock %}

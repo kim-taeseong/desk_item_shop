@@ -1,116 +1,56 @@
 {% extends "noncategory_base.html" %}
-{% load humanize %} 
+{% load humanize %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'logistics/detail.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<style>
-    .product-detail {
-        display: flex;
-        align-items: flex-start; /* 세로 축 기준으로 상단 정렬 */
-        width: 90%;
-        margin: auto;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        border-radius: 8px;
-    }
-
-    .products a {
-        text-decoration: none;
-        color: black;
-        flex-direction: column;
-        align-items: center;
-        border: none; /* 박스 테두리 제거 */
-    }
-        
-    .product-detail img {
-        width: 500px; /* 이미지 고정 너비 */
-        height: 500px; /* 이미지 고정 높이 */
-        object-fit: cover; /* 이미지 비율 유지 */
-        border-radius: 8px;
-    }
-    
-    .product-info {
-        margin-left: 50px; /* 이미지와 정보 사이의 간격 */
-        flex-grow: 1; /* 나머지 공간을 채움 */
-        text-align: left; /* 모든 텍스트 왼쪽 정렬 */
-    }
-
-    .product-info h1 { /* 상품명 */
-        margin-top: 0px;
-    }
-     
-    .product-info h2 { /* 할인율, 상품가격 */
-        margin-top: 30px;
-    }
-
-    .product-info h5 {  /* 정상가 */
-        margin-top: 30px;
-    }
-
-    
-    .product-info p {  /* 상품설명 */
-        margin-top: 30px;
-    }    
-
-    .store-button {
-        padding: 5px 5px;
-        background-color: #2d3743;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        display: inline-block;
-        margin-top: 60px;
-        margin-bottom: 35px;
-        align-self: flex-start; /* 버튼을 정보 섹션의 왼쪽 정렬로 설정 */
-    }
-
-    .product-form {
-        display: flex;
-        flex-direction: column;
-        width: 20%;
-    }
-
-    .horizontal-form {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .horizontal-form .form-group {
-        flex: 1;
-        margin-right: 5px; /* form과 button 사이의 간격 조정 */
-    }
-
-    .horizontal-form .form-group:last-child {
-        margin-right: 0; /* 마지막 요소의 오른쪽 마진을 제거하여 간격이 일정하게 유지 */
-    }
-
-
-</style>
-
 <div class="product-detail">
     <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
     <div class="product-info">
-        <h1><strong>{{ product.product_name }}</strong></h1>  <!-- 상품명 -->
-        <h5 style="color: #5a5a5a;">{{ product.product_sale }}% <del style="color: #bababa;">{{ product.product_price|intcomma }}원</del></h5>  <!-- 할인율 -->
-        <h2><strong>{{ discounted_price|floatformat:0|intcomma }}</strong> 원</h2> <!-- 상품 가격 -->
-        <p>{{ product.product_description }}</p>  <!-- 상품 설명 -->
-        <a href="{% url 'users:cus_store_home' product.store.pk %}" class="store-button">Store</a> <!-- 스토어 페이지 버튼 -->
+        <h1><strong>{{ product.product_name }}</strong></h1>
+        <h5 class="discount-info">{{ product.product_sale }}% <del>{{ product.product_price|intcomma }}원</del></h5>
+        <h2><strong>{{ discounted_price|floatformat:0|intcomma }}</strong> 원</h2>
+        <p>{{ product.product_description }}</p>
+        <a href="{% url 'users:cus_store_home' product.store.pk %}" class="store-button">Store</a>
         <form class="horizontal-form" action="{% url 'orders:order' %}" method="post">
             {% csrf_token %}
-            <!-- 수량 -->
             <div class="form-group">
                 {% if product.product_inventory %}
-                    <input class="form-control" type="number" name="amount" id="amount" min="1" value="1" placeholder="수량">
+                    <input class="form-control" type="number" name="amount" id="amount1" min="1" value="1" placeholder="수량">
                 {% else %}
                     <button class="form-control btn btn-dark" disabled>품절</button>
                 {% endif %}
             </div>
-            <!-- 주문 -->
             <div class="form-group">
                 {% if product.product_inventory %}
                     <button class="form-control btn btn-dark" type="submit" name="product" value="{{ product.id }}">바로구매</button>
                 {% endif %}
             </div>
         </form>
+        <form class="horizontal-form" action="{% url 'cart:add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {% if product.product_inventory %}
+                    <button class="form-control btn btn-dark" type="submit">담기</button>
+                {% endif %}
+                    <input type="hidden" name="amount" id="amount2" min="1" value="1" placeholder="수량">
+            </div>
+        </form>
+        <br>
+        <a href="{% url 'inquiry:question_create' %}" class="btn btn-dark">상품문의 작성</a>
+        <a href="{% url 'inquiry:my_qna' %}" class="btn btn-dark">작성한 상품문의 확인하기</a>
     </div>
 </div>
+
+<script>
+    document.getElementById('amount1').addEventListener('change', function() {
+        let amount = this.value;
+        document.getElementById('amount2').value = amount;
+    });
+</script>
+
 {% endblock %}

@@ -1,0 +1,14 @@
+.custom-card {
+    width: 250px;
+}
+
+.card-img-top {
+    height: 225px;
+    width: 100%;
+    display: block;
+}
+
+.product-link {
+    text-decoration: none;
+    color: inherit;
+}

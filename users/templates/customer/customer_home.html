@@ -1,53 +1,11 @@
 {% extends "customer_base.html" %}
 
-{% block content %}
-<style>
-    .orders {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: left;
-    }
-    .order {
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        width: 200px;
-        height: 280px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: hidden;
-    }
-    .orders a {
-        text-decoration: none;
-        color: black;
-        border: none;
-    }
-    .order img {
-        width: 100%;
-        max-height: 150px;
-        object-fit: cover;
-    }
-    .order h6 {
-        background-color: #f7f7f7;
-        width: 100%;
-        text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: clip;
-        font-size: 14px;
-        margin: 0;
-    }
-    .order p {
-        padding: 0 10px;
-        margin: 10px 0;
-        font-size: 15px;
-        text-align: right;
-        width: 100%;
-    }
-</style>
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/customer/home.css' %}">
+{% endblock %}
 
+{% block content %}
 <h3><a href="{% url 'orders:display_orders' %}">구매내역</a></h3>
 <div class="orders">
     {% for order in orders %}
@@ -59,9 +17,31 @@
     {% empty %}
         <p>구매한 상품이 없습니다.</p>
     {% endfor %}
+</div>
+<br>
+<h3>스토어찜</h3>
 
+<div class="row">
+    <div class="col-md-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>스토어</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in favorites %}
+                <tr>
+                    <td><a href="{% url 'users:cus_store_home' item.store.user_id %}">{{ item.store.store_name }}</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8"></div>
 </div>
 
+<<<<<<< HEAD
 <br>
 
 <h3>장바구니</h3>
@@ -108,3 +88,6 @@
 
 
 {% endblock %}
+=======
+{% endblock %}
+>>>>>>> 7a193a958e414c772998b2936029dcab107ed18f

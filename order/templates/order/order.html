@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>or</title>
-</head>
-<body>
-    {{ status }}
-</body>
-</html>
+{% extends 'noncategory_base.html' %}
+
+{% block content %}
+<h4>{{ status }}</h4>
+<a href="{% url 'logistics:main' %}">메인 화면으로</a>
+{% endblock %}
