@@ -1,13 +1,10 @@
 from django.shortcuts import redirect, render, get_object_or_404
-<<<<<<< HEAD
 from django.views.generic import *
 from .models import User, Customer, Store
 from logistics.models import Product
 from community.models import Community
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
-=======
 from django.views.generic import CreateView, TemplateView, ListView
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 from django.contrib.auth import login, get_user_model, logout, authenticate, update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import PasswordChangeForm
@@ -21,9 +18,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.utils import timezone
-<<<<<<< HEAD
 from django.core.paginator import Paginator
-=======
 from django.core.exceptions import ObjectDoesNotExist
 from cart.views import transfer_session_cart_to_user
 from logistics.models import Product
@@ -32,7 +27,6 @@ from favorites.models import UserFavoriteStore
 from .models import User, Customer, Store
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from .decorators import customer_required, store_required
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 
 User = get_user_model()
 
@@ -197,24 +191,22 @@ def account_delete_now(request):
 @login_required
 @customer_required
 def customer_home(request):
-<<<<<<< HEAD
     # 상품 목록 가져오기
     product = Product.objects.all()
 
     # 현재 로그인한 사용자의 커뮤니티 글 가져오기
     customer = request.user.customer 
     community_posts = Community.objects.filter(customer=customer)
+    # merge
+    orders = Order.objects.filter(customer=request.user.customer)
+    customer = Customer.objects.get(user=request.user)
     
     context = {
         'products': product,
-        'community_posts': community_posts,  
-=======
-    orders = Order.objects.filter(customer=request.user.customer)
-    customer = Customer.objects.get(user=request.user)
-    context = {
+        'community_posts': community_posts, 
         'orders': orders,
-        'favorites': customer.favorites.all()
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
+        'favorites': customer.favorites.all() 
+
     }
     return render(request, 'customer/customer_home.html', context)
 
@@ -379,21 +371,4 @@ class CustomerStoreHomeView(ListView):
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
             'page_obj': page_obj  
         })
-<<<<<<< HEAD
         return context
-=======
-        if self.request.user.is_store:
-            context['is_store'] = True
-        else:
-            if self.request.user.id == None:
-                saved = False
-            else:
-                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
-            context['saved'] = saved
-            context['is_store'] = False
-        if self.request.user.is_authenticated:
-            context['is_authenticated'] = 1
-        else:
-            context['is_authenticated'] = 0
-        return context
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f

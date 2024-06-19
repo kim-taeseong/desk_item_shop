@@ -1,19 +1,13 @@
 {% extends 'main_base.html' %}
-<<<<<<< HEAD
 {% load humanize %} 
 {% block logistics_content %}
-    <div class="log_content">
-=======
-{% load humanize %}
 
 {% load static %}
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'logistics/main.css' %}">
 {% endblock %}
 
-{% block content %}
-    <div class="container">
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
+    <div class="log_content">
         <h4>{{ category.category_name }}</h4>
         {% if products_with_discount %}
             <div class="row">

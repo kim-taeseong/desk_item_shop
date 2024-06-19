@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
 <style>
   .products {
     display: flex;
@@ -66,8 +65,8 @@
   text-align: right; /* 오른쪽 정렬을 위한 설정 */
   width: 85%; /* 부모 요소의 너비를 가득 채우도록 설정 */
   }
-
 </style>
+
 <!-- 커뮤니티 리스트 -->
 <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 10;">스타일링샷</h6>
 
@@ -102,7 +101,7 @@
 </div>
 
 
-<!-- 페이징 네비게이션 -->
+<!-- 스타일링샷 페이징 네비게이션 -->
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
@@ -136,8 +135,6 @@
 
 <!-- 상품 리스트 -->
 <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 5;">모든 상품</h6>
-=======
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 <div class="products">
     {% for product, discounted_price in products_with_discount %}
       <div class="product-card">
@@ -149,12 +146,6 @@
       <p>등록된 상품이 없습니다.</p>
     {% endfor %}
 </div>
-<<<<<<< HEAD
-
-
-
-
-=======
 {% if not is_store %}
   <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
     {% if saved %}
@@ -165,8 +156,9 @@
   </button>
   <p id="message"></p>
 {% endif %}
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
 {% endblock %}
+
+
 
 {% block scripts %}
 <script>
