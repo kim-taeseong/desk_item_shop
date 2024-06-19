@@ -12,20 +12,6 @@ body {
     padding: 0;
 }
 
-/* 공통 컨테이너 스타일 */
-.question-section {
-    padding: 20px;
-    background-color: #dcdcdc; /* 배경색 */
-    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-}
-
-.answer-section {
-    padding: 20px;
-    background-color: #fff; /* 배경색 */
-    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
-}
-
 /* 헤더 스타일 */
 .title-container {
     background-color: #fff; /* 상단 배경 색상 */
@@ -40,6 +26,20 @@ body {
     font-size: 32px; /* 글자 크기 조정 */
     font-weight: bolder;
     margin-bottom: 5px; /* 하단 여백 */
+}
+
+/* 공통 컨테이너 스타일 */
+.question-section {
+    padding: 20px;
+    background-color: #dcdcdc; /* 배경색 */
+    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.answer-section {
+    padding: 20px;
+    background-color: #fff; /* 배경색 */
+    margin: 0 20px 20px 20px; /* 좌우 여백 및 하단 여백 */
 }
 
 form {

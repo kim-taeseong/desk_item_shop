@@ -1,10 +1,29 @@
-/* 회원정보 수정 페이지 스타일 */
-h1 {
-    text-align: center; /* 가운데 정렬 */
-    color: #333; /* 텍스트 색상 지정 */
-    margin-bottom: 20px; /* 아래쪽 간격 추가 */
-    font-size: 24px; /* 폰트 크기 지정 */
-    font-weight: bold; /* 폰트 굵기 지정 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
 }
 
 form {
@@ -24,8 +43,7 @@ form input[type="password"] {
     border-radius: 5px; /* 테두리를 둥글게 */
 }
 
-input[type="submit"],
-.button-box {
+input[type="submit"] {
     width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춤 */
     padding: 10px; /* 내부 여백 추가 */
     background-color: #30303b; /* 배경색 지정 */
@@ -35,31 +53,41 @@ input[type="submit"],
     cursor: pointer; /* 포인터로 변경 */
 }
 
-input[type="submit"]:hover,
-.button-box:hover {
+input[type="submit"]:hover {
     background-color: #192019; /* 호버 시 배경색 변경 */
 }
 
-/* 비밀번호 수정 버튼 스타일 */
+/* 버튼 컨테이너 */
+.button-container {
+    max-width: 700px; /* 폼의 최대 너비와 동일하게 설정 */
+    margin: 20px auto; /* 가운데 정렬 및 상단 여백 */
+    display: flex;
+    justify-content: space-between; /* 버튼 사이의 간격 */
+}
+
 .btn-edit-password,
 .btn-account-delete {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px;
+    width: 48%; /* 버튼의 너비를 48%로 설정하여 두 버튼 사이에 간격을 줌 */
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .btn-edit-password {
-    margin-left: 415px;
-    width : 300px;
-    background-color: #007bff;
+    background-color: #30303b;
     color: white;
 }
 
+.btn-edit-password:hover {
+    background-color: #192019;
+}
+
 .btn-account-delete {
-    width : 300px;
-    background-color: #dc3545;
+    background-color: #30303b;
     color: white;
+}
+
+.btn-account-delete:hover {
+    background-color: #192019;
 }

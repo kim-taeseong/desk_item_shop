@@ -2,12 +2,14 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'users/signup.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'users/profile_edit.css' %}">
 {% endblock %}
 
 {% block content %}
     <title>구매자 회원가입</title>
-    <h2>회원가입</h2>
+    <div class="title-container">
+        <h2>회원가입</h2>
+    </div>
     <form action="{% url 'users:customer_signup' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

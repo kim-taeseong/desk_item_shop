@@ -10,28 +10,27 @@
     <div class="title-container">
         <h2>고객센터 질문 & 답변 목록</h2>
     </div>
-        <!-- Box for Question -->
+ 
     <div class="box">
-        <h2>{{ question.question_title }}</h2>
+        <h3>{{ question.question_title }}</h3>
         <p>{{ question.question_content }}</p>
         <small>등록일: {{ question.question_date }}</small>
         <hr>
     </div>
 
-        {% if question.answers.exists %}
-            <!-- Box for Answers -->
-            <div class="box">
-                <h3>답변</h3>
-                {% for answer in question.answers.all %}
-                    <p>{{ answer.answer_content }}</p>
-                    <small>등록일: {{ answer.answer_date }}</small>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="box">
-                <p>아직 답변이 등록되지 않았습니다.</p>
-            </div>
-        {% endif %}
-
+    {% if question.answers.exists %}
+        <!-- Box for Answers -->
+        <div class="box">
+            <h3>답변</h3>
+            {% for answer in question.answers.all %}
+                <p>{{ answer.answer_content }}</p>
+                <small>등록일: {{ answer.answer_date }}</small>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="box">
+            <p>아직 답변이 등록되지 않았습니다.</p>
+        </div>
+    {% endif %}
         <a href="{% url 'support:customer_list' %}"><button>목록으로 돌아가기</button></a>
 {% endblock %}

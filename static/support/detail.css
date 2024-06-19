@@ -15,6 +15,22 @@ body {
     padding: 0;
 }
 
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검은색 밑줄 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
 /* 컨테이너 스타일 */
 .container {
     max-width: 800px;
@@ -30,19 +46,6 @@ body {
     text-align: center;
     border-radius: 10px;
     margin-bottom: 20px;
-}
-
-.header h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Styles for question title */
-h1, h2, h3 {
-    color: #333;
-    font-family: 'NanumSquare', Arial, sans-serif;
-    font-weight: bold;
 }
 
 /* Styles for question content */
@@ -62,20 +65,21 @@ small {
     margin-bottom: 20px;
 }
 
-/* Styles for buttons */
+/* 버튼 스타일 */
 button {
-    background-color: #0c2b4d;
+    background-color: #000;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 15px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 3px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #3f3f3f;
+    transform: translateY(-2px);
 }
 
 /* Styles for hr */
