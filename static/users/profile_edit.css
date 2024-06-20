@@ -91,3 +91,35 @@ input[type="submit"]:hover {
 .btn-account-delete:hover {
     background-color: #192019;
 }
+
+
+/**** account_delete ***/
+/* 삭제 안내 텍스트 스타일 */
+.delete-text {
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* 체크박스 및 레이블 스타일 */
+.agreement-container {
+    margin-bottom: 20px;
+}
+
+.agreement-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* 메시지 스타일 */
+.messages {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.messages li {
+    list-style: none;
+    margin-bottom: 10px;
+}

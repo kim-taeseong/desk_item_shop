@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'logistics/delete.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/question.css' %}">
 {% endblock %}
 
 
@@ -11,29 +11,19 @@
     <div class="title-container">
         <h3><strong>상품 삭제하기</strong></h3>
     </div>
-
-    <div class="form-container">
-        <h3>다음 상품을 삭제하시겠습니까?</h3>
-        <form action="." method="post">{% csrf_token %}
-            <div class="form-group">
-                <p><strong>상품명:</strong> {{ object.product_name }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>가격:</strong> {{ object.product_price }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>재고:</strong> {{ object.product_inventory }}</p>
-            </div>
-            <div class="form-group">
-                <p><strong>상세 설명:</strong> {{ object.product_description }}</p>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="삭제하기" class="submit-button" />
-            </div>
-            <div class="form-group">
-                <button type="button" class="back-button" onclick="window.location.href='{% url 'logistics:del_list' %}'">뒤로 가기</button>
-            </div>
-        </form>
+    <div class="product-details">
+        <p><strong>상품명:</strong> {{ product.product_name }}</p>
+        <p><strong>상세 설명:</strong> {{ product.product_description }}</p>
+        <p><strong>가격:</strong> {{ product.product_price }}</p>
+        <p><strong>재고:</strong> {{ product.product_inventory }}</p>
+        <p><strong>세일:</strong> {{ product.product_sale }}</p>
+        {% if product.product_img %}
+            <p><strong>이미지:</strong></p>
+            <img src="{{ product.product_img.url }}" alt="상품 이미지">
+        {% endif %}
     </div>
+        <button type="button" class="submit-button" onclick="window.location.href='{% url 'logistics:del_list' %}'">뒤로 가기</button>
+    </form>
 </div>
+
 {% endblock %}

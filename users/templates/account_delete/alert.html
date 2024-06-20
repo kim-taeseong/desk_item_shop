@@ -1,0 +1,34 @@
+{% extends "noncategory_base.html" %}
+
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/delete.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="title-container">
+    <h2>회원 탈퇴한 계정입니다.</h2>
+</div>
+
+<div class="box">
+    <div class="delete-text"> 
+        <p> 이 계정은 회원 탈퇴일로부터 7일 후에 완전 삭제됩니다 </p>
+        <p>회원 탈퇴를 취소하거나 지금 즉시 탈퇴하실 수 있습니다</p>
+    </div>
+
+    <form method="post" action="{% url 'users:account_delete_cancel' %}">
+        {% csrf_token %}
+        <button type="submit">탈퇴 취소하기</button>
+    </form>
+
+    <form method="post" action="{% url 'users:account_delete_now' %}">
+        {% csrf_token %}
+        <button type="submit">즉시 탈퇴하기</button>
+    </form>
+</div>
+
+
+<a href="{% url 'users:login' %}" class="login-link">로그인 화면으로</a>
+
+{% endblock %}
+ 
