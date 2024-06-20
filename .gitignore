@@ -171,4 +171,5 @@ cart/migrations
 support/migrations
 favorites/migrations
 follow/migrations
+reviews/migrations
 .vscode/
