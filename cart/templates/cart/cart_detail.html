@@ -108,13 +108,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = getCookie('csrftoken');
 
     document.querySelectorAll('.quantity-input').forEach(function(input) {
+        let beforeQuantity = input.value;
         input.addEventListener('change', function() {
             const cartItemId = this.getAttribute('data-cart-item-id');
             const quantity = this.value;
             const salesPrice = parseInt(this.closest('tr').querySelector('.sales-price').innerText);
             const quantityPriceCell = this.closest('tr').querySelector('.quantity-price');
+            const totalPriceElement = document.getElementById('total-price');
 
             quantityPriceCell.innerText = parseInt(quantity) * salesPrice;
+            
+            if (this.closest('tr').querySelector('.checkbox').checked) {
+                let totalPrice = parseInt(totalPriceElement.innerText);
+                totalPrice = totalPrice - parseInt(beforeQuantity) * salesPrice + parseInt(quantity) * salesPrice;
+                totalPriceElement.innerText = totalPrice;
+            }
+            beforeQuantity = quantity;
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '{% url "cart:update_cart_item" %}', true);
