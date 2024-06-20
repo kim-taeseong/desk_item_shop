@@ -69,56 +69,25 @@ tbody tr:hover {
     background-color: #e0e0e0;
 }
 
-/* 반응형 테이블 스타일 */
-@media screen and (max-width: 600px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
 
-    /* 테이블 헤더 숨김 */
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
+.product-buttons {
+    text-align: center;
+}
 
-    tr {
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
+.product-buttons a {
+    text-decoration: none;
+}
 
-    td {
-        border: none;
-        position: relative;
-        padding-left: 50%;
-    }
+.product-buttons button {
+    padding: 5px 10px;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
 
-    td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-    }
-
-    td:nth-of-type(1):before {
-        content: "제목: ";
-    }
-
-    td:nth-of-type(2):before {
-        content: "상품: ";
-    }
-
-    td:nth-of-type(3):before {
-        content: "작성일: ";
-    }
-
-    td:nth-of-type(4):before {
-        content: "내용: ";
-    }
-
-    td:nth-of-type(5):before {
-        content: "답변: ";
-    }
+.product-buttons button:hover {
+    background-color: #000;
 }

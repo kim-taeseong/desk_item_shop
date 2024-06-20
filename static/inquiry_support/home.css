@@ -1,0 +1,97 @@
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 2px solid #3f3f3f; /* 검정색 밑줄 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
+#faq, #one-to-one {
+    margin-bottom: 40px;
+}
+
+#faq ul {
+    list-style: none;
+    padding: 0;
+}
+
+#faq li {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#faq h3 {
+    color: #000;
+    margin-bottom: 10px;
+}
+
+#faq p {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1.5em; /* 글씨 크기를 조절할 수 있습니다 */
+}
+
+#one-to-one a {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#one-to-one a:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+section h2 {
+    font-size: 1.75em;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+section p {
+    font-size: 1em;
+    color: #555;
+}

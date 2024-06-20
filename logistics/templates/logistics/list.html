@@ -2,14 +2,14 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'logistics/list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/list.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="store-name">
+<div class="title-container">
     <strong>{{ store.store_name|upper }}</strong>  <!-- 스토어 이름 표시 --> 
     {% with page_title="상품 목록" %}
-        <h3 class="page-title">{{ page_title }}</h3>
+        <h2 class="page-title">{{ page_title }}</h2>
     {% endwith %}
 </div>
 
@@ -39,14 +39,10 @@
                 <td>{{ product.product_date }}</td>
                 <td class="product-description">{{ product.product_description }}</td>
                 <td class="product-buttons">
-                    <a href="{% url 'logistics:update_product' pk=product.pk %}">
-                        <button>상품수정</button>
-                    </a>
+                    <a href="{% url 'logistics:update_product' pk=product.pk %}"><button>상품수정</button></a>
                 </td>
                 <td class="product-buttons">
-                    <a href="{% url 'logistics:del_product' pk=product.pk %}">
-                        <button>상품삭제</button>
-                    </a>
+                    <a href="{% url 'logistics:del_product' pk=product.pk %}"><button>상품삭제</button></a>
                 </td>
             </tr>
             {% endfor %} 
@@ -56,8 +52,6 @@
 
 <!-- 상품 등록 버튼 -->
 <div class="product-buttons" style="margin-top: 20px; text-align: right;">
-    <a href="{% url 'logistics:add_product' %}">
-        <button>상품 등록</button>
-    </a>
+    <a href="{% url 'logistics:add_product' %}"><button>상품 등록</button></a>
 </div>
 {% endblock %}

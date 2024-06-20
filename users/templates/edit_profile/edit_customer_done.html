@@ -1,19 +1,14 @@
 {% extends "noncategory_base.html" %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/done.css' %}">
+{% endblock %}
+
+
 {% block content %}
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>구매자-회원정보수정</title>
-</head>
-<body>
-    <h3>회원정보가 수정되었습니다</h3>
-=======
+<div class="title-container">
     <h2>회원정보가 수정되었습니다</h2>
->>>>>>> 7a193a958e414c772998b2936029dcab107ed18f
-    <a href="{% url 'users:customer_home' %}">나의 쇼핑</a>
+</div>
+<a href="{% url 'users:customer_home' %}" class="button">나의 쇼핑</a>
 {% endblock %}
