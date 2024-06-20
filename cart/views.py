@@ -70,7 +70,10 @@ def transfer_session_cart_to_user(request, user):
     for item_id, quantity in session_cart.items():
         item = get_object_or_404(Product, id=item_id)
         cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
-        cart_item.quantity += quantity
+        if created:
+            cart_item.quantity = quantity
+        else:
+            cart_item.quantity += quantity
         cart_item.save()
 
     del request.session['cart']
