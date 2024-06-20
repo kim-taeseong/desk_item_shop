@@ -30,7 +30,7 @@
                     <td>{{ question.question_content }}</td>
                     <td>{{ question.customer }}</td>
                     <td>
-                        {% if question.answer_set.all %}
+                        {% if question.answer_set.all %}``
                             <ul>
                                 {% for answer in question.answer_set.all %}
                                     <li>{{ answer.answer_content }}</li>
