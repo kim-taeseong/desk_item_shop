@@ -43,7 +43,7 @@ def cart_detail(request):
                 'item': item,
                 'quantity': quantity,
                 'quantity_price': quantity * round(item.product_price * (1 - item.product_sale * 0.01)),
-                'sales_price': round(item.item.product_price * (1 - item.item.product_sale * 0.01))
+                'sales_price': round(item.product_price * (1 - item.product_sale * 0.01))
             })
     total_price = sum(item['quantity_price'] for item in cart_items)
     return render(request, 'cart/cart_detail.html', {'cart_items': cart_items, 'total_price': total_price})
