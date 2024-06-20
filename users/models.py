@@ -20,6 +20,7 @@ class Customer(models.Model):
     cus_birth = models.DateField(blank=True) # 생년월일
     cus_telnum = models.CharField(max_length=20) # 전화번호
     cus_regdate = models.DateTimeField(auto_now_add=True) # 가입일 자동생성
+    follows = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
 
     def __str__(self) -> str:
         return self.cus_name

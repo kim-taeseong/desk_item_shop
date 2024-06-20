@@ -205,8 +205,9 @@ def customer_home(request):
         'products': product,
         'community_posts': community_posts, 
         'orders': orders,
-        'favorites': customer.favorites.all() 
-
+        'favorites': customer.favorites.all(), 
+        'followers': customer.followers.all(),
+        'following': customer.follows.all()
     }
     return render(request, 'customer/customer_home.html', context)
 

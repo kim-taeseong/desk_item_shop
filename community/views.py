@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import Q
 import json
 from django.views.decorators.http import require_POST
+from users.decorators import customer_required
 
 # 커뮤니티 카테고리 ##############################################################################
 
@@ -203,7 +204,16 @@ def post_detail(request, pk):
         'form': form,
         'selected_products': selected_products,
     }
-
+    customer = community.customer
+    context['customer'] = customer
+    context['is_other_customer'] = False
+    if customer != request.user.customer:
+        context['is_other_customer'] = True
+    context['is_following'] = customer in request.user.customer.follows.all() if request.user.is_authenticated else False
+    if request.user.is_authenticated:
+        context['is_authenticated'] = 1
+    else:
+        context['is_authenticated'] = 0
     return render(request, 'post/post_detail.html', context)
 
 
