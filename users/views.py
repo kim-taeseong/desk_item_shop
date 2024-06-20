@@ -24,6 +24,7 @@ from cart.views import transfer_session_cart_to_user
 from logistics.models import Product
 from order.models import Order
 from favorites.models import UserFavoriteStore
+from cart.models import Cart
 from .models import User, Customer, Store
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from .decorators import customer_required, store_required
@@ -38,6 +39,7 @@ class CustomerSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        Cart.objects.create(user=user)
         return redirect('users:signup_done')
     
 # Store 회원가입
