@@ -41,7 +41,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     width: 200px;
-    height: 280px;
+    height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,6 +56,7 @@ body {
 
 .order img {
     width: 100%;
+    height: 180px;
     max-height: 200px;
     object-fit: cover;
 }
@@ -100,7 +101,7 @@ body {
 
 .table a {
     text-decoration: none;
-    color: #007bff;
+    color: #4b4b4b;
 }
 
 .table a:hover {
