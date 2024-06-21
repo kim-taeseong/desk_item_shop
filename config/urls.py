@@ -10,6 +10,10 @@ urlpatterns = [
     path("", include("logistics.urls")),
     path('orders/', include('order.urls')),
     path("inquiry/", include("inquiry.urls")),
+    path("community/", include("community.urls")),
+    path('cart/', include('cart.urls')),
+    path("support/", include("support.urls")),
+    path('favorites/', include('favorites.urls')),
     path('payments/', include('payments.urls')),
     # 비밀번호 초기화
     path('accounts/password_reset/form', auth_views.PasswordResetView.as_view(), name="password_reset"), # 이메일 입력 화면
