@@ -82,6 +82,16 @@
                         <div style="margin-left: 5px;">
                             <p class="mb-0" style="font-size: 15px;"><strong>{{ community.customer.cus_nickname }}</strong></p>
                         </div>
+                        {% if is_other_customer %}
+                            <button type="button" id="follow" data-user-id="{{ customer.user_id }}" data-authentication="{{ is_authenticated }}">
+                                {% if is_following %}
+                                    Unfollowing
+                                {% else %}
+                                    Following
+                                {% endif %}
+                            </button>
+                            <p id="message"></p>
+                        {% endif %}
                     </div>
                     {% if request.user.customer == community.customer %}
                     <div>
@@ -177,4 +187,59 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        const follow = function(userId, element) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "follow_and_unfollow" %}', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);  // CSRF token 설정
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    const response = JSON.parse(xhr.responseText);
+                    document.getElementById('message').innerText = response.message;
+                    if (response.check) {
+                        element.textContent = 'Unfollowing';
+                    } else {
+                        element.textContent = 'Following';
+                    }
+                }
+            };
+
+            xhr.send(`user_id=${userId}`);
+        };
+
+        followButton = document.getElementById('follow');
+        followButton.addEventListener('click', function() {
+            userId = this.getAttribute('data-user-id');
+            isAuthenticated = parseInt(this.getAttribute('data-authentication'));
+            if (!!isAuthenticated === false) {
+                window.location.href = '{% url "users:login" %}'
+                return;
+            }
+            follow(userId, this);
+        })
+    });
+</script>
 {% endblock %}

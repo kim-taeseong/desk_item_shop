@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import Q
 import json
 from django.views.decorators.http import require_POST
+from users.decorators import customer_required
 
 # 커뮤니티 카테고리 ##############################################################################
 
@@ -177,6 +178,7 @@ def post_list(request):
 
 
 # 커뮤니티 글 상세
+# 커뮤니티 글 상세
 def post_detail(request, pk):
     if request.user.is_authenticated:
         if request.user.is_customer:
@@ -211,6 +213,8 @@ def post_detail(request, pk):
     else:
         messages.warning(request, '사용자 계정으로 로그인이 필요합니다.')  # 로그인 페이지에서 메세지
         return redirect(reverse('users:login'))
+
+
 
 
 
