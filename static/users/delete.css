@@ -101,3 +101,10 @@ form button[type="submit"]:hover {
 .form-messages {
     list-style-type: none;
 }
+
+.product-img {
+    max-width: 100%;
+    height: 500px;
+    display: block;
+    margin: 0 auto;
+}

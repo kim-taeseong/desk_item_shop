@@ -76,15 +76,36 @@ form select:focus {
     background-color: #000;
     color: white;
     border: none;
-    padding: 15px;
+    padding: 10px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.2s, transform 0.2s;
     align-self: flex-start; /* 버튼을 왼쪽 정렬 */
+    margin: 5px;
 }
 
 .submit-button:hover {
+    background-color: #16181b60;
+    transform: translateY(-2px);
+}
+
+
+/* 버튼 스타일 */
+.btn-delete {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s, transform 0.2s;
+    align-self: flex-start; /* 버튼을 왼쪽 정렬 */
+    margin: 5px;
+}
+
+.btn-delete:hover {
     background-color: #16181b60;
     transform: translateY(-2px);
 }
