@@ -178,7 +178,6 @@ def post_list(request):
 
 
 # 커뮤니티 글 상세
-# 커뮤니티 글 상세
 def post_detail(request, pk):
     if request.user.is_authenticated:
         if request.user.is_customer:
