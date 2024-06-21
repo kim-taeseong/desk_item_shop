@@ -28,6 +28,7 @@ from cart.models import Cart
 from .models import User, Customer, Store
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from .decorators import customer_required, store_required
+from django.contrib.auth.models import AnonymousUser
 
 User = get_user_model()
 
@@ -376,19 +377,19 @@ class CustomerStoreHomeView(ListView):
             'categories': categories,
             'products': products,
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
-            'page_obj': page_obj  
+            'page_obj': page_obj,
+            'is_authenticated': self.request.user.is_authenticated,
         })
-        if self.request.user.is_store:
-            context['is_store'] = True
-        else:
-            if self.request.user.id == None:
-                saved = False
-            else:
-                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
-            context['saved'] = saved
+        if not self.request.user.is_authenticated:
             context['is_store'] = False
-        if self.request.user.is_authenticated:
-            context['is_authenticated'] = 1
+            context['saved'] = False
         else:
-            context['is_authenticated'] = 0
+            is_customer = getattr(self.request.user, 'is_customer', False)
+            if is_customer:
+                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+            else:
+                saved = False
+            context['is_store'] = is_customer
+            context['saved'] = saved
+
         return context

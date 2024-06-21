@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'support',
     'favorites',
     'follow',
-    'reveiws'
+    # 'reveiws',
 ]
 
 MIDDLEWARE = [
