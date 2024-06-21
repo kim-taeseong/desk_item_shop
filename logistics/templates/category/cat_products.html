@@ -7,7 +7,9 @@
 
 {% block logistics_content %}
     <div class="log_content">
-        <h4>{{ category.category_name }}</h4>
+        <div class="title-container">
+            <h2>{{ category.category_name }}</h2>
+        </div>
         {% if products %}
             <div class="row">
                 {% for product in products %}
