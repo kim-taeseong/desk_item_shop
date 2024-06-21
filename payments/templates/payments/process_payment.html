@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Payment</title>
+    <script src="https://js.tosspayments.com/v1"></script>
+</head>
+<body>
+    <h1>결제 처리 중...</h1>
+    <script>
+        const clientKey = "{{ toss_api_key }}";
+        const tossPayments = TossPayments(clientKey);
+        
+        tossPayments.requestPayment('카드', {
+            amount: "{{ payment.amount }}",
+            orderId: "{{ payment.merchant_uid }}",
+            orderName: "{{ payment.name }}",
+            customerName: "{{ request.user.username }}",
+            successUrl: "{{ payment_verify_url }}",
+            failUrl: "{{ payment_verify_url }}",
+        });
+    </script>
+</body>
+</html>
+
