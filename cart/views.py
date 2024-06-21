@@ -9,7 +9,7 @@ def add_to_cart(request, item_id):
     item = get_object_or_404(Product, id=item_id)
     amount = int(request.POST.get('amount'))
     if request.user.is_authenticated:
-        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart = Cart.objects.get(user=request.user)
         cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
         if not created:
             cart_item.quantity += amount
@@ -43,7 +43,7 @@ def cart_detail(request):
                 'item': item,
                 'quantity': quantity,
                 'quantity_price': quantity * round(item.product_price * (1 - item.product_sale * 0.01)),
-                'sales_price': round(item.item.product_price * (1 - item.item.product_sale * 0.01))
+                'sales_price': round(item.product_price * (1 - item.product_sale * 0.01))
             })
     total_price = sum(item['quantity_price'] for item in cart_items)
     return render(request, 'cart/cart_detail.html', {'cart_items': cart_items, 'total_price': total_price})
@@ -65,12 +65,15 @@ def transfer_session_cart_to_user(request, user):
     if not session_cart:
         return
     
-    cart, created = Cart.objects.get_or_create(user=user)
+    cart = Cart.objects.get(user=user)
 
     for item_id, quantity in session_cart.items():
         item = get_object_or_404(Product, id=item_id)
         cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
-        cart_item.quantity += quantity
+        if created:
+            cart_item.quantity = quantity
+        else:
+            cart_item.quantity += quantity
         cart_item.save()
 
     del request.session['cart']

@@ -178,43 +178,43 @@ def post_list(request):
 
 
 # 커뮤니티 글 상세
-@login_required
+# 커뮤니티 글 상세
 def post_detail(request, pk):
-    community = get_object_or_404(Community, pk=pk)
-    comments = CommunityComment.objects.filter(community=community)
-
-    if request.method == 'POST':
-        form = CommentcreateForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.customer = request.user.customer
-            comment.community = community
-            comment.save()
-            return redirect('community:post_detail', pk=community.pk)
-    else:
-        form = CommentcreateForm()
-
-    # Community 모델의 selected_products 필드 값을 가져옴
-    selected_products = community.selected_products.all()
-    product_links = community.product.all()
-
-    context = {
-        'community': community,
-        'comments': comments,
-        'form': form,
-        'selected_products': selected_products,
-    }
-    customer = community.customer
-    context['customer'] = customer
-    context['is_other_customer'] = False
-    if customer != request.user.customer:
-        context['is_other_customer'] = True
-    context['is_following'] = customer in request.user.customer.follows.all() if request.user.is_authenticated else False
     if request.user.is_authenticated:
-        context['is_authenticated'] = 1
+        if request.user.is_customer:
+            community = get_object_or_404(Community, pk=pk)
+            comments = CommunityComment.objects.filter(community=community)
+
+            if request.method == 'POST':
+                form = CommentcreateForm(request.POST)
+                if form.is_valid():
+                    comment = form.save(commit=False)
+                    comment.customer = request.user.customer
+                    comment.community = community
+                    comment.save()
+                    return redirect('community:post_detail', pk=community.pk)
+            else:
+                form = CommentcreateForm()
+
+            # Community 모델의 selected_products 필드 값을 가져옴
+            selected_products = community.selected_products.all()
+            product_links = community.product.all()
+
+            context = {
+                'community': community,
+                'comments': comments,
+                'form': form,
+                'selected_products': selected_products,
+            }
+            return render(request, 'post/post_detail.html', context)
+        else:
+            messages.warning(request, '글을 작성할 권한이 없습니다. 사용자 계정으로 로그인 하세요.')  # 로그인 페이지에서 메세지
+            return redirect(reverse('users:logout'))
     else:
-        context['is_authenticated'] = 0
-    return render(request, 'post/post_detail.html', context)
+        messages.warning(request, '사용자 계정으로 로그인이 필요합니다.')  # 로그인 페이지에서 메세지
+        return redirect(reverse('users:login'))
+
+
 
 
 
