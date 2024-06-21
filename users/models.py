@@ -11,6 +11,7 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='customer')
     cus_nickname = models.CharField(max_length=20) # 닉네임
     cus_name = models.CharField(max_length=20) # 이름
+    cus_img = models.ImageField(upload_to='customer/img', null=True, blank=True) # 프로필 이미지
     cus_address = models.CharField(max_length=200) # 주소
     cus_zipcode = models.CharField(max_length=10) # 우편번호 - 수학적인 연산이 필요하지 않기에 CharField가 더 적절하다고 함
     cus_birth = models.DateField(blank=True) # 생년월일
