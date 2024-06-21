@@ -47,6 +47,7 @@ body {
 }
 
 #faq h3 {
+    font-size: 20px; /* 글자 크기 조정 */
     color: #000;
     margin-bottom: 10px;
 }
@@ -54,7 +55,7 @@ body {
 #faq p {
     color: #555;
     line-height: 1.6;
-    font-size: 1.5em; /* 글씨 크기를 조절할 수 있습니다 */
+    font-size: 20px; /* 글씨 크기를 조절할 수 있습니다 */
 }
 
 #one-to-one a {
@@ -76,9 +77,6 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 section {

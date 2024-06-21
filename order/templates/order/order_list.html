@@ -2,18 +2,18 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'order/list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/list.css' %}">
 {% endblock %}
 
 {% block content %}
-<div>
+<div class="title-container">
     {% with page_title='상품 목록' %}
-        <h3>{{ page_title }}</h3>
+        <h2>{{ page_title }}</h2>
     {% endwith %}
 </div>
 
 <div>
-    <table class="table">
+    <table>
         <thead>
             <tr>
                 <th>상품명</th>
@@ -32,7 +32,7 @@
                 <td>{{ order.amount }}</td>
                 <td>{{ order.price }}</td>
                 <td>미정</td>
-                <td>
+                <td class="product-buttons">
                     <a href="{% url 'orders:delete_order' order.id %}">
                         <button type="button">취소</button>
                     </a>
@@ -41,5 +41,9 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {% if orders|length == 0 %}
+    <p class="empty-message">주문이 없습니다.</p>
+    {% endif %}
 </div>
 {% endblock %}

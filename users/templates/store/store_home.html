@@ -6,13 +6,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'users/store/home.css' %}">
 {% endblock %}
 
-{% block content %}
-<h3>정산내역</h3>
-<p>정산내역 연결</p>
-
-<br>
-
-<h3>새로 등록한 상품</h3>
+{% block content %}    
+    <div class="title-container">
+        <h2>새로 등록한 상품</h2>
+    </div>
 <div class="products">
   {% for product, discounted_price in products_with_discount %}
     <div class="product">
@@ -25,8 +22,8 @@
   {% endfor %}
 </div>
 
-<br>
-
-<h3>상품문의</h3>
+<div class="title-container">
+    <h2>상품문의</h2>
+</div>
 <a href="{% url 'inquiry:store_list' %}">상품문의 게시판 바로가기</a>
 {% endblock %}

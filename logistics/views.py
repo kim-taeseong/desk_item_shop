@@ -83,7 +83,7 @@ class AddProductView(CreateView):
         return context
 
 
-# Page not found (404) - 쿼리 결과에 product가 없습니다. (수정필요) > 수정완료했습니다 product_detail.html
+# product_detail.html
 class UpdateProductView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     template_name = 'logistics/update.html'  # 연결되는 templates url (수정)

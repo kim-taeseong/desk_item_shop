@@ -1,23 +1,32 @@
 {% extends 'customer_base.html' %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/question.css' %}">
+{% endblock %}
+
 {% block content %}
+<title>주문 취소하기 customer</title>
+
 <div class="container">
-    {% with page_title="주문 취소하기" %}
-        <h1>{{ page_title }}</h1>
-    {% endwith %}
-</div>
-
-<div>
-    <h3>다음 주문을 취소하시겠습니까?</h3>
-    <p><strong>주문상품:</strong>{{ order.product.product_name }}</p>
-    <p><strong>주문수량:</strong>{{ order.amount }}</p>
-    <p><strong>총 금액:</strong>{{ order.price }}</p>
-
+    <div class="title-container">
+        {% with page_title="주문 취소하기" %}
+            <h2>{{ page_title }}</h2>
+        {% endwith %}
+    </div>
+    <div class="product-details">
+        <p><strong>주문상품:</strong> {{ order.product.product_name }}</p>
+        <p><strong>주문수량:</strong> {{ order.amount }}</p>
+        <p><strong>총 금액:</strong> {{ order.price }}</p>
+        {% if order.product.product_img %}
+            <p><strong>이미지:</strong></p>
+            <img src="{{ order.product.product_img.url }}" alt="주문 상품 이미지" class="product-img">
+        {% endif %}
+    </div>
     <form action="." method="post">
         {% csrf_token %}
-        <input type="submit" value="Confirm" class="btn btn-danger btn-sm">
-        <a href="{% url 'orders:display_orders' %}"><button type="button">뒤로 가기</button></a>
+        <button type="submit" class="btn-delete">주문 취소</button>
     </form>
+    <button type="button" class="submit-button" onclick="window.location.href='{% url 'orders:display_orders' %}'">뒤로 가기</button>
 </div>
-
 {% endblock %}

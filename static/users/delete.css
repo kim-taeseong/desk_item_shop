@@ -1,0 +1,110 @@
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+.title-container {
+    background-color: #fff; /* 상단 배경 색상 */
+    color: #333; /* 텍스트 색상 */
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.title-container h2 {
+    font-size: 32px; /* 글자 크기 조정 */
+    font-weight: bolder;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
+/* 삭제 안내 텍스트 스타일 */
+.delete-text {
+    max-width: 700px;
+    margin: 0 auto 20px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* 폼 스타일 */
+form {
+    max-width: 700px;
+    margin: 0 auto 10px;
+    padding: 20px;
+    background-color: #fff;
+    text-align: center;
+}
+
+/* 폼 입력 필드 스타일 */
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춤 */
+    margin-bottom: 10px; /* 아래쪽 간격 추가 */
+    padding: 10px; /* 내부 여백 추가 */
+    border: 1px solid #ccc; /* 테두리 추가 */
+    border-radius: 5px; /* 테두리를 둥글게 */
+}
+
+
+form button[type="submit"] {
+    width: 400px;
+    padding: 10px;
+    background-color: #30303b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #192019;
+}
+
+/* 로그인 링크 스타일 */
+.login-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #192019;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+/* 네모박스 스타일 */
+.box {
+    max-width: 500px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.box .delete-text {
+    margin-bottom: 20px;
+}
+
+/* 메시지 스타일 */
+.form-messages {
+    list-style-type: none;
+}
+
+.product-img {
+    max-width: 100%;
+    height: 500px;
+    display: block;
+    margin: 0 auto;
+}

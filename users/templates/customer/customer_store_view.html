@@ -7,102 +7,43 @@
 {% endblock %}
 
 {% block content %}
-<style>
-  .products {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around; /* 카드 사이의 간격을 균등하게 설정 */
-    padding: 20px;
-  }
 
-  .product-card {
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    width: 250px; /* 카드 너비 */
-    margin: 10px;
-    overflow: hidden;
-    background-color: #fff; /* 배경 색상 */
-    transition: transform 0.2s; /* 호버 효과 */
-  }
-
-  .product-card:hover {
-    transform: scale(1.05); /* 호버 시 카드 확대 */
-  }
-
-  .product-card img {
-    width: 100%; /* 이미지 너비 */
-    height: 225px; /* 이미지 높이 */
-    object-fit: cover; /* 이미지 비율 유지 */
-  }
-
-  .products a {
-    text-decoration: none; /* 밑줄 제거 */
-    color: black;
-    border: none; /* 박스 테두리 제거 */
-    }
-
-  .product-card h6 {
-    padding: 10px; /* 제목 패딩 */
-    margin: 0;
-    text-align: left; /* 제목 중앙 정렬 */
-    white-space: nowrap; /* 텍스트를 한 줄로 만듦 */
-    overflow: hidden; /* 내용이 넘칠 때 처리 */
-    text-overflow: clip; /* 오버플로 텍스트를 자름 */
-  }
-
-  .product-card p {
-    padding: 0 10px 10px; /* 문단 패딩 */
-    margin-top: 20px;
-    margin-bottom: 0px;
-    font-size: 14px; /* 폰트 사이즈 */
-    color: #666; /* 폰트 색상 */
-    text-align: left; /* 폰트 왼쪽 정렬 */
-  }
-
-  .discounted-price {
-  display: inline-block;
-  text-align: right; /* 오른쪽 정렬을 위한 설정 */
-  width: 85%; /* 부모 요소의 너비를 가득 채우도록 설정 */
-  }
-</style>
-
-<!-- 커뮤니티 리스트 -->
-<h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 10;">스타일링샷</h6>
-
-<div class="container mt-4">
-    <div class="row">
-        {% for post in page_obj %}
-            <div class="col-md-3 mb-4 d-flex align-items-stretch">
-                <div class="card mb-3 box-shadow" style="width: 100%;">
-                    <img class="card-img-top" src="{{ post.community_img.url }}" alt="{{ post.community_title }}" style="height: 225px; width: 100%; display: block;">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-text">
-                            <a href="{% url 'community:post_detail' post.pk %}" style="text-decoration: none; color: inherit;">
-                                {{ post.community_title }}
-                            </a>
-                        </h5>
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0">
-                                    <i class="bi bi-heart-fill" style="color: red;"></i>
-                                    <small class="text-muted">{{ post.community_like }}</small>
-                                </p>
-                                <p class="mb-0"><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일' }}</small></p>
+<section class="community-section">
+  <div class="title-container">
+    <h6>스타일링샷</h6></div>
+    <div class="container mt-4">
+        <div class="row">
+            {% for post in page_obj %}
+                <div class="col-md-3 mb-4 d-flex align-items-stretch">
+                    <div class="card mb-3 box-shadow">
+                        <img class="card-img-top" src="{{ post.community_img.url }}" alt="{{ post.community_title }}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="{% url 'community:post_detail' post.pk %}" class="post-link">
+                                    {{ post.community_title }}
+                                </a>
+                            </h5>
+                            <div class="post-footer mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="mb-0">
+                                        <i class="bi bi-heart-fill heart-icon"></i>
+                                        <small class="text-muted">{{ post.community_like }}</small>
+                                    </p>
+                                    <p class="mb-0"><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일' }}</small></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <p class="col-12">등록된 커뮤니티 게시글이 없습니다.</p>
-        {% endfor %}
+            {% empty %}
+                <p class="col-12 text-center">등록된 커뮤니티 게시글이 없습니다.</p>
+            {% endfor %}
+        </div>
     </div>
-</div>
-
+</section>
 
 <!-- 스타일링샷 페이징 네비게이션 -->
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation example" class="pagination-nav">
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
             <li class="page-item"><a class="page-link" href="?page=1">처음</a></li>
@@ -130,35 +71,34 @@
     </ul>
 </nav>
 
-
-
-
 <!-- 상품 리스트 -->
-<h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 5;">모든 상품</h6>
-<div class="products">
-    {% for product, discounted_price in products_with_discount %}
-      <div class="product-card">
-        <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
-        <a href="{{ product.get_absolute_url }}"><h6>{{ product.product_name }}</h6></a>
-        <p>{{ product.product_sale }}% <span class="discounted-price">{{ discounted_price|floatformat:0|intcomma }}원</span></p>
-      </div>
-    {% empty %}
-      <p>등록된 상품이 없습니다.</p>
-    {% endfor %}
-</div>
+<section class="product-section">
+  <div class="title-container">
+    <h6>모든 상품</h6></div>
+    <div class="products">
+        {% for product, discounted_price in products_with_discount %}
+            <div class="product-card">
+                <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
+                <a href="{{ product.get_absolute_url }}" class="product-link"><h6>{{ product.product_name }}</h6></a>
+                <p class="discount-info">{{ product.product_sale }}% <span class="discounted-price">{{ discounted_price|floatformat:0|intcomma }}원</span></p>
+            </div>
+        {% empty %}
+            <p class="text-center">등록된 상품이 없습니다.</p>
+        {% endfor %}
+    </div>
+</section>
+
 {% if not is_store %}
-  <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}">
-    {% if saved %}
-      Remove Store
-    {% else %}
-      Save Store
-    {% endif %}
-  </button>
-  <p id="message"></p>
+    <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}" class="save-button">
+        {% if saved %}
+            팔로잉 취소
+        {% else %}
+            팔로잉
+        {% endif %}
+    </button>
+    <p id="message" class="message"></p>
 {% endif %}
 {% endblock %}
-
-
 
 {% block scripts %}
 <script>
@@ -191,25 +131,25 @@
           const response = JSON.parse(xhr.responseText);
           document.getElementById('message').innerText = response.message;
           if (response.check) {
-            element.textContent = 'Remove Store';
+            element.textContent = '팔로잉 취소';
           } else {
-            element.textContent = 'Save Store';
+            element.textContent = '팔로잉';
           }
         }
       };
 
       xhr.send(`user_id=${userId}`);
     };
-    favoriteButton = document.getElementById('favorites');
+    const favoriteButton = document.getElementById('favorites');
     favoriteButton.addEventListener('click', function() {
-      userId = this.getAttribute('data-user-id');
-      isAuthenticated = parseInt(this.getAttribute('data-authentication'));
-      if (!!isAuthenticated === false) {
-        window.location.href = '{% url "users:login" %}'
+      const userId = this.getAttribute('data-user-id');
+      const isAuthenticated = parseInt(this.getAttribute('data-authentication'));
+      if (!isAuthenticated) {
+        window.location.href = '{% url "users:login" %}';
         return;
       }
       saveStore(userId, this);
-    })
+    });
   });
 </script>
 {% endblock %}

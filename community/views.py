@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import Q
 import json
 from django.views.decorators.http import require_POST
+from users.decorators import customer_required
 
 # 커뮤니티 카테고리 ##############################################################################
 
@@ -177,34 +178,42 @@ def post_list(request):
 
 
 # 커뮤니티 글 상세
-@login_required
 def post_detail(request, pk):
-    community = get_object_or_404(Community, pk=pk)
-    comments = CommunityComment.objects.filter(community=community)
+    if request.user.is_authenticated:
+        if request.user.is_customer:
+            community = get_object_or_404(Community, pk=pk)
+            comments = CommunityComment.objects.filter(community=community)
 
-    if request.method == 'POST':
-        form = CommentcreateForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.customer = request.user.customer
-            comment.community = community
-            comment.save()
-            return redirect('community:post_detail', pk=community.pk)
+            if request.method == 'POST':
+                form = CommentcreateForm(request.POST)
+                if form.is_valid():
+                    comment = form.save(commit=False)
+                    comment.customer = request.user.customer
+                    comment.community = community
+                    comment.save()
+                    return redirect('community:post_detail', pk=community.pk)
+            else:
+                form = CommentcreateForm()
+
+            # Community 모델의 selected_products 필드 값을 가져옴
+            selected_products = community.selected_products.all()
+            product_links = community.product.all()
+
+            context = {
+                'community': community,
+                'comments': comments,
+                'form': form,
+                'selected_products': selected_products,
+            }
+            return render(request, 'post/post_detail.html', context)
+        else:
+            messages.warning(request, '글을 작성할 권한이 없습니다. 사용자 계정으로 로그인 하세요.')  # 로그인 페이지에서 메세지
+            return redirect(reverse('users:logout'))
     else:
-        form = CommentcreateForm()
+        messages.warning(request, '사용자 계정으로 로그인이 필요합니다.')  # 로그인 페이지에서 메세지
+        return redirect(reverse('users:login'))
 
-    # Community 모델의 selected_products 필드 값을 가져옴
-    selected_products = community.selected_products.all()
-    product_links = community.product.all()
 
-    context = {
-        'community': community,
-        'comments': comments,
-        'form': form,
-        'selected_products': selected_products,
-    }
-
-    return render(request, 'post/post_detail.html', context)
 
 
 

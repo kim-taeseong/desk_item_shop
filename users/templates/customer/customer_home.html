@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block content %}
-<h3><a href="{% url 'orders:display_orders' %}">구매내역</a></h3>
+<div class="title-container">
+    <h2><a href="{% url 'orders:display_orders' %}">구매내역</a></h2>
+</div>
 <div class="orders">
     {% for order in orders %}
         <div class="order">
@@ -18,9 +20,10 @@
         <p>구매한 상품이 없습니다.</p>
     {% endfor %}
 </div>
-<br>
-<h3>스토어찜</h3>
 
+<div class="title-container">
+    <h2>스토어찜</h2>
+</div>
 <div class="row">
     <div class="col-md-4">
         <table class="table">
@@ -41,14 +44,13 @@
     <div class="col-md-8"></div>
 </div>
 
-<br>
-
-<h3>장바구니</h3>
+<div class="title-container">
+    <h2>장바구니</h2>
+</div>
 <p>장바구니 게시판 연결</p>
-
-<br>
-
-<h3>내가 작성한 글</h3>
+<div class="title-container">
+    <h2>내가 작성한 글</h2>
+</div>
 <div class="community-posts">
     {% if community_posts %}
         <div class="row">
@@ -68,7 +70,8 @@
                                     <i class="bi bi-heart-fill" style="color: red;"></i>
                                     <small class="text-muted">{{ post.community_like }}</small>
                                 </p>
-                                <p><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일' }}</small></p>
+                                <p><s
+                                mall class="text-muted">{{ post.community_date|date:'Y년 m월 d일' }}</s></p>
                             </div>
                         </div>
                     </div>
@@ -83,7 +86,45 @@
     {% endif %}
 </div>
 
+<div class="title-container">
+    <h2>팔로우/팔로잉</h2>
+</div>
 
+<div class="row">
+    <div class="col-md-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>팔로우</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in followers %}
+                <tr>
+                    <td>{{ person.cus_nickname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>팔로잉</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in following %}
+                <tr>
+                    <td>{{ person.cus_nickname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
 {% endblock %}

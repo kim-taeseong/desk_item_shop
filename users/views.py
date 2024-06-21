@@ -24,9 +24,11 @@ from cart.views import transfer_session_cart_to_user
 from logistics.models import Product
 from order.models import Order
 from favorites.models import UserFavoriteStore
+from cart.models import Cart
 from .models import User, Customer, Store
 from .forms import CustomerSignUpForm, StoreSignUpForm, LoginForm, CustomerEditForm, StoreEditForm
 from .decorators import customer_required, store_required
+from django.contrib.auth.models import AnonymousUser
 
 User = get_user_model()
 
@@ -38,6 +40,7 @@ class CustomerSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        Cart.objects.create(user=user)
         return redirect('users:signup_done')
     
 # Store 회원가입
@@ -56,6 +59,7 @@ class SignUpDoneView(TemplateView):
 
 # 로그인
 class LoginView(auth_views.LoginView):
+
     form_class = LoginForm
     template_name = 'login_password/login.html'
 
@@ -95,6 +99,8 @@ def logout_view(request):
     logout(request)
     return redirect('users:login')  # 로그인 화면으로 리다이렉트
 
+
+#--------------------------------
 # 회원 탈퇴 - 실제 삭제가 아닌 비활성화 is_active = 0
 @login_required
 def account_delete(request):
@@ -124,12 +130,12 @@ def account_delete(request):
             return redirect('users:login') # 탈퇴 후 로그인 페이지로 리다이렉트
         else:
             messages.error(request, '비밀번호가 틀렸습니다.')
-            return render(request, 'account_delete/account_delete.html')
-    return render(request, 'account_delete/account_delete.html')
+            return render(request, 'account_delete/delete.html')
+    return render(request, 'account_delete/delete.html')
 
 # 탈퇴한 계정 페이지 - 회원탈퇴 해놓고 7일 이내 재 로그인시 표시(실제 로그인 처리되는것은 아니기에 last_login 시간에 반영 X)
 def account_delete_alert(request):
-    return render(request, 'account_delete/account_delete_alert.html')
+    return render(request, 'account_delete/alert.html')
 
 # 탈퇴 취소 페이지 - 탈퇴 취소됨 is_active = 1
 def account_delete_cancel(request):
@@ -140,7 +146,7 @@ def account_delete_cancel(request):
         # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
         if not username or not password:
             messages.error(request, '탈퇴를 취소하려는 계정의 아이디와 비밀번호를 입력해주세요.')
-            return render(request, 'account_delete/account_delete_cancel.html')
+            return render(request, 'account_delete/cancel.html')
 
         try:
             user = User.objects.get(username=username, is_active=False)
@@ -159,7 +165,7 @@ def account_delete_cancel(request):
         except User.DoesNotExist:
             messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
-    return render(request, 'account_delete/account_delete_cancel.html')
+    return render(request, 'account_delete/cancel.html')
 
 # 즉시 탈퇴 페이지 - 즉시 DB에서 모든 정보 삭제
 def account_delete_now(request):
@@ -170,7 +176,7 @@ def account_delete_now(request):
         # 첫 진입 시 and 사용자가 아이디나 비밀번호를 입력하지 않았을 경우
         if not username or not password:
             messages.error(request, '즉시 탈퇴하려는 계정의 아이디와 비밀번호를 입력해주세요.')
-            return render(request, 'account_delete/account_delete_now.html')
+            return render(request, 'account_delete/now.html')
 
         try:
             user = User.objects.get(username=username)
@@ -185,8 +191,9 @@ def account_delete_now(request):
         except User.DoesNotExist:
             messages.error(request, '해당하는 계정을 찾을 수 없습니다.') # 아이디가 일치하지 않으면
 
-    return render(request, 'account_delete/account_delete_now.html')
+    return render(request, 'account_delete/now.html')
 
+#--------------------------------
 # Customer 홈
 @login_required
 @customer_required
@@ -205,8 +212,9 @@ def customer_home(request):
         'products': product,
         'community_posts': community_posts, 
         'orders': orders,
-        'favorites': customer.favorites.all() 
-
+        'favorites': customer.favorites.all(), 
+        'followers': customer.followers.all(),
+        'following': customer.follows.all()
     }
     return render(request, 'customer/customer_home.html', context)
 
@@ -369,6 +377,19 @@ class CustomerStoreHomeView(ListView):
             'categories': categories,
             'products': products,
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
-            'page_obj': page_obj  
+            'page_obj': page_obj,
+            'is_authenticated': self.request.user.is_authenticated,
         })
+        if not self.request.user.is_authenticated:
+            context['is_store'] = False
+            context['saved'] = False
+        else:
+            is_customer = getattr(self.request.user, 'is_customer', False)
+            if is_customer:
+                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+            else:
+                saved = False
+            context['is_store'] = is_customer
+            context['saved'] = saved
+
         return context

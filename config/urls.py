@@ -15,6 +15,7 @@ urlpatterns = [
     path("support/", include("support.urls")),
     path('favorites/', include('favorites.urls')),
     path('payments/', include('payments.urls')),
+    path('follow/', include('follow.urls')),
     # 비밀번호 초기화
     path('accounts/password_reset/form', auth_views.PasswordResetView.as_view(), name="password_reset"), # 이메일 입력 화면
     path('accounts/password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"), # 이메일 발송 완료 화면

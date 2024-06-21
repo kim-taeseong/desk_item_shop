@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'inquiry/list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +30,7 @@
                     <td>{{ question.question_content }}</td>
                     <td>{{ question.customer }}</td>
                     <td>
-                        {% if question.answer_set.all %}
+                        {% if question.answer_set.all %}``
                             <ul>
                                 {% for answer in question.answer_set.all %}
                                     <li>{{ answer.answer_content }}</li>

@@ -7,7 +7,7 @@ def customer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, lo
     필요하다면 로그인 페이지로 이동
     '''
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_customer,
+        lambda u: u.is_authenticated and u.is_active and u.is_customer,
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
@@ -22,7 +22,7 @@ def store_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
     필요하다면 로그인 페이지로 이동
     '''
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_store,
+        lambda u: u.is_authenticated and u.is_active and u.is_store,
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
