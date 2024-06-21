@@ -1,9 +1,15 @@
-/* 전역 스타일 설정 */
-body, html {
+/* 웹 폰트 임포트 */
+.nanum-gothic-regular {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body, html{
+    font-family: "Nanum Gothic", Arial, sans-serif;
+    background: #ffffff;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background: #ffffff;
 }
 
 /* 링크 - 전역 스타일 설정 */
