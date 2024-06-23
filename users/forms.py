@@ -17,7 +17,7 @@ def contains_consecutive_chars(password):
         if password[i:i+3].isdigit() and int(password[i+1]) == int(password[i]) + 1 and int(password[i+2]) == int(password[i]) + 2:
             return True
     return False
- 
+
 class CustomPasswordValidator: # password 유효성 검사
     def validate(self, password, user=None):
         if len(password) < 8 or len(password) > 12: # 8자 미만, 12자 이상일 경우
@@ -55,6 +55,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     # Customer 모델에 맞춰 필드 추가
     cus_nickname = forms.CharField(widget=forms.TextInput(),label='닉네임')
     cus_name = forms.CharField(widget=forms.TextInput(),label='이름')
+    cus_img = forms.ImageField(label='프로필 이미지')
     cus_address = forms.CharField(widget=forms.TextInput(),label='주소')
     cus_zipcode = forms.CharField(widget=forms.TextInput(),label='우편번호')
     cus_birth = forms.DateField(
@@ -70,7 +71,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name',
+        fields = ('username', 'email', 'password1', 'password2','cus_nickname','cus_name', 'cus_img',
                 'cus_address','cus_zipcode','cus_birth','cus_telnum') # 입력받을 항목들
         help_texts = {
             'username': '아이디는 6-16자, 영문 대소문자와 "_"만 사용 가능합니다.',
@@ -86,7 +87,8 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
         customer = Customer.objects.create( # customer를 생성하고 DB에 저장 
             user=user, # 각 필드에서 입력한 값들
             cus_nickname=self.cleaned_data.get('cus_nickname'), 
-            cus_name=self.cleaned_data.get('cus_name'), 
+            cus_name=self.cleaned_data.get('cus_name'),
+            cus_img =self.cleaned_data.get('cus_img'),
             cus_address=self.cleaned_data.get('cus_address'),
             cus_zipcode=self.cleaned_data.get('cus_zipcode'),
             cus_birth=self.cleaned_data.get('cus_birth'),
