@@ -1,5 +1,10 @@
 {% extends "noncategory_base.html" %}
 
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/done.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <div class="title-container">
