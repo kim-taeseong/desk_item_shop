@@ -209,7 +209,7 @@ def add_review(request, product_id):
 
 def review_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    reviews = Review.objects.filter(product=product).order_by('-review_date')
+    reviews = Review.objects.filter(product=product).order_by('-created_at')
     
     # Pagination 적용
     paginator = Paginator(reviews, 5)  # 페이지 당 5개의 리뷰

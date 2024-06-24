@@ -78,9 +78,9 @@
     <div class="title-container">
         <h2>상품후기 목록</h2>
     </div>
-    {% if reviews %}
+    {% if page_obj.object_list %}
         <div class="review-list">
-            {% for review in reviews %}
+            {% for review in page_obj.object_list %}
                 <div class="review-item">
                     <div class="review-header">
                         <span class="review-rate">{{ review.rate }} 점</span>
@@ -104,26 +104,27 @@
         </div>
 
         <div class="pagination">
-            {% if reviews.has_previous %}
-                <a href="?page={{ reviews.previous_page_number }}">이전</a>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">이전</a>
             {% endif %}
 
-            {% for page_number in reviews.paginator.page_range %}
-                {% if page_number == reviews.number %}
+            {% for page_number in page_obj.paginator.page_range %}
+                {% if page_number == page_obj.number %}
                     <span class="current-page">{{ page_number }}</span>
                 {% else %}
                     <a href="?page={{ page_number }}">{{ page_number }}</a>
                 {% endif %}
             {% endfor %}
 
-            {% if reviews.has_next %}
-                <a href="?page={{ reviews.next_page_number }}">다음</a>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">다음</a>
             {% endif %}
         </div>
     {% else %}
         <p>작성된 리뷰가 없습니다.</p>
     {% endif %}
 </div>
+
 
 
 <script>
