@@ -1,11 +1,14 @@
 from .models import Product, Category, Store
 from community.models import Community 
+from reviews.models import Review 
 from django.views.generic import *
 from django.urls import reverse_lazy
 from typing import Any
 from django.db.models.query import QuerySet
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from reviews.forms import ReviewForm
+from django.core.paginator import Paginator
 
 #-- 카테고리
 # 카테고리 목록
@@ -184,3 +187,34 @@ class MainProductListView(ListView):
         # context에 카테고리를 추가
         context['category'] = self.category
         return context
+
+#-- 리뷰 작성
+def add_review(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.customer = request.user.customer  # 로그인한 사용자의 customer 객체 사용
+            review.save()
+            return redirect('logistics:product_detail', pk=product.pk)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'logistics/detail.html', {'form': form, 'product': product})
+
+
+
+def review_detail(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    reviews = Review.objects.filter(product=product).order_by('-review_date')
+    
+    # Pagination 적용
+    paginator = Paginator(reviews, 5)  # 페이지 당 5개의 리뷰
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'logistics/detail.html', {'product': product, 'reviews': page_obj})
+

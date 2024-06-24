@@ -23,4 +23,7 @@ urlpatterns = [
     # customer 메인 페이지 : 카테고리별 상품리스트 조회
     path('', MainListView.as_view(), name='main'),
     path('categories/<int:pk>/', MainProductListView.as_view(), name='cat_products'),
+
+    path('product/<int:product_id>/add_review/', views.add_review, name='add_review'),
+    path('product/reviews/<int:product_id>/', views.review_detail, name='review_detail'),
 ]
