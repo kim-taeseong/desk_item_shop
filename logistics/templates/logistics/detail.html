@@ -78,46 +78,45 @@
     <div class="title-container">
         <h2>상품후기 목록</h2>
     </div>
-    {% if page_obj.object_list %}
+    {% if reviews %}
         <div class="review-list">
-            {% for review in page_obj.object_list %}
+            {% for review in reviews %}
                 <div class="review-item">
                     <div class="review-header">
                         <span class="review-rate">{{ review.rate }} 점</span>
-                        <span class="review-author">{{ review.author.username }}</span>
+                        <span class="review-customer">{{ review.customer }}</span>
                         <span class="review-date">{{ review.review_date|date:"Y-m-d" }}</span>
-                    </div>
-                    <div class="review-image-modal">
-                        <div class="review-image-modal-content">
-                            <span class="review-image-modal-close">&times;</span>
-                            <img src="" alt="Review Image">
-                        </div>
                     </div>
                     <div class="review-content">
                         <p>{{ review.content }}</p>
-                        {% if review.image %}
-                            <img src="{{ review.image.url }}" alt="Review Image" class="review-image">
-                        {% endif %}
                     </div>
+                    {% if review.image %}
+                        <div class="review-image">
+                            <img src="{{ review.image.url }}" alt="Review Image">
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
 
+        <!-- 페이지네이션 -->
         <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">이전</a>
+            {% if reviews.has_previous %}
+                <a href="?page=1">&laquo;</a>
+                <a href="?page={{ reviews.previous_page_number }}">이전</a>
             {% endif %}
 
-            {% for page_number in page_obj.paginator.page_range %}
-                {% if page_number == page_obj.number %}
-                    <span class="current-page">{{ page_number }}</span>
-                {% else %}
-                    <a href="?page={{ page_number }}">{{ page_number }}</a>
+            {% for num in reviews.paginator.page_range %}
+                {% if reviews.number == num %}
+                    <span class="current-page">{{ num }}</span>
+                {% elif num > reviews.number|add:-3 and num < reviews.number|add:3 %}
+                    <a href="?page={{ num }}">{{ num }}</a>
                 {% endif %}
             {% endfor %}
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">다음</a>
+            {% if reviews.has_next %}
+                <a href="?page={{ reviews.next_page_number }}">다음</a>
+                <a href="?page={{ reviews.paginator.num_pages }}">&raquo;</a>
             {% endif %}
         </div>
     {% else %}

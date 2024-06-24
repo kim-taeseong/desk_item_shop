@@ -4,29 +4,28 @@
         {% if popular_posts %}
             <div class="row">
                 {% for post in popular_posts %}
-                    <div class="col-md-3 mb-4">
-                        <div class="card mb-3 box-shadow" style="width: 300px;">
-                            <img class="card-img-top" src="{{ post.community_img.url }}" alt="{{ post.community_title }}" style="height: 180px; width: 100%; display: block;">
-                            <div class="card-body">
-                                <h5 class="card-text">
-                                    <!--  게시글 제목 클릭하면 상세 페이지로 이동 -->
-                                    <a href="{% url 'community:post_detail' pk=post.pk %}" style="text-decoration: none; color: inherit;">
-                                        {{ post.community_title }}
-                                    </a>
-                                </h5>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>
-                                        <i class="bi bi-heart-fill" style="color: red;"></i>
-                                        <small class="text-muted">{{ post.community_like }}</small>
-                                    </p>
-                                    <p><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일'  }}</small></p>
-                                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card mb-3 box-shadow">
+                        <img class="card-img-top" src="{{ post.community_img.url }}" alt="{{ post.community_title }}">
+                        <div class="card-body">
+                            <h5 class="card-text">
+                                <!--  게시글 제목 클릭하면 상세 페이지로 이동 -->
+                                <a href="{% url 'community:post_detail' pk=post.pk %}">{{ post.community_title }}</a>
+                            </h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p>
+                                    <i class="bi bi-heart-fill" style="color: red;"></i>
+                                    <small class="text-muted">{{ post.community_like }}</small>
+                                </p>
+                                <p><small class="text-muted">{{ post.community_date|date:'Y년 m월 d일'  }}</small></p>
                             </div>
                         </div>
                     </div>
-                    {% if forloop.counter|divisibleby:4 and not forloop.last %}
-                        </div><div class="row">
-                    {% endif %}
+                </div>
+
+                {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                    </div><div class="row">
+                {% endif %}
                 {% endfor %}
             </div>
         {% else %}

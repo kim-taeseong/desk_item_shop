@@ -198,10 +198,14 @@ a.btn:last-child {
     line-height: 1.5;
   }
   
-  .review-image {
-    max-width: 100px; /* 이미지 크기 조절 */
-    margin-top: 10px;
-  }
+  .review-image img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
   
   /* 리뷰 이미지 클릭 시 모달 스타일 */
   .review-image-modal {
@@ -263,21 +267,21 @@ a.btn:last-child {
     margin-top: 20px;
   }
   
-  .pagination a, .pagination span {
+.pagination a, .pagination span {
     padding: 8px 16px;
     text-decoration: none;
     border: 1px solid #ddd;
     margin: 0 4px;
     color: #333;
-  }
+}
   
-  .pagination a:hover {
+.pagination a:hover {
     background-color: #f1f1f1;
-  }
+}
   
-  .pagination .current-page {
+.pagination .current-page {
     background-color: #4CAF50;
     color: white;
     border-color: #4CAF50;
-  }
+}
   
