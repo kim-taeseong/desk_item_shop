@@ -1,4 +1,29 @@
 {% block community_content %}
+<style>
+    .card {
+        width: 250px;
+    }
+
+    .card-img-top {
+        height: 225px;
+        width: 100%;
+        display: block;
+    }
+
+    .card-text a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .text-muted {
+        font-size: 14px;
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+</style>
+
     <div class="com_content">
         <h6 style="display: block; background-color: rgb(232, 232, 232); padding: 5px; margin: 10;">커뮤니티 인기글</h6>
         {% if popular_posts %}
