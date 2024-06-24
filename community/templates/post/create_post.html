@@ -1,67 +1,59 @@
 {% extends "community_base.html" %}
+
 {% load static %}
-{% block content %}
-    <style>
-        .form-field {
-            margin-bottom: 10px;
-        }
-    </style>
-    
-    
-    <h3>게시글 작성하기</h3>
-    <form action="{% url 'community:create_post' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-field">
-            <label for="id_community_category">게시글 카테고리</label>
-            {{ form.community_category }}
-        </div>
-        <div class="form-field">
-            <label for="id_community_title">제목</label>
-            {{ form.community_title }}
-        </div>
-        <div class="form-field">
-            <label for="id_community_img"></label>
-            {{ form.community_img }}
-        </div>
-        <div class="form-field">
-            <label for="id_community_content"></label>
-            {{ form.community_content }}
-        </div>
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/question.css' %}">
+{% endblock %}
 
+{% block content %}    
+<div class="container">
+    <div class="title-container">
+        <h2>게시글 작성하기</h2>
+    </div>
+    <div class="form-container">
+        <form action="{% url 'community:create_post' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="id_community_category">게시글 카테고리</label>
+                {{ form.community_category }}
+            </div>
+            <div class="form-field">
+                <label for="id_community_title">제목</label>
+                {{ form.community_title }}
+            </div>
+            <div class="form-field">
+                <label for="id_community_img">이미지 업로드</label>
+                {{ form.community_img }}
+            </div>
+            <div class="form-field">
+                <label for="id_community_content">내용</label>
+                {{ form.community_content }}
+            </div>
+            
+            <!-- Product Search -->
+            <div id="product-container">       
+                <input type="text" id="searchInput" placeholder="상품을 검색하세요">
+                <button id="searchButton" type="button" class="submit-button">검색</button>
+            </div>
 
-        
-        <!-- 상품 검색 -->
-        <div id="product-container">       
-            <input type="text" id="searchInput" placeholder="상품을 검색하세요">
-            <button id="searchButton">검색</button>
-        </div>
+            <!-- Searched Product List Container -->
+            <div id="searchedProductList"></div>
 
+            <!-- Selected Product List Container -->
+            <div id="selectedProductListContainer">
+                <div id="selectedProductList"></div>
+                <p id="noSelectedProductMessage">선택된 상품이 없습니다</p>
+            </div>
 
+            <!-- Hidden input : JSON string to server -->
+            <input type="hidden" id="hiddenInput" name="hiddenInput">
 
-        <!-- 검색 결과를 화면에 표시하는 컨테이너-->
-        <div id="searchedProductList">          
-        </div>
-        
+            <!-- Submit Button -->
+            <button id="completeButton" type="submit" class="submit-button">작성완료</button>
+        </form>
+    </div>
+</div>
 
-
-        <!-- 선택된 상품 목록-->
-        <div id="selectedProductListContainer" style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; margin-bottom: 10px;">
-            <div id="selectedProductList"></div>
-            <p id="noSelectedProductMessage">선택된 상품이 없습니다</p> <!-- 선택된 상품이 없을 때 보여질 문구 -->
-        </div>
-
-
-
-        <!-- Hidden input : JSON 문자열 서버로 전달 -->
-        <input type="hidden" id="hiddenInput" name="hiddenInput">
-
-
-
-        <!-- 작성완료 버튼 -->
-        <button id="completeButton" type="submit" class="btn btn-dark text-white">작성완료</button>
-    </form>
-
-
-    <!-- create_post.js 스크립트 추가 -->
-    <script src="{% static 'community/create_post.js' %}"></script>
+<!-- create_post.js script -->
+<script src="{% static 'community/create_post.js' %}"></script>
 {% endblock %}

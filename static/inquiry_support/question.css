@@ -148,3 +148,67 @@ input:focus, textarea:focus, select:focus {
     border-radius: 5px; /* 이미지 테두리 반경 */
     margin-top: 10px; /* 상단 여백 */
 }
+
+
+#product-container {
+    display: flex;
+    align-items: center; /* 수직 정렬을 중앙으로 맞춤 */
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px; /* 요소 간 간격 조정 */
+    height: 44px; /* 높이를 버튼과 동일하게 설정 */
+    box-sizing: border-box; /* 전체 크기를 상자 크기로 계산 */
+}
+
+#searchButton {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 44px; /* 높이를 input과 동일하게 설정 */
+    width: 130px; /* 너비를 100px로 설정 */
+    box-sizing: border-box; /* 전체 크기를 상자 크기로 계산 */
+}
+
+#searchButton:hover {
+    background-color: #000;
+}
+
+#searchedProductList {
+    margin-top: 20px;
+}
+
+/* 선택된 상품 목록 스타일 */
+#selectedProductListContainer {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+#selectedProductList {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#selectedProductList p {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+
+#noSelectedProductMessage {
+    color: #999;
+    font-size: 14px;
+}

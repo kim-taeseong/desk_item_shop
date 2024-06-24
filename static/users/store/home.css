@@ -57,7 +57,7 @@ body {
 
 .product img {
     width: 100%;
-    max-height: 150px;
+    height: 150px;
     object-fit: cover;
 }
 
@@ -77,4 +77,34 @@ body {
     font-size: 15px;
     text-align: right;
     width: 100%;
+}
+
+/* Styles for the button containing a link */
+button {
+    display: inline-block;
+    background-color: #333; /* Green background */
+    border: none;
+    color: white; /* White text */
+    padding: 15px 32px; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* No underline */
+    display: inline-block;
+    font-size: 16px; /* Set a font size */
+    margin: 4px 2px; /* Some margin */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button a {
+    color: white; /* White text */
+    text-decoration: none; /* No underline */
+}
+
+button:hover {
+    background-color: #000000; /* Darker green on hover */
+}
+
+button a:hover {
+    color: white; /* Ensure text remains white on hover */
 }
