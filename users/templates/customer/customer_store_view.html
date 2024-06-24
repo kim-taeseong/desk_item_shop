@@ -72,21 +72,33 @@
 </nav>
 
 <!-- 상품 리스트 -->
+<div class="title-container">
+    <h6>상품 리스트</h6>
+</div>
 <section class="product-section">
-  <div class="title-container">
-    <h6>모든 상품</h6></div>
-    <div class="products">
+    <div class="row products">
         {% for product, discounted_price in products_with_discount %}
+        <div class="col-lg-3 col-md-4 mb-4">
             <div class="product-card">
                 <img src="{{ product.product_img.url }}" alt="{{ product.product_name }}">
-                <a href="{{ product.get_absolute_url }}" class="product-link"><h6>{{ product.product_name }}</h6></a>
-                <p class="discount-info">{{ product.product_sale }}% <span class="discounted-price">{{ discounted_price|floatformat:0|intcomma }}원</span></p>
+                <a href="{{ product.get_absolute_url }}" class="product-link">
+                    <h6>{{ product.product_name }}</h6>
+                </a>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{{ product.product_sale }}%</small>
+                    <small class="text-muted">{{ discounted_price|floatformat:0|intcomma }}원</small>
+                </div>
             </div>
+        </div>
         {% empty %}
+        <div class="col">
             <p class="text-center">등록된 상품이 없습니다.</p>
+        </div>
         {% endfor %}
     </div>
 </section>
+
+
 
 {% if not is_store %}
     <button type="button" id="favorites" data-user-id="{{ store.user_id }}" data-authentication="{{ is_authenticated }}" class="save-button">
