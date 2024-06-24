@@ -46,6 +46,7 @@
     </div>
 </div>
 
+{% if customer.is_authenticated %}
 <div class="container">
     <div class="title-container">
         <h2>상품후기 작성</h2>
@@ -73,6 +74,7 @@
         <button type="submit" class="btn btn-dark">리뷰 작성</button>
     </form>
 </div>
+{% endif %}
 
 <div class="container">
     <div class="title-container">
