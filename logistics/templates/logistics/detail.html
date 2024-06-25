@@ -46,11 +46,116 @@
     </div>
 </div>
 
+{% if customer.is_authenticated %}
+<div class="container">
+    <div class="title-container">
+        <h2>상품후기 작성</h2>
+    </div>
+    <form class="review-form" action="{% url 'logistics:add_review' product.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_rate">평점</label>
+            <select class="form-control" name="rate" id="id_rate">
+                <option value="1">1 (별로에요)</option>
+                <option value="2">2 (그저 그래요)</option>
+                <option value="3">3 (보통이에요)</option>
+                <option value="4">4 (좋아요)</option>
+                <option value="5">5 (매우 좋아요)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="id_content">리뷰 내용</label>
+            <textarea class="form-control" name="content" id="id_content" rows="3" maxlength="500" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="id_image">이미지 첨부</label>
+            <input type="file" class="form-control-file" name="image" id="id_image">
+        </div>
+        <button type="submit" class="btn btn-dark">리뷰 작성</button>
+    </form>
+</div>
+{% endif %}
+
+<div class="container">
+    <div class="title-container">
+        <h2>상품후기 목록</h2>
+    </div>
+    {% if reviews %}
+        <div class="review-list">
+            {% for review in reviews %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-rate">{{ review.rate }} 점</span>
+                        <span class="review-customer">{{ review.customer.cus_nickname }}</span>
+                        <span class="review-date">{{ review.review_date|date:"Y-m-d" }}</span>
+                    </div>
+                    <div class="review-content">
+                        <p>{{ review.content }}</p>
+                    </div>
+                    {% if review.image %}
+                        <div class="review-image">
+                            <img src="{{ review.image.url }}" alt="Review Image">
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+            {% if reviews.has_previous %}
+                <a href="?page=1">&laquo;</a>
+                <a href="?page={{ reviews.previous_page_number }}">이전</a>
+            {% endif %}
+
+            {% for num in reviews.paginator.page_range %}
+                {% if reviews.number == num %}
+                    <span class="current-page">{{ num }}</span>
+                {% elif num > reviews.number|add:-3 and num < reviews.number|add:3 %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if reviews.has_next %}
+                <a href="?page={{ reviews.next_page_number }}">다음</a>
+                <a href="?page={{ reviews.paginator.num_pages }}">&raquo;</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>작성된 리뷰가 없습니다.</p>
+    {% endif %}
+</div>
+
+
+
 <script>
     document.getElementById('amount1').addEventListener('change', function() {
         let amount = this.value;
         document.getElementById('amount2').value = amount;
     });
+
+        // 리뷰 이미지 클릭 시 모달 열기
+    document.querySelectorAll('.review-image').forEach(img => {
+        img.addEventListener('click', () => {
+        const modal = document.querySelector('.review-image-modal');
+        const modalImg = document.querySelector('.review-image-modal-content img');
+        const closeBtn = document.querySelector('.review-image-modal-close');
+    
+        modal.style.display = 'block';
+        modalImg.src = img.src;
+    
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+            modal.style.display = 'none';
+            }
+        });
+        });
+    });
+  
 </script>
 
 {% endblock %}

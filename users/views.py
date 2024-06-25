@@ -222,7 +222,7 @@ def customer_home(request):
 def find_username(request):
     if request.method == 'POST':
         email = request.POST['email']
-        users = User.objects.get(email=email)
+        users = User.objects.filter(email=email)
         if users.exists():
             current_site = get_current_site(request)
             domain = current_site.domain

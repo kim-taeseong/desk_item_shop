@@ -172,4 +172,6 @@ support/migrations
 favorites/migrations
 follow/migrations
 reviews/migrations
+community/migrations
+payments/migrations
 .vscode/

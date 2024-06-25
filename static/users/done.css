@@ -44,6 +44,17 @@ p {
     margin: 10px 0;
 }
 
+.box ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.box li {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
 .button {
     display: block;
     width: 200px;

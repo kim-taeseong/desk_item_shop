@@ -1,11 +1,14 @@
 from .models import Product, Category, Store
 from community.models import Community 
+from reviews.models import Review 
 from django.views.generic import *
 from django.urls import reverse_lazy
 from typing import Any
 from django.db.models.query import QuerySet
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from reviews.forms import ReviewForm
+from django.core.paginator import Paginator
 
 #-- 카테고리
 # 카테고리 목록
@@ -109,10 +112,21 @@ class ProductDetailView(DetailView):
         discounted_price = self.get_object().product_price * (1 - self.get_object().product_sale / 100)
         return discounted_price
     
+    # 상품후기 목록
+    def get_review_list(self):
+        product = self.get_object()
+        reviews = Review.objects.filter(product=product).order_by('-review_date')
+        paginator = Paginator(reviews, 5)  # 한 페이지에 5개의 리뷰
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return page_obj
+
     # context에 담아 템플릿으로 전달
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['discounted_price'] = self.discounted_price()  # discounted_price 이름으로 전달
+        context['discounted_price'] = self.discounted_price()
+        context['reviews'] = self.get_review_list()
+        context['form'] = ReviewForm()
         return context
 
 
@@ -137,7 +151,6 @@ class DeleteProductDV(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     
 
 ###############################################################################
-#### 메인페이지
 #-- 메인페이지 http://127.0.0.1:8000/
 class MainListView(ListView):
     model = Product
@@ -184,3 +197,22 @@ class MainProductListView(ListView):
         # context에 카테고리를 추가
         context['category'] = self.category
         return context
+
+#-- 리뷰 작성
+def add_review(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.customer = request.user.customer  # 로그인한 사용자의 customer 객체 사용
+            review.save()
+            return redirect('logistics:product_detail', pk=product.pk)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'logistics/detail.html', {'form': form, 'product': product})
+
+

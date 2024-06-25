@@ -92,6 +92,7 @@ body {
     padding: 10px;
     text-align: left;
     border-top: 1px solid #ddd;
+    text-align: center;
 }
 
 .table th {
@@ -170,7 +171,7 @@ body {
 
 .table-follow th, .table-follow td {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-top: 1px solid #ddd;
 }
 

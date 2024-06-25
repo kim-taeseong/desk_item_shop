@@ -1,22 +1,20 @@
 {% extends "community_base.html" %}
+
 {% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'inquiry_support/question.css' %}">
+{% endblock %}
+
 {% block content %}
     <script>
         // 서버에서 제공하는 JSON 데이터 (게시글 작성 때 데이터)
         var initialSelectedProducts = JSON.parse('{{ selected_products_json|safe }}');
     </script>
-
-    <style>
-        .form-field {
-            margin-bottom: 10px;
-        }
-
-        #noSelectedProductMessage {
-            display: none;
-        }
     </style>
 
-    <h3>게시글 수정하기</h3>
+    <div class="title-container">
+        <h3>게시글 수정하기</h3>
+    </div>
     <form action="{% url 'community:edit_post' post_id=post_id %}" method="post" enctype="multipart/form-data" onsubmit="listToHiddenInput()">
         {% csrf_token %}
         <div class="form-field">
