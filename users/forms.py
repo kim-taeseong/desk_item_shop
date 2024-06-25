@@ -55,6 +55,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
     # Customer 모델에 맞춰 필드 추가
     cus_nickname = forms.CharField(widget=forms.TextInput(),label='닉네임')
     cus_name = forms.CharField(widget=forms.TextInput(),label='이름')
+    cus_img = forms.ImageField(label='프로필 이미지')
     cus_address = forms.CharField(widget=forms.TextInput(),label='주소')
     cus_zipcode = forms.CharField(widget=forms.TextInput(),label='우편번호')
     cus_birth = forms.DateField(
@@ -87,6 +88,7 @@ class CustomerSignUpForm(UserCreationForm): # 구매자 계정 회원가입 폼
             user=user, # 각 필드에서 입력한 값들
             cus_nickname=self.cleaned_data.get('cus_nickname'), 
             cus_name=self.cleaned_data.get('cus_name'), 
+            cus_img=self.cleaned_data.get('cus_img'),
             cus_address=self.cleaned_data.get('cus_address'),
             cus_zipcode=self.cleaned_data.get('cus_zipcode'),
             cus_birth=self.cleaned_data.get('cus_birth'),
