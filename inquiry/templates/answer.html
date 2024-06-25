@@ -14,14 +14,15 @@
         <p><strong>제목:</strong> {{ question.question_title }}</p>
         <p><strong>내용:</strong> {{ question.question_content }}</p>
     </div>
-
     <div class="answer-section">
-        <form method="post" enctype="multipart/form-data" class="form-container">
+        <p><strong>제목:</strong> {{ question.question_title }}</p>
+        <p><strong>내용:</strong> {{ question.question_content }}</p>
+        <h2>답변</h2>
+        <form method="post" >
             {% csrf_token %}
-            <div class="form-group">
-                답변 : {{ form.answer_content }}
-            </div>
+            {{ form.as_p }}
             <button type="submit" class="submit-button">질문 등록</button>
         </form>
+    <a href="{% url 'inquiry:store_list' %}">목록보기</a>
     </div>
 {% endblock %}
