@@ -377,19 +377,20 @@ class CustomerStoreHomeView(ListView):
             'categories': categories,
             'products': products,
             'products_with_discount': products_with_discount,  # products_with_discount로 전달
-            'page_obj': page_obj,
-            'is_authenticated': self.request.user.is_authenticated,
+            'page_obj': page_obj  
         })
-        if not self.request.user.is_authenticated:
-            context['is_store'] = False
-            context['saved'] = False
-        else:
-            is_customer = getattr(self.request.user, 'is_customer', False)
-            if is_customer:
-                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
-            else:
-                saved = False
-            context['is_store'] = is_customer
-            context['saved'] = saved
 
-        return context
+        if self.request.user.is_authenticated:
+            context['is_authenticated'] = 1
+            if self.request.user.is_store:
+                context['is_store'] = True
+            else:
+                saved = UserFavoriteStore.objects.filter(customer=self.request.user.customer, store=store).exists()
+                context['saved'] = saved
+                context['is_store'] = False
+        else:
+            context['is_authenticated'] = 0
+            context['is_store'] = False
+            context['saved'] = False  # 비회원인 경우에는 일반적으로 False로 처리
+
+        return context   
